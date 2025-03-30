@@ -19,6 +19,7 @@ const Button: FC<ButtonProps> = ({
   icon,
   width,
   path,
+  disabled,
   onClick,
 }) => {
   if (type === "link" && path) {
@@ -41,12 +42,21 @@ const Button: FC<ButtonProps> = ({
           type === "primary"
             ? "bg-[#c1eb2a] hover:bg-[#d5fd42] text-black"
             : type === "outline"
-            ? "border border-[#c4f70f] text-[#c4f70f] bg-transparent hover:bg-[#afc467] hover:text-black"
+            ? `border bg-transparent ${
+                disabled
+                  ? "border-gray-200 text-gray-200"
+                  : "hover:bg-[#afc467] hover:text-black border-[#c4f70f] text-[#c4f70f] "
+              }`
             : type === "transparent"
-            ? "bg-transparent hover:bg-black/5 backdrop-blur-sm text-white"
+            ? `bg-transparent text-white ${
+                disabled
+                  ? "cursor-not-allowed"
+                  : "hover:bg-black/5 backdrop-blur-sm cursor-pointer"
+              }`
             : ""
         }
     `}
+      disabled={disabled}
       onClick={onClick}
     >
       {icon && (

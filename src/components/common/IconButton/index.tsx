@@ -4,13 +4,15 @@ import { FC } from "react";
 interface IconButtonProps {
   icon?: string;
   imgSource?: string;
+  onClick?: () => void;
 }
 
-const IconButton: FC<IconButtonProps> = ({ icon, imgSource }) => {
+const IconButton: FC<IconButtonProps> = ({ icon, imgSource, onClick }) => {
   return (
     <button
       className="p-3 flex flex-col items-center justify-center rounded-xl shadow-lg bg-transparent hover:bg-black/5 backdrop-blur-sm group
     transition-all duration-300 ease-in-out"
+      onClick={onClick}
     >
       {imgSource && (
         <img

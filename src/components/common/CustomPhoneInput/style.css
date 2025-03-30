@@ -1,0 +1,22 @@
+.custom-phone-container input {
+  background-color: transparent !important;
+  border: "none" !important;
+  outline: "none" !important;
+}
+
+.custom-phone-container select {
+  display: none !important;
+  border: "none" !important;
+  outline: "none" !important;
+}
+
+.custom-phone-container .PhoneInputCountry {
+  display: none !important;
+  border: "none" !important;
+  outline: "none" !important;
+}
+
+.custom-phone-container input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

@@ -62,7 +62,7 @@ const Login = () => {
               />
             </div>
           </div>
-          <div className="flex flex-row items-center justify-center gap-8 mt-4">
+          <div className="flex flex-row items-center justify-center gap-8">
             <IconButton icon="logos:google-icon" />
             <IconButton icon="solar:smartphone-2-bold-duotone" />
           </div>
