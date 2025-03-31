@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { setAuth } from "../../redux/slices/authSlice";
 import EmailVerification from "./EmailVerificatoin";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { useAppKit } from "@reown/appkit/react";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -27,6 +28,8 @@ const Register = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { open } = useAppKit();
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -109,14 +112,14 @@ const Register = () => {
           <img
             src="../assets/pngs/model1.png"
             alt="MODEL"
-            className="w-full h-auto rounded-xl"
+            className="w-full h-full rounded-xl"
           />
         </motion.div>
         <motion.div
           initial={{ x: 300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg"
+          className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
         >
           <div className="w-full h-full flex flex-col items-center justify-center gap-4">
             <img src="./logo.png" alt="LOGO" className="w-[120px] h-auto" />
@@ -171,7 +174,7 @@ const Register = () => {
                     />
                     <IconButton
                       icon="solar:wallet-money-bold-duotone"
-                      onClick={() => {}}
+                      onClick={() => open()}
                     />
                   </div>
                   <div className="mt-4">

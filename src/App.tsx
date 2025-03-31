@@ -2,8 +2,8 @@ import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router";
 import { Container } from "./components";
-import { Login, Register } from "./pages";
-import { useAuth } from "./hooks";
+import { Home, Login, Register } from "./pages";
+// import { useAuth } from "./hooks";
 import { Toaster } from "react-hot-toast";
 
 import { createAppKit } from "@reown/appkit/react";
@@ -24,17 +24,21 @@ createAppKit({
   projectId: "372af36aa30df14521fcca840c78291f",
   features: {
     analytics: true,
+    email: false,
+    socials: false,
   },
+  themeMode: "light",
 });
 
 function App() {
-  useAuth();
+  // useAuth();
 
   return (
     <Container>
       <Routes>
         <Route path="/register" Component={Register} />
         <Route path="/login" Component={Login} />
+        <Route path="/" Component={Home} />
       </Routes>
       <Toaster position="top-right" reverseOrder={false} />
     </Container>
