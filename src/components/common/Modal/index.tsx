@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import IconButton from "../IconButton";
+import Button from "../Button";
 
 const Modal = ({
   title,
@@ -32,20 +33,10 @@ const Modal = ({
             transition={{ duration: 0.3 }}
           >
             <div className="flex flex-row w-full items-center justify-between">
-              <h2 className="text-base text-black">{title}</h2>
+              <h2 className="text-base text-black font-semibold">{title}</h2>
               <IconButton icon="mdi:times" onClick={onClose} />
             </div>
-
-            {children}
-
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-              >
-                Close
-              </button>
-            </div>
+            <div className="w-full mt-6">{children}</div>
           </motion.div>
         </motion.div>
       )}

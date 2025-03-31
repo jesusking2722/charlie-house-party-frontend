@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Link } from "react-router";
 
 interface ButtonProps {
-  type: "primary" | "outline" | "transparent" | "link";
+  type: "primary" | "outline" | "transparent" | "link" | "blue" | "red";
   label: string;
   icon?: string;
   loading?: boolean;
@@ -40,12 +40,12 @@ const Button: FC<ButtonProps> = ({
       } shadow-lg
         ${
           type === "primary"
-            ? "bg-[#c1eb2a] hover:bg-[#d5fd42] text-black"
+            ? "bg-[#c1eb2a] border border-[#c1eb2a] hover:bg-white text-black hover:text-[#a3c627]"
             : type === "outline"
             ? `border bg-transparent ${
                 disabled
                   ? "border-gray-200 text-gray-200"
-                  : "hover:bg-[#afc467] hover:text-black border-[#c4f70f] text-[#c4f70f] "
+                  : "hover:bg-[#c4f70f] hover:text-black border-[#c4f70f] text-[#a3c627]"
               }`
             : type === "transparent"
             ? `bg-transparent text-white ${
@@ -53,6 +53,8 @@ const Button: FC<ButtonProps> = ({
                   ? "cursor-not-allowed"
                   : "hover:bg-black/5 backdrop-blur-sm cursor-pointer"
               }`
+            : type === "red"
+            ? `bg-red-500 hover:bg-red-600`
             : ""
         }
     `}
@@ -64,9 +66,9 @@ const Button: FC<ButtonProps> = ({
           icon={icon}
           className={`w-6 h-6 transition-all duration-300 ease-in-out ${
             type === "primary"
-              ? "text-white"
+              ? "text-black group-hover:text-[#a3c627]"
               : type === "outline"
-              ? "text-[#c4f70f] group-hover:text-black"
+              ? "text-[#a3c627] group-hover:text-black"
               : type === "transparent"
               ? "text-white"
               : ""

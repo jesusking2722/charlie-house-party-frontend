@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Button,
   CardEffectSlider,
   CardEffectSliderItemType,
   Map,
@@ -72,12 +73,28 @@ const Home = () => {
         }}
       >
         <div className="flex flex-col gap-4">
-          <h2 className="text-sm font-semibold text-black">
-            {selectedParty?.address}
+          <h2 className="text-sm text-black">
+            <strong>Address:</strong> {selectedParty?.address}
           </h2>
-          <h2 className="text-sm font-semibold text-black">
+          <h2 className="text-sm text-black">
+            <strong>Attendees: </strong>
             {selectedParty?.attendees}
           </h2>
+        </div>
+        <div className="mt-6 flex flex-row items-center justify-end gap-4">
+          <Button
+            type="primary"
+            label="Apply to join"
+            icon="solar:document-medicine-bold-duotone"
+          />
+          <Button
+            type="outline"
+            label="Cancel"
+            icon="solar:arrow-right-outline"
+            onClick={() => {
+              setModalOpen(false);
+            }}
+          />
         </div>
       </Modal>
     </div>
