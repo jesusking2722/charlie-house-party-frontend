@@ -8,3 +8,4 @@ export { default as CardEffectSlider } from "./CardEffectSlider";
 export type { CardEffectSliderItemType } from "./CardEffectSlider";
 export { default as Map } from "./Map";
 export type { PartyLocation } from "./Map";
+export { default as Modal } from "./Modal";
