@@ -13,6 +13,8 @@ export interface PartyLocation {
   address: string;
   partyType: string;
   attendees: number;
+  country: string;
+  region: string;
 }
 
 const PartyMarker = ({
@@ -37,17 +39,25 @@ const PartyMarker = ({
   );
 };
 
+interface Center {
+  lat: number;
+  lng: number;
+}
+
 export interface MapInterface {
   parties: PartyLocation[];
+  center: Center;
+  zoom: number | null;
   onClick: (party: PartyLocation) => void;
 }
 
-const Map: FC<MapInterface> = ({ parties, onClick }) => {
+const Map: FC<MapInterface> = ({ parties, center, zoom, onClick }) => {
   return (
     <APIProvider apiKey="AIzaSyDRgkhZgl0RG7UoQiqU6LkFv1BsT6Upg1Y">
       <GoogleMap
-        defaultZoom={13}
-        defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
+        defaultZoom={5}
+        center={center}
+        zoom={zoom}
         gestureHandling={"greedy"}
         mapId={"AIzaSyDRgkhZgl0RG7UoQiqU6LkFv1BsT6Upg1Y"}
         className="w-full h-full map rounded-[20px] shadow-lg border border-[#d5fd42]"

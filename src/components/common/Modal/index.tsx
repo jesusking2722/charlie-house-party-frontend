@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
 import IconButton from "../IconButton";
-import Button from "../Button";
 
 const Modal = ({
   title,

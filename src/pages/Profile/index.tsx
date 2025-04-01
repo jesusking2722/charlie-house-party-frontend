@@ -1,6 +1,6 @@
 const Profile = () => {
   return (
-    <div className="```">
+    <div className="">
       <div></div>
     </div>
   );

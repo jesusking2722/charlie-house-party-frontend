@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 
 const Navbar = () => {
   return (
-    <motion.header
+    <motion.div
       initial={{ x: -300 }}
       animate={{ x: 0 }}
       transition={{ type: "spring" }}
@@ -17,11 +17,6 @@ const Navbar = () => {
             path=""
           />
           <LinkIconButton
-            label="Profile"
-            icon="solar:user-bold-duotone"
-            path=""
-          />
-          <LinkIconButton
             label="Notification"
             icon="solar:bell-bing-bold-duotone"
             path=""
@@ -32,14 +27,9 @@ const Navbar = () => {
             path=""
           />
           <LinkIconButton label="Shop" icon="solar:shop-bold-duotone" path="" />
-          <LinkIconButton
-            label="Log out"
-            icon="solar:logout-bold-duotone"
-            path=""
-          />
         </ul>
       </nav>
-    </motion.header>
+    </motion.div>
   );
 };
 

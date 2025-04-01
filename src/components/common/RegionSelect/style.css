@@ -1,0 +1,8 @@
+.country-select div {
+    border-radius: 10px !important;
+}
+
+.country-select option:hover {
+    background-color: #c1eb2a !important;
+    font-size: small !important;
+}
