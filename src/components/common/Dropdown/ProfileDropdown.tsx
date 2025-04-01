@@ -8,7 +8,7 @@ const ProfileDropdown = () => {
   return (
     <div className="max-w-lg mx-auto relative w-[200px]">
       <button
-        className="flex flex-row items-center justify-center rounded-full bg-transparent hover:bg-black/5 backdrop-blur-sm group gap-4 px-4
+        className="flex flex-row items-center justify-center rounded-full bg-transparent hover:bg-black/5 backdrop-blur-sm group gap-4 pr-4
           transition-all duration-300 ease-in-out"
         onClick={() => setActive(!active)}
       >
@@ -33,7 +33,10 @@ const ProfileDropdown = () => {
             <li className="group hover:bg-[#c1eb2a] transition-all duration-300 ease-in-out cursor-pointer px-4 py-2">
               <Link
                 to="/profile"
-                className=" flex flex-row items-center justify-between "
+                className=" flex flex-row items-center justify-between"
+                onClick={() => {
+                  setActive(false);
+                }}
               >
                 <span className="text-[#353537] text-sm">Edit profile</span>
                 <Icon

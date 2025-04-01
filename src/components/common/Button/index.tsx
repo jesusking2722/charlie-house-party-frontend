@@ -40,18 +40,18 @@ const Button: FC<ButtonProps> = ({
       } shadow-lg
         ${
           type === "primary"
-            ? "bg-[#c1eb2a] border border-[#c1eb2a] hover:bg-white text-black hover:text-[#a3c627]"
+            ? "bg-[#c4f70f] border border-[#c4f70f] hover:bg-white text-black hover:text-[#c4f70f]"
             : type === "outline"
             ? `border bg-transparent ${
                 disabled
-                  ? "border-gray-200 text-gray-200"
-                  : "hover:bg-[#c4f70f] hover:text-black border-[#c4f70f] text-[#a3c627]"
+                  ? "border-gray-200 text-gray-200 cursor-not-allowed"
+                  : "hover:bg-[#c4f70f] hover:text-black border-[#c4f70f] text-[#c4f70f]"
               }`
             : type === "transparent"
-            ? `bg-transparent text-white ${
+            ? `bg-black/5 text-white ${
                 disabled
                   ? "cursor-not-allowed"
-                  : "hover:bg-black/5 backdrop-blur-sm cursor-pointer"
+                  : "hover:bg-black/10 backdrop-blur-sm cursor-pointer"
               }`
             : type === "red"
             ? `bg-red-500 hover:bg-red-600`
@@ -66,9 +66,13 @@ const Button: FC<ButtonProps> = ({
           icon={icon}
           className={`w-6 h-6 transition-all duration-300 ease-in-out ${
             type === "primary"
-              ? "text-black group-hover:text-[#a3c627]"
+              ? "text-black group-hover:text-[#c4f70f]"
               : type === "outline"
-              ? "text-[#a3c627] group-hover:text-black"
+              ? `${
+                  disabled
+                    ? "text-white"
+                    : "text-[#c4f70f] group-hover:text-black"
+                }`
               : type === "transparent"
               ? "text-white"
               : ""

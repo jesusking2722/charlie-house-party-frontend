@@ -9,7 +9,7 @@ const Navbar = () => {
       transition={{ type: "spring" }}
       className="w-[100px] fixed left-0 top-0 min-h-screen bg-black/5 backdrop-blur-sm shadow-lg"
     >
-      <nav className="w-full py-14 px-4 text-center">
+      <nav className="py-14 px-4 text-center">
         <ul className="flex flex-col gap-4">
           <LinkIconButton
             label="Menu"

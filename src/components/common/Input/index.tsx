@@ -47,14 +47,14 @@ const Input: FC<InputFieldProps> = ({
   return (
     <div className="w-full flex flex-col gap-1">
       {label && (
-        <label className="text-gray-400 text-sm font-semibold mb-1">
+        <label className="text-[#696969] text-sm font-semibold mb-1">
           {label}
         </label>
       )}
 
       <div
         className={`group w-full flex items-center gap-2 rounded-lg px-3 py-2
-          bg-transparent border border-gray-400 transition-all duration-300
+          bg-transparent border border-[#696969] transition-all duration-300
           hover:border-[#c4f70f] hover:shadow-lg focus-within:border-[#c4f70f] focus-within:shadow-lg ${
             isInvalid ? "border-red-500" : ""
           }`}
@@ -62,7 +62,7 @@ const Input: FC<InputFieldProps> = ({
         {icon && (
           <Icon
             icon={icon}
-            className={`text-[#353537] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-6 h-6 ${
+            className={`text-[#696969] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-6 h-6 ${
               isInvalid && "text-red-500"
             }`}
           />
@@ -70,7 +70,7 @@ const Input: FC<InputFieldProps> = ({
         <input
           type={type === "password" && !showPassword ? "password" : "text"}
           className="bg-transparent border-none outline-none focus:border-none text-black 
-            text-sm w-full placeholder-gray-400"
+            text-sm w-full placeholder-[#696969]"
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChange?.(e.target.value)}
@@ -80,7 +80,7 @@ const Input: FC<InputFieldProps> = ({
         {type === "password" && (
           <button
             type="button"
-            className="pl-1 border-l border-gray-400 cursor-pointer"
+            className="pl-1 border-l border-[#696969] cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
           >
             <Icon
@@ -89,7 +89,7 @@ const Input: FC<InputFieldProps> = ({
                   ? "solar:eye-closed-bold-duotone"
                   : "solar:eye-bold-duotone"
               }
-              className="text-[#353537] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-6 h-6"
+              className="text-[#696969] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-6 h-6"
             />
           </button>
         )}
@@ -101,7 +101,7 @@ const Input: FC<InputFieldProps> = ({
           <div className="flex gap-1 mt-1">
             <div
               className={`h-1 flex-1 rounded-lg ${
-                passwordStrength === "weak" ? "bg-red-500" : "bg-[#353537]"
+                passwordStrength === "weak" ? "bg-red-500" : "bg-[#696969]"
               }`}
             ></div>
             <div
@@ -110,22 +110,22 @@ const Input: FC<InputFieldProps> = ({
                   ? "bg-[#c4f70f]"
                   : passwordStrength === "strong"
                   ? "bg-[#c4f70f]"
-                  : "bg-[#353537]"
+                  : "bg-[#696969]"
               }`}
             ></div>
             <div
               className={`h-1 flex-1 rounded-lg ${
-                passwordStrength === "strong" ? "bg-[#c4f70f]" : "bg-[#353537]"
+                passwordStrength === "strong" ? "bg-[#c4f70f]" : "bg-[#696969]"
               }`}
             ></div>
           </div>
           <div className="flex flex-row items-center justify-between">
-            <span className="text-[#353537] font-semibold text-[10px]">
+            <span className="text-[#696969] font-semibold text-[10px]">
               {passwordStrength.toUpperCase()}
             </span>
             <Icon
               icon="heroicons:information-circle-solid"
-              className="text-[#353537] w-4 h-4"
+              className="text-[#696969] w-4 h-4"
             />
           </div>
         </div>

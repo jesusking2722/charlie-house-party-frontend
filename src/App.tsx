@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router";
 import { Container } from "./components";
-import { Home, Login, Register } from "./pages";
+import { Home, Login, Profile, Register } from "./pages";
 // import { useAuth } from "./hooks";
 import { Toaster } from "react-hot-toast";
 
@@ -39,6 +39,7 @@ function App() {
         <Route path="/register" Component={Register} />
         <Route path="/login" Component={Login} />
         <Route path="/" Component={Home} />
+        <Route path="/profile" Component={Profile} />
       </Routes>
       <Toaster position="top-right" reverseOrder={false} />
     </Container>

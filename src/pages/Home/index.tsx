@@ -133,12 +133,12 @@ const Home = () => {
             />
             <div className="flex flex-row items-center gap-4">
               <Button
-                type="primary"
+                type="outline"
                 label="Reset All"
                 onClick={handleResetAll}
               />
               <Button
-                type="transparent"
+                type="primary"
                 label="See All"
                 icon="solar:square-alt-arrow-right-line-duotone"
               />
