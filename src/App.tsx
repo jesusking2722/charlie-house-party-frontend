@@ -50,7 +50,7 @@ function App() {
         <Route path="/dashboard" Component={Home} />
         <Route path="/profile" Component={Profile} />
         <Route path="/pricing" Component={Pricing} />
-        <Route path="/not-found" Component={NotFound} />
+        <Route path="*" Component={NotFound} />
       </Routes>
       <Toaster position="top-right" reverseOrder={false} />
     </Container>
