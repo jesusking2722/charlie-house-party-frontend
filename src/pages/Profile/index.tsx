@@ -1,10 +1,18 @@
-import { Icon } from "@iconify/react";
-import { Banner, Button, IconButton, Rater } from "../../components";
+import {
+  Badge,
+  Banner,
+  Button,
+  IconButton,
+  Modal,
+  Rater,
+} from "../../components";
 import StickerPockets from "./StickerPockets";
 import ProfileDescripter from "./ProfileDescripter";
 import ProfileHeader from "./ProfileHeader";
 import ProfileReviewer from "./ProfileReviewer";
-import { Review } from "../../types";
+import { Review, User } from "../../types";
+import { useState } from "react";
+import ProfileEdit from "./ProfileEdit";
 
 const initialReviews: Review[] = [
   {
@@ -15,6 +23,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -33,6 +42,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -51,6 +61,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -69,6 +80,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -87,6 +99,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -105,6 +118,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -123,6 +137,7 @@ const initialReviews: Review[] = [
     createdAt: new Date(),
     reviewer: {
       name: "Lukas Boruski",
+      shortname: "lukasboruski",
       avatar: "./assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
@@ -135,7 +150,22 @@ const initialReviews: Review[] = [
   },
 ];
 
+const initialUser: User = {
+  name: "Lukas Boruski",
+  shortname: "lukasboruski",
+  avatar: "./assets/pngs/user.png",
+  email: "lukas.boruski@gmail.com",
+  phone: "",
+  createdAt: new Date(),
+  emailVerified: true,
+  phoneVerified: false,
+  kycVerified: true,
+  reviews: [],
+};
+
 const Profile = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
       <Banner />
@@ -144,21 +174,24 @@ const Profile = () => {
           <div className="flex flex-row items-center gap-2">
             <h2 className="text-lg text-black font-semibold">Jhon Doe.</h2>
             <h2 className="text-lg text-black font-semibold">@jhondoe</h2>
-            <Icon
-              icon="solar:verified-check-bold"
-              className="text-green-500 w-6 h-6"
-            />
-            <Icon icon="solar:stars-bold" className="text-cyan-500 w-6 h-6" />
+            <Badge type="kyc" />
+            <Badge type="premium" />
           </div>
           <div className="flex flex-row items-center gap-2">
-            <Button type="transparent" label="Edit profile" />
+            <Button
+              type="primary"
+              label="Edit profile"
+              onClick={() => {
+                setModalOpen(true);
+              }}
+            />
             <Button type="transparent" label="Invite to party" />
             <IconButton icon="solar:share-line-duotone" />
             <IconButton icon="solar:plain-bold-duotone" />
           </div>
         </div>
+        {/* Profile description */}
         <div className="w-full flex flex-row items-start justify-between flex-1 gap-14">
-          {/* Profile description */}
           <div className="flex flex-col gap-4 flex-1">
             <Rater rate={3.5} />
             <ProfileHeader
@@ -167,12 +200,25 @@ const Profile = () => {
               countryCode="US"
               joinedDate={new Date()}
             />
-            <ProfileDescripter description="Hi, I am a senior party owner with 5 years of experience in opening and managing several kinds of parties." />
+            <ProfileDescripter
+              description="Hi, I am a senior party owner with 5 years of experience in opening and managing several kinds of parties. 
+              I owned some kinds of happy parties and all members enjoyed together."
+            />
           </div>
           <StickerPockets />
         </div>
       </div>
+      {/* Profile Reviews */}
       <ProfileReviewer reviews={initialReviews} />
+      <Modal
+        title="Edit profile"
+        isOpen={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+        }}
+      >
+        <ProfileEdit user={initialUser} />
+      </Modal>
     </div>
   );
 };

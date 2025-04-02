@@ -6,7 +6,10 @@ import { useLocation } from "react-router";
 const Container = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
   const isAuthPage =
-    pathname.includes("register") || pathname.includes("login");
+    pathname.includes("register") ||
+    pathname.includes("login") ||
+    pathname.includes("onboarding") ||
+    pathname.includes("not-found");
 
   return (
     <div

@@ -23,7 +23,9 @@ const ProfileDropdown = () => {
           </span>
           <Icon
             icon="solar:alt-arrow-down-linear"
-            className="text-[#353537] group-hover:text-[#c1eb2a] w-6 h-6 transition-all duration-300 ease-in-out"
+            className={`text-[#353537] group-hover:text-[#c1eb2a] w-6 h-6 transition-all duration-300 ease-in-out ${
+              active ? "rotate-180" : "rotate-0"
+            }`}
           />
         </div>
       </button>

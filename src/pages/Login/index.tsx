@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center">
+    <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div className="w-full flex flex-row gap-4">
         <motion.div
           initial={{ x: -300 }}
@@ -43,7 +43,7 @@ const Login = () => {
             <Input
               type="email"
               placeholder="example.com"
-              icon="solar:user-bold-duotone"
+              icon="solar:inbox-line-bold-duotone"
               value={email}
               onChange={setEmail}
             />

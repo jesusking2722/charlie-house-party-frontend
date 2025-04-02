@@ -133,7 +133,7 @@ const Home = () => {
             />
             <div className="flex flex-row items-center gap-4">
               <Button
-                type="outline"
+                type="transparent"
                 label="Reset All"
                 onClick={handleResetAll}
               />

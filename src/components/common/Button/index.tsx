@@ -3,7 +3,14 @@ import { FC } from "react";
 import { Link } from "react-router";
 
 interface ButtonProps {
-  type: "primary" | "outline" | "transparent" | "link" | "blue" | "red";
+  type:
+    | "primary"
+    | "outline"
+    | "transparent"
+    | "link"
+    | "blue"
+    | "red"
+    | "gradient";
   label: string;
   icon?: string;
   loading?: boolean;
@@ -48,13 +55,15 @@ const Button: FC<ButtonProps> = ({
                   : "hover:bg-[#c4f70f] hover:text-black border-[#c4f70f] text-[#c4f70f]"
               }`
             : type === "transparent"
-            ? `bg-black/5 text-white ${
+            ? `bg-black/10 text-white ${
                 disabled
                   ? "cursor-not-allowed"
-                  : "hover:bg-black/10 backdrop-blur-sm cursor-pointer"
+                  : "hover:bg-black/15 backdrop-blur-sm cursor-pointer"
               }`
             : type === "red"
             ? `bg-red-500 hover:bg-red-600`
+            : type === "gradient"
+            ? "bg-gradient text-white"
             : ""
         }
     `}
@@ -73,7 +82,7 @@ const Button: FC<ButtonProps> = ({
                     ? "text-white"
                     : "text-[#c4f70f] group-hover:text-black"
                 }`
-              : type === "transparent"
+              : type === "transparent" || type === "gradient"
               ? "text-white"
               : ""
           }`}

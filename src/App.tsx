@@ -2,7 +2,15 @@ import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router";
 import { Container } from "./components";
-import { Home, Login, Profile, Register } from "./pages";
+import {
+  Home,
+  Login,
+  NotFound,
+  Onboarding,
+  Pricing,
+  Profile,
+  Register,
+} from "./pages";
 // import { useAuth } from "./hooks";
 import { Toaster } from "react-hot-toast";
 
@@ -38,8 +46,11 @@ function App() {
       <Routes>
         <Route path="/register" Component={Register} />
         <Route path="/login" Component={Login} />
-        <Route path="/" Component={Home} />
+        <Route path="/onboarding" Component={Onboarding} />
+        <Route path="/dashboard" Component={Home} />
         <Route path="/profile" Component={Profile} />
+        <Route path="/pricing" Component={Pricing} />
+        <Route path="/not-found" Component={NotFound} />
       </Routes>
       <Toaster position="top-right" reverseOrder={false} />
     </Container>

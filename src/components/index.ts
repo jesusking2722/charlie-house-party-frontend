@@ -15,6 +15,7 @@ export {
   Banner,
   Rater,
   Tooltip,
+  Badge,
 } from "./common";
 export type { CardEffectSliderItemType, PartyLocation } from "./common";
 export { Container, Navbar, Header, Footer } from "./layouts";

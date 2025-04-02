@@ -15,3 +15,4 @@ export { default as Textarea } from "./Textarea";
 export { default as Banner } from "./Banner";
 export { default as Rater } from "./Rater";
 export { default as Tooltip } from "./Tooltip";
+export { default as Badge } from "./Badge";

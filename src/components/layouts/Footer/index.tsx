@@ -6,8 +6,13 @@ import { Icon } from "@iconify/react";
 const Footer = () => {
   const [text, setText] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
+  const [subject, setSubject] = useState<string>("");
   const currentYear = new Date().getFullYear();
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   return (
     <footer className="w-[80%] mx-auto py-8 flex flex-col gap-8">
@@ -43,13 +48,19 @@ const Footer = () => {
             type="email"
             icon="solar:inbox-line-bold-duotone"
             placeholder="example.com"
+            invalid={!validateEmail(email)}
+            invalidTxt="Input your correct email"
+            value={email}
             onChange={setEmail}
           />
           <Input
             type="text"
-            icon="solar:user-hands-bold-duotone"
-            placeholder="Name"
-            onChange={setUsername}
+            icon="solar:chat-dots-bold-duotone"
+            placeholder="Subject"
+            invalid={subject === ""}
+            invalidTxt="Describe your subject"
+            value={subject}
+            onChange={setSubject}
           />
           <Textarea value={text} onChange={setText} />
           <Button
@@ -57,7 +68,7 @@ const Footer = () => {
             label="Submit"
             icon="solar:plain-bold-duotone"
             width="full"
-            disabled={email === "" || username === "" || text === ""}
+            disabled={!validateEmail(email) || subject === "" || text === ""}
           />
         </form>
       </div>

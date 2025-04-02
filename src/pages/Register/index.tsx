@@ -100,7 +100,7 @@ const Register = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center">
+    <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {loading && <Spinner />}
       <div className="w-full flex flex-row gap-4">
         <motion.div
@@ -145,7 +145,7 @@ const Register = () => {
                     <Input
                       type="email"
                       placeholder="example.com"
-                      icon="solar:user-bold-duotone"
+                      icon="solar:inbox-line-bold-duotone"
                       value={email}
                       invalid={!validate()}
                       invalidTxt="Input your correct email"

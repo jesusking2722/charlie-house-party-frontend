@@ -10,7 +10,6 @@ const myStyles = {
 const Rater = ({ rate }: { rate: number }) => {
   return (
     <div className="flex flex-row items-center gap-2">
-      <span className="text-sm font-semibold text-green-500">{rate}</span>
       <Rating
         value={rate}
         style={{ margin: 0, padding: 0 }}
@@ -18,6 +17,7 @@ const Rater = ({ rate }: { rate: number }) => {
         className="max-w-[150px] p-0 m-0"
         readOnly={true}
       />
+      <span className="text-sm font-semibold text-green-500">{rate}</span>
     </div>
   );
 };

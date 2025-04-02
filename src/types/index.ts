@@ -2,6 +2,7 @@ export type { ApiResponse, AuthResponse } from "./api";
 
 export interface User {
   name: string | null;
+  shortname: string | null;
   email: string | null;
   avatar: string | null;
   phone: string | null;

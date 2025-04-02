@@ -6,19 +6,40 @@ interface LinkIconButtonProps {
   label: string;
   icon: string;
   path: string;
+  active?: boolean;
+  onClick?: (val: string) => void;
 }
 
-const LinkIconButton: FC<LinkIconButtonProps> = ({ label, icon, path }) => {
+const LinkIconButton: FC<LinkIconButtonProps> = ({
+  label,
+  icon,
+  path,
+  active,
+  onClick,
+}) => {
   return (
     <Link
-      to={path}
+      to={path ?? ""}
       className="flex flex-col items-center justify-center gap-2 bg-transparent group"
+      onClick={
+        onClick
+          ? () => {
+              onClick(label);
+            }
+          : () => {}
+      }
     >
       <Icon
         icon={icon}
-        className="text-[#353537] w-12 h-12 group-hover:text-[#dcff5e] group-focus-within:text-[#dcff5e] group-hover:bg-[#a3bd45] group-focus-within:bg-[#a3bd45] backdrop-blur-sm rounded-full shadow-lg p-2 transition-all duration-300 ease-in-out"
+        className={`text-[#353537] w-12 h-12 group-hover:text-[#dcff5e] group-hover:bg-[#a3bd45] ${
+          active && "bg-[#a3bd45] text-[#dcff5e]"
+        } backdrop-blur-sm rounded-full shadow-lg p-2 transition-all duration-300 ease-in-out`}
       />
-      <span className="text-[#353537] group-hover:text-[#d5fd42] group-focus-within:text-[#d5fd42] text-xs transition-all duration-300 ease-in-out">
+      <span
+        className={`text-[#353537] group-hover:text-[#d5fd42] ${
+          active && "text-[#d5fd42]"
+        } text-xs transition-all duration-300 ease-in-out`}
+      >
         {label}
       </span>
     </Link>
