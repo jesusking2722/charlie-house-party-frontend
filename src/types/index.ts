@@ -13,12 +13,15 @@ export interface User {
   kycVerified: boolean;
   reviews: Review[] | null;
   createdAt: Date | null;
-  membership?: "premium" | "free";
+  membership?: "premium" | "free" | null;
   membershipPeriod?: 0 | 1 | 3 | 6 | 12;
   country?: string;
   region?: string;
   title?: string;
   about?: string;
+  rate?: number;
+  totalCompleted?: number;
+  kyc?: Kyc;
 }
 
 export interface Review {
@@ -48,4 +51,20 @@ export interface Party {
   creator: User;
   applicants: Applicant[];
   createdAt: Date;
+}
+
+export interface Kyc {
+  sessionId: string;
+  sessionNumber: number;
+  sessionToken: string;
+  vendorData: string;
+  status:
+    | "Not Started"
+    | "In Progress"
+    | "Completed"
+    | "Approved"
+    | "Declined"
+    | "Expired"
+    | "Abandoned";
+  url: string;
 }

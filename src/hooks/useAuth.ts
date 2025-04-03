@@ -18,7 +18,7 @@ const useAuth = () => {
   useEffect(() => {
     if (user) {
       if (!user.emailVerified) navigate("/register");
-      else if (!user.name) navigate("/onboarding");
+      else if (!user.name || !user.country) navigate("/onboarding");
     }
   }, [user]);
 };

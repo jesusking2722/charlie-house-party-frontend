@@ -6,5 +6,8 @@ export {
   updateFirstMe,
   updateMe,
   updateBannerMe,
+  updateAvatarMe,
+  startKyc,
+  fetchKyc,
 } from "./auth";
 export { fetchAllUsers } from "./user";

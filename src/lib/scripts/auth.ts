@@ -1,4 +1,4 @@
-import { ApiResponse, AuthResponse, User } from "../../types";
+import { ApiResponse, AuthResponse, Kyc, User } from "../../types";
 import {
   EMAIL_REGISTER,
   GOOGLE_LOGIN,
@@ -8,6 +8,9 @@ import {
   BASE_URL,
   UPDATE_ME,
   UPDATE_BANNER_ME,
+  UPDATE_AVATAR_ME,
+  START_KYC,
+  FETCH_KYC_DECISION,
 } from "../apis";
 import fetchInstance from "../fetchInstance";
 import { UserResponse } from "../../types/api";
@@ -68,7 +71,21 @@ export const updateBannerMe = async ({
   id: string;
   formData: FormData;
 }): Promise<any> => {
-  const response = await fetch(UPDATE_BANNER_ME + id, {
+  const response = await fetch(BASE_URL + UPDATE_BANNER_ME + id, {
+    method: "PATCH",
+    body: formData,
+  });
+  return response.json();
+};
+
+export const updateAvatarMe = async ({
+  id,
+  formData,
+}: {
+  id: string;
+  formData: FormData;
+}): Promise<any> => {
+  const response = await fetch(BASE_URL + UPDATE_AVATAR_ME + id, {
     method: "PATCH",
     body: formData,
   });
@@ -83,5 +100,20 @@ export const updateMe = async ({
   return await fetchInstance<ApiResponse<UserResponse>>(UPDATE_ME, {
     method: "PATCH",
     body: JSON.stringify({ user }),
+  });
+};
+
+export const startKyc = async (): Promise<ApiResponse<UserResponse>> => {
+  return await fetchInstance<ApiResponse<UserResponse>>(START_KYC, {
+    method: "GET",
+  });
+};
+
+export const fetchKyc = async (
+  sessionId: string
+): Promise<ApiResponse<Kyc>> => {
+  return await fetchInstance<ApiResponse<Kyc>>(FETCH_KYC_DECISION, {
+    method: "POST",
+    body: JSON.stringify({ sessionId }),
   });
 };

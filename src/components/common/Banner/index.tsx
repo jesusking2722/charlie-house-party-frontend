@@ -1,9 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import { Icon } from "@iconify/react";
 import { BACKEND_BASE_URL } from "../../../constant";
 
-const Banner = ({ avatar, banner }: { avatar: string; banner: string }) => {
-  const [bannerImage, setBannerImage] = useState("");
+const Banner = ({
+  avatar,
+  banner,
+  isMe,
+  onBannerUpload,
+}: {
+  avatar: string;
+  banner: string;
+  isMe: boolean;
+  onBannerUpload: (banner: File) => Promise<void>;
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
@@ -13,47 +22,46 @@ const Banner = ({ avatar, banner }: { avatar: string; banner: string }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setBannerImage(imageUrl);
+      onBannerUpload(file);
     }
   };
-
-  useEffect(() => {
-    setBannerImage(banner);
-  }, [banner]);
 
   return (
     <div className="w-full relative h-[300px] rounded-xl border border-white shadow-lg">
       {/* Background Image */}
-      {bannerImage !== "" && (
+      {banner !== "" && (
         <img
-          src={bannerImage}
+          src={BACKEND_BASE_URL + banner}
           alt="Banner Background"
           className="w-full h-full object-cover object-center rounded-xl"
         />
       )}
 
-      <button
-        onClick={handleUploadClick}
-        className="bg-white rounded-xl p-2 group absolute bottom-5 right-5 transition-all duration-300 ease-in-out flex flex-row items-center justify-center gap-2 hover:shadow-lg"
-      >
-        <span className="text-sm text-black group-hover:text-[#c4f70f] transition-all duration-300 ease-in-out">
-          Upload
-        </span>
-        <Icon
-          icon="solar:cloud-upload-bold-duotone"
-          className="text-black group-hover:text-[#c4f70f] transition-all duration-300 ease-in-out"
-        />
-      </button>
+      {isMe && (
+        <>
+          <button
+            onClick={handleUploadClick}
+            className="bg-white rounded-xl p-2 group absolute bottom-5 right-5 transition-all duration-300 ease-in-out flex flex-row items-center justify-center gap-2 hover:shadow-lg"
+          >
+            <span className="text-sm text-black group-hover:text-[#c4f70f] transition-all duration-300 ease-in-out">
+              Upload
+            </span>
+            <Icon
+              icon="solar:cloud-upload-bold-duotone"
+              className="text-black group-hover:text-[#c4f70f] transition-all duration-300 ease-in-out"
+            />
+          </button>
 
-      {/* Hidden File Input */}
-      <input
-        type="file"
-        accept="image/*"
-        ref={fileInputRef}
-        className="hidden"
-        onChange={handleFileChange}
-      />
+          {/* Hidden File Input */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </>
+      )}
 
       {/* User Image */}
       <div className="absolute left-24 -bottom-14 transform -translate-x-1/2 w-[150px] h-[150px] rounded-full border border-white shadow-lg bg-white">

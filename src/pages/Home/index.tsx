@@ -51,12 +51,27 @@ const initialSlides: CardEffectSliderItemType[] = [
   {
     title: "Special House Party",
     subtitle: "Enjoy our special house party",
+    imgSource: "./assets/pngs/model1.png",
+  },
+  {
+    title: "Special House Party",
+    subtitle: "Enjoy our special house party",
     imgSource: "./assets/pngs/model2.png",
   },
   {
     title: "Special House Party",
     subtitle: "Enjoy our special house party",
-    imgSource: "./assets/pngs/model1.png",
+    imgSource: "./assets/pngs/model3.png",
+  },
+  {
+    title: "Special House Party",
+    subtitle: "Enjoy our special house party",
+    imgSource: "./assets/pngs/model4.png",
+  },
+  {
+    title: "Special House Party",
+    subtitle: "Enjoy our special house party",
+    imgSource: "./assets/pngs/model5.png",
   },
 ];
 

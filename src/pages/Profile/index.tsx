@@ -5,6 +5,8 @@ import {
   IconButton,
   Modal,
   Rater,
+  SharingButtonGroup,
+  Spinner,
 } from "../../components";
 import StickerPockets from "./StickerPockets";
 import ProfileDescripter from "./ProfileDescripter";
@@ -14,8 +16,11 @@ import { Review, User } from "../../types";
 import { useEffect, useState } from "react";
 import ProfileEdit from "./ProfileEdit";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { updateBannerMe } from "../../lib/scripts";
+import { setAuthUser } from "../../redux/slices/authSlice";
+import { DOMAIN } from "../../constant";
 
 const initialReviews: Review[] = [
   {
@@ -155,23 +160,57 @@ const initialReviews: Review[] = [
 
 const Profile = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [shareOpen, setShareOpen] = useState<boolean>(false);
+  const [isMe, setIsMe] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [sharingLink, setSharingLink] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const { userId } = useParams();
 
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth, shallowEqual);
+  const dispatch = useDispatch();
+
+  const handleBannerUpload = async (bannerFile: File) => {
+    try {
+      if (selectedUser?._id) {
+        setLoading(true);
+        let formData = new FormData();
+        formData.append("banner", bannerFile);
+        const response = await updateBannerMe({
+          id: selectedUser._id,
+          formData,
+        });
+        if (response.ok) {
+          const { user } = response.data;
+          dispatch(setAuthUser({ user }));
+          setSelectedUser(user);
+        }
+      }
+    } catch (error) {
+      console.log("handle banner upload error: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (user?._id === userId) {
       setSelectedUser(user);
-      console.log(user);
+      setIsMe(true);
+      const profileUrl = `${DOMAIN}/profile/${user?._id}`;
+      const encodedUrl = encodeURIComponent(profileUrl);
+      setSharingLink(encodedUrl);
     }
   }, [userId, user]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
+      {loading && <Spinner />}
       <Banner
         avatar={selectedUser?.avatar ?? ""}
         banner={selectedUser?.banner ?? ""}
+        isMe={isMe}
+        onBannerUpload={handleBannerUpload}
       />
       <div className="w-full p-4 flex flex-col gap-4">
         <div className="w-full flex flex-row items-center justify-between">
@@ -183,28 +222,38 @@ const Profile = () => {
               @{selectedUser?.shortname}
             </h2>
             <Badge type="kyc" />
-            {selectedUser?.membership === "premium" && <Badge type="premium" />}
+            <Badge type="premium" />
+            {/* {selectedUser?.membership === "premium" && <Badge type="premium" />} */}
           </div>
           <div className="flex flex-row items-center gap-2">
-            <Button
-              type="primary"
-              label="Edit profile"
+            {isMe && (
+              <Button
+                type="primary"
+                label="Edit profile"
+                onClick={() => {
+                  setModalOpen(true);
+                }}
+              />
+            )}
+            <Button type="transparent" label="Invite to party" />
+            <IconButton
+              icon="solar:share-line-duotone"
               onClick={() => {
-                setModalOpen(true);
+                setShareOpen(true);
               }}
             />
-            <Button type="transparent" label="Invite to party" />
-            <IconButton icon="solar:share-line-duotone" />
+            {/* {selectedUser?.membership === "premium" && ( */}
             <IconButton icon="solar:plain-bold-duotone" />
+            {/* )} */}
           </div>
         </div>
         {/* Profile description */}
         <div className="w-full flex flex-row items-start justify-between flex-1 gap-14">
           <div className="flex flex-col gap-4 flex-1">
-            <Rater rate={3.5} />
+            <Rater rate={selectedUser?.rate ?? 0} />
             <ProfileHeader
               title={selectedUser?.title ?? ""}
-              parites={7}
+              parites={selectedUser?.totalCompleted ?? 0}
               countryCode={selectedUser?.country ?? ""}
               joinedDate={selectedUser?.createdAt ?? new Date()}
             />
@@ -222,7 +271,26 @@ const Profile = () => {
           setModalOpen(false);
         }}
       >
-        <ProfileEdit user={selectedUser} />
+        <ProfileEdit
+          user={selectedUser}
+          onClose={() => {
+            setModalOpen(false);
+          }}
+        />
+      </Modal>
+      <Modal
+        title="Share your profile to socials"
+        isOpen={shareOpen}
+        onClose={() => {
+          setShareOpen(false);
+        }}
+      >
+        <div className="w-full">
+          <SharingButtonGroup
+            link={sharingLink}
+            text="Try to see my awesome house party profile !!!"
+          />
+        </div>
       </Modal>
     </div>
   );

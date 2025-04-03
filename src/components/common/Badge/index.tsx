@@ -17,22 +17,19 @@ const Badge: FC<BadgeProps> = ({ type }) => {
           : ""
       }
     >
-      <Icon
-        icon={
-          type === "kyc"
-            ? "solar:verified-check-bold"
-            : type === "premium"
-            ? "solar:stars-bold"
-            : ""
-        }
-        className={`w-6 h-6 ${
-          type === "kyc"
-            ? "text-green-500"
-            : type === "premium"
-            ? "text-cyan-500"
-            : ""
-        }`}
-      />
+      {type === "premium" && (
+        <img
+          src="http://localhost:3000/assets/svgs/premium.svg"
+          alt="premium"
+          className="w-6 h-6"
+        />
+      )}
+      {type === "kyc" && (
+        <Icon
+          icon="solar:verified-check-bold"
+          className="w-6 h-6 text-green-500"
+        />
+      )}
     </Tooltip>
   );
 };

@@ -6,6 +6,7 @@ import {
   RegionSelect,
   Spinner,
   Textarea,
+  VideoShower,
 } from "../../components";
 import { useEffect, useRef, useState } from "react";
 import PricingCard from "../Pricing/PricingCard";
@@ -33,17 +34,20 @@ import { useNavigate } from "react-router";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { updateFirstMe, updateMe } from "../../lib/scripts";
+import { startKyc, updateFirstMe, updateMe } from "../../lib/scripts";
 import { setAuthUser } from "../../redux/slices/authSlice";
 import { User } from "../../types";
 import countryList from "react-select-country-list";
+import KycVerifier from "./KycVerifier";
 
 const Onboarding = () => {
   const [name, setName] = useState<string>("");
+  const [activeScreen, setActiveScreen] = useState<
+    "name" | "country" | "kyc" | "subscription" | "welcome" | ""
+  >("name");
   const [shortname, setShortname] = useState<string>("");
-  const [first, setFirst] = useState<boolean>(false);
-  const [second, setSecond] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [kycOpen, setKycOpen] = useState<boolean>(false);
   const [selectedMonth, setSelectedMonth] = useState<1 | 3 | 6 | 12 | null>(
     null
   );
@@ -98,7 +102,9 @@ const Onboarding = () => {
         if (response.ok) {
           const { user } = response.data;
           dispatch(setAuthUser({ user }));
-          setFirst(true);
+          setActiveScreen("country");
+        } else {
+          toast.error(response.message);
         }
       }
     } catch (error) {
@@ -125,7 +131,7 @@ const Onboarding = () => {
           if (response.ok) {
             const { user } = response.data;
             dispatch(setAuthUser({ user }));
-            setSecond(true);
+            setActiveScreen("welcome");
           }
         } else {
           setSelectedMonth(month);
@@ -205,11 +211,27 @@ const Onboarding = () => {
       if (response.ok) {
         const { user } = response.data;
         dispatch(setAuthUser({ user }));
+        setActiveScreen("subscription");
       } else {
         toast.error(response.message);
       }
     } catch (error) {
       console.log("handle country continue error: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartVerification = async () => {
+    try {
+      setLoading(true);
+      const response = await startKyc();
+      if (response.ok) {
+        const { user } = response.data;
+        dispatch(setAuthUser({ user }));
+      }
+    } catch (error) {
+      console.log("handle start verification error: ", error);
     } finally {
       setLoading(false);
     }
@@ -246,11 +268,31 @@ const Onboarding = () => {
     generateUsername();
   }, [name]);
 
+  useEffect(() => {
+    if (user) {
+      if (!user.name) {
+        setActiveScreen("name");
+        return;
+      } else if (!user.country) {
+        setActiveScreen("country");
+        return;
+      } else if (!user.kycVerified) {
+        setActiveScreen("kyc");
+        return;
+      } else if (!user.membership) {
+        setActiveScreen("subscription");
+        return;
+      } else {
+        setActiveScreen("welcome");
+      }
+    }
+  }, [user]);
+
   return (
     <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {loading && <Spinner />}
       <AnimatePresence mode="wait">
-        {!user?.name ? (
+        {activeScreen === "name" ? (
           <motion.div
             key="first-onboarding-section"
             initial={{ x: 300, opacity: 0 }}
@@ -259,6 +301,7 @@ const Onboarding = () => {
             transition={{ duration: 0.8 }}
             className="w-full flex flex-row gap-4"
           >
+            {/* First onboarding section for name and avatar */}
             <motion.div
               initial={{ x: -600 }}
               animate={{ x: 0 }}
@@ -268,7 +311,7 @@ const Onboarding = () => {
               <img
                 src="../assets/pngs/model2.png"
                 alt="MODEL"
-                className="w-full h-full rounded-xl"
+                className="w-full h-full rounded-xl object-cover object-center"
               />
             </motion.div>
             <motion.div
@@ -278,6 +321,7 @@ const Onboarding = () => {
               className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
             >
               <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+                {/* Avatar upload and name input */}
                 <div className="w-full px-12 flex flex-col items-center justify-center">
                   <img
                     src="./logo.png"
@@ -370,7 +414,7 @@ const Onboarding = () => {
                     <Button
                       label="Continue"
                       type="transparent"
-                      icon="solar:skip-next-broken"
+                      icon="solar:square-double-alt-arrow-right-broken"
                       disabled={name === "" || shortname === ""}
                       onClick={handleUserInfo}
                     />
@@ -379,7 +423,7 @@ const Onboarding = () => {
               </div>
             </motion.div>
           </motion.div>
-        ) : !user?.country ? (
+        ) : activeScreen === "country" ? (
           <motion.div
             key="country-onboarding-section"
             initial={{ x: 300, opacity: 0 }}
@@ -388,6 +432,7 @@ const Onboarding = () => {
             transition={{ duration: 0.8 }}
             className="w-full flex flex-row gap-4"
           >
+            {/* Second onboarding section for country selection */}
             <motion.div
               initial={{ x: -600 }}
               animate={{ x: 0 }}
@@ -395,9 +440,9 @@ const Onboarding = () => {
               className="basis-2/3 bg-white rounded-xl shadow-lg"
             >
               <img
-                src="../assets/pngs/model2.png"
+                src="../assets/pngs/model3.png"
                 alt="MODEL"
-                className="w-full h-full rounded-xl"
+                className="w-full h-full rounded-xl object-cover object-center"
               />
             </motion.div>
             <motion.div
@@ -431,7 +476,7 @@ const Onboarding = () => {
                 <Button
                   type="transparent"
                   label="Continue"
-                  icon="solar:skip-next-broken"
+                  icon="solar:square-double-alt-arrow-right-broken"
                   disabled={
                     country === "" ||
                     region === "" ||
@@ -443,19 +488,60 @@ const Onboarding = () => {
               </div>
             </motion.div>
           </motion.div>
-        ) : !second ? (
+        ) : activeScreen === "kyc" ? (
           <motion.div
-            key="second-onboarding-section"
+            key="kyc-onboarding-section"
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 100 }}
+            exit={{ x: -300, opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="w-full flex flex-col items-center justify-center gap-8"
+          >
+            {/* KYC verification section */}
+            <h1 className="gradient-text text-3xl font-semibold">
+              WELCOME TO YOUR KYC VERIFICATION
+            </h1>
+            <VideoShower
+              title="How to verify KYC"
+              videoSource="http://localhost:3000/assets/videos/kyc.mp4"
+            />
+            <div className="w-full flex flex-row items-center justify-center gap-14">
+              <Button
+                type="transparent"
+                label="Skip"
+                icon="solar:skip-next-bold"
+                onClick={() => {
+                  if (user?.membership) {
+                    setActiveScreen("welcome");
+                  } else {
+                    setActiveScreen("subscription");
+                  }
+                }}
+              />
+              <Button
+                type="primary"
+                label="Start"
+                icon="solar:square-double-alt-arrow-right-broken"
+                onClick={() => {
+                  setKycOpen(true);
+                }}
+              />
+            </div>
+          </motion.div>
+        ) : activeScreen === "subscription" ? (
+          <motion.div
+            key="subscribe-onboarding-section"
             initial={{ x: 300, opacity: 0 }}
             animate={{ x: 0, opacity: 100 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ duration: 0.8 }}
             className="w-full flex flex-col gap-14"
           >
+            {/* Subscription plan section */}
             <div className="flex flex-row items-center justify-center">
               <h2 className="text-2xl gradient-text font-semibold">
                 Let's subscribe to become a <strong>PREMIUM</strong> member for
-                owning our own happy parites !!!
+                owning our own happy parties !!!
               </h2>
             </div>
             <div className="flex flex-row items-center justify-between">
@@ -466,19 +552,20 @@ const Onboarding = () => {
               <PricingCard price={55} month={12} onSelect={handleSelectPlan} />
             </div>
           </motion.div>
-        ) : (
+        ) : activeScreen === "welcome" ? (
           <motion.div
-            key="third-onboarding-section"
+            key="welcome-onboarding-section"
             initial={{ x: 300, opacity: 0 }}
             animate={{ x: 0, opacity: 100 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ duration: 0.8 }}
             className="w-full flex flex-col gap-4"
           >
+            {/* Final welcome screen after onboarding */}
             <Confetti width={width} height={height} />
             <div className="">
               <h1 className="text-center gradient-text text-3xl font-semibold">
-                Congratulations for your becoming memeber for our{" "}
+                Congratulations for becoming a member of our{" "}
                 <strong>CHARLIE UNICORN AI</strong>'s House Party Family !!!
               </h1>
             </div>
@@ -486,14 +573,14 @@ const Onboarding = () => {
               <Button
                 type="primary"
                 label="Continue"
-                icon="solar:skip-next-broken"
+                icon="solar:square-double-alt-arrow-right-broken"
                 onClick={() => {
                   navigate("/dashboard");
                 }}
               />
             </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
       <Modal
         title={`Subscribe ${selectedPrice} CHRLE for ${selectedMonth} ${
@@ -521,6 +608,25 @@ const Onboarding = () => {
             loading={loading}
             onClick={isConnected ? handlePayment : () => open()}
           />
+        </div>
+      </Modal>
+      <Modal
+        title="KYC VERIFICATION"
+        isOpen={kycOpen}
+        onClose={() => {
+          setKycOpen(false);
+        }}
+      >
+        <div className="w-full flex flex-col gap-8">
+          <KycVerifier link={user?.kyc?.url ?? ""} />
+          <div className="w-full flex flex-row items-center justify-end gap-2">
+            <Button
+              type="primary"
+              label="Start"
+              icon="solar:square-double-alt-arrow-right-broken"
+              onClick={handleStartVerification}
+            />
+          </div>
         </div>
       </Modal>
     </div>

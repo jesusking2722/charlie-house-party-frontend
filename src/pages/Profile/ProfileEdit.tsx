@@ -1,25 +1,83 @@
 import { useEffect, useRef, useState } from "react";
 import { User } from "../../types";
 import { Icon } from "@iconify/react";
-import { Button, Input, RegionSelect, Textarea } from "../../components";
+import { Button, Input, Spinner, Textarea } from "../../components";
 import { BACKEND_BASE_URL } from "../../constant";
+import { updateAvatarMe, updateMe } from "../../lib/scripts";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../../redux/slices/authSlice";
+import toast from "react-hot-toast";
 
-const ProfileEdit = ({ user }: { user: User | null }) => {
+const ProfileEdit = ({
+  user,
+  onClose,
+}: {
+  user: User | null;
+  onClose: () => void;
+}) => {
   const [avatar, setAvatar] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [about, setAbout] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const dispatch = useDispatch();
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setAvatar(imageUrl);
+    if (file && user?._id) {
+      try {
+        setLoading(true);
+        let formData = new FormData();
+        formData.append("avatar", file);
+        const response = await updateAvatarMe({ id: user._id, formData });
+        if (response.ok) {
+          const { user } = response.data;
+          dispatch(setAuthUser({ user }));
+          setAvatar(user.avatar);
+        } else {
+          toast.error(response.message);
+        }
+      } catch (error) {
+        console.log("upload avatar error: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      if (user) {
+        const updatingUser: User = {
+          ...user,
+          name,
+          title,
+          about,
+        };
+        const response = await updateMe({ user: updatingUser });
+        if (response.ok) {
+          const { user } = response.data;
+          dispatch(setAuthUser({ user }));
+          toast.success("Profile is updated successfully");
+          onClose();
+        } else {
+          toast.error(response.message);
+        }
+      }
+    } catch (error) {
+      console.log("handle profile save error: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,6 +92,7 @@ const ProfileEdit = ({ user }: { user: User | null }) => {
 
   return (
     <div className="w-full flex flex-col gap-4">
+      {loading && <Spinner />}
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <button
           className="w-full flex flex-row items-center gap-4 group hover:bg-black/10 hover:shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out rounded-xl"
@@ -88,6 +147,8 @@ const ProfileEdit = ({ user }: { user: User | null }) => {
           type="primary"
           label="Save"
           icon="solar:check-circle-bold-duotone"
+          disabled={name === "" || title === "" || about === ""}
+          onClick={handleSave}
         />
       </div>
     </div>

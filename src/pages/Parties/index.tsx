@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dropdown, IconButton, RegionSelect, Tooltip } from "../../components";
 import { Party } from "../../types";
 import PartyCardGroup from "./PartyCardGroup";
@@ -239,6 +239,7 @@ const Parites = () => {
   const [country, setCountry] = useState<string>("");
   const [region, setRegion] = useState<string>("");
   const [partyType, setPartyType] = useState<string>("");
+  const [scrolled, setScrolled] = useState<boolean>(false);
 
   const countryCode = countryList();
 
@@ -274,9 +275,34 @@ const Parites = () => {
     setParties(initialParties);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="w-[80%] mx-auto flex flex-col gap-8">
-      <div className="w-full flex flex-row items-center justify-between">
+    <div
+      className="w-[80%] mx-auto flex flex-col gap-8"
+      onScroll={() => {
+        setScrolled(true);
+      }}
+    >
+      <div
+        className={`w-full flex flex-row items-center justify-between sticky top-0 z-20 transition-all duration-300 ease-in-out ${
+          scrolled ? "bg-white shadow-lg p-2 rounded-b-xl" : "bg-transparent"
+        }`}
+      >
         <div className="">
           <RegionSelect
             country={country}
