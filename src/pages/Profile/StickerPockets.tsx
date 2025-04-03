@@ -13,24 +13,96 @@ const StickerPockets = () => {
           !expand ? "overflow-hidden h-[300px]" : "h-[400px]"
         } `}
       >
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
-        <img src="./logo.png" alt="STICKER" className="w-[80px] h-[80px]" />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
+        <img
+          src="http://localhost:3000/logo.png"
+          alt="STICKER"
+          className="w-[80px] h-[80px]"
+        />
       </div>
       <div className="w-full p-2 flex items-center justify-center left-0">
         <Button

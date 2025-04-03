@@ -1,5 +1,5 @@
-const BASE_URL =
-  "https://charlie-house-party-backend-production.up.railway.app/api";
+const BASE_URL = "http://localhost:5001/api";
+// "https://charlie-house-party-backend-production.up.railway.app/api";
 
 // Function to get headers including Authorization token
 const getHeaders = (): HeadersInit => {

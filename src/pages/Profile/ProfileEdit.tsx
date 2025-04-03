@@ -1,10 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "../../types";
 import { Icon } from "@iconify/react";
-import { Button, Input } from "../../components";
+import { Button, Input, RegionSelect, Textarea } from "../../components";
+import { BACKEND_BASE_URL } from "../../constant";
 
-const ProfileEdit = ({ user }: { user: User }) => {
+const ProfileEdit = ({ user }: { user: User | null }) => {
   const [avatar, setAvatar] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [about, setAbout] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
@@ -19,6 +23,15 @@ const ProfileEdit = ({ user }: { user: User }) => {
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      setAvatar(user.avatar ?? "");
+      setName(user.name ?? "");
+      setTitle(user.title ?? "");
+      setAbout(user.about ?? "");
+    }
+  }, [user]);
+
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="w-full flex flex-col items-center justify-center gap-4">
@@ -27,15 +40,13 @@ const ProfileEdit = ({ user }: { user: User }) => {
           onClick={handleUploadClick}
         >
           <img
-            src={avatar === "" ? (user.avatar as string) : avatar}
-            alt={user.name ?? ""}
+            src={BACKEND_BASE_URL + avatar}
+            alt={user?.name ?? ""}
             className="w-[100px] h-[100px] rounded-full object-cover object-center"
           />
-          <div className="flex flex-1 flex-row items-center gap-2">
-            <Icon
-              icon="solar:cloud-upload-bold-duotone"
-              className="w-14 h-14"
-            />
+          <Icon icon="solar:cloud-upload-bold-duotone" className="w-10 h-10" />
+          <div className="flex-1 flex flex-col items-start gap-1">
+            <span className="text-sm text-black">File limits 5MB</span>
             <span className="text-sm text-black">Upload your avatar</span>
           </div>
         </button>
@@ -50,13 +61,26 @@ const ProfileEdit = ({ user }: { user: User }) => {
           type="text"
           icon="solar:user-bold-duotone"
           placeholder="Your name"
-          value={user.name ?? ""}
+          invalid={name === ""}
+          invalidTxt="Input your name"
+          value={name}
+          onChange={setName}
         />
         <Input
           type="text"
           icon="solar:shield-user-bold-duotone"
-          placeholder="Your id"
-          value={user.shortname ?? ""}
+          placeholder="Your title"
+          invalid={title === ""}
+          invalidTxt="Input your profession"
+          value={title}
+          onChange={setTitle}
+        />
+        <Textarea
+          placeholder="About yourself"
+          invalid={about === ""}
+          invalidTxt="Input your professional description"
+          value={about}
+          onChange={setAbout}
         />
       </div>
       <div className="w-full flex flex-row items-center justify-end gap-4">

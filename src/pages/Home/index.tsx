@@ -10,6 +10,7 @@ import {
   RegionSelect,
 } from "../../components";
 import countryList from "react-select-country-list";
+import { useNavigate } from "react-router";
 
 const initialPartyLocations: PartyLocation[] = [
   {
@@ -71,6 +72,7 @@ const Home = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedPartyType, setSelectedPartyType] = useState<string>("");
   const countryCode = countryList();
+  const navigate = useNavigate();
 
   const handleLocationClick = (party: PartyLocation) => {
     setSelectedParty(party);
@@ -141,6 +143,9 @@ const Home = () => {
                 type="primary"
                 label="See All"
                 icon="solar:square-alt-arrow-right-line-duotone"
+                onClick={() => {
+                  navigate("/parties");
+                }}
               />
             </div>
           </div>

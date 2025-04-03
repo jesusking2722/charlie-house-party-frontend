@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import { BACKEND_BASE_URL } from "../../../constant";
 
-const Banner = () => {
+const Banner = ({ avatar, banner }: { avatar: string; banner: string }) => {
   const [bannerImage, setBannerImage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -16,6 +17,10 @@ const Banner = () => {
       setBannerImage(imageUrl);
     }
   };
+
+  useEffect(() => {
+    setBannerImage(banner);
+  }, [banner]);
 
   return (
     <div className="w-full relative h-[300px] rounded-xl border border-white shadow-lg">
@@ -53,7 +58,7 @@ const Banner = () => {
       {/* User Image */}
       <div className="absolute left-24 -bottom-14 transform -translate-x-1/2 w-[150px] h-[150px] rounded-full border border-white shadow-lg bg-white">
         <img
-          src="./assets/pngs/user.png"
+          src={BACKEND_BASE_URL + avatar}
           alt="USER"
           className="w-full h-full object-cover rounded-full"
         />

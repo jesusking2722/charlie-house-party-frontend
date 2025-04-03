@@ -9,7 +9,7 @@ const NotFound = () => {
       <div className="w-full grid grid-cols-2 gap-4">
         <div className="">
           <img
-            src="./assets/pngs/404.png"
+            src="http://localhost:3000/assets/pngs/404.png"
             alt="404"
             className="w-full h-auto"
           />

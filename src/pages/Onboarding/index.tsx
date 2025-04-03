@@ -1,6 +1,13 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Button, Input, Modal, Spinner } from "../../components";
-import { useRef, useState } from "react";
+import {
+  Button,
+  Input,
+  Modal,
+  RegionSelect,
+  Spinner,
+  Textarea,
+} from "../../components";
+import { useEffect, useRef, useState } from "react";
 import PricingCard from "../Pricing/PricingCard";
 import {
   useAppKitAccount,
@@ -24,6 +31,12 @@ import { useWindowSize } from "react-use";
 import Confetti from "react-confetti";
 import { useNavigate } from "react-router";
 import { Icon } from "@iconify/react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { updateFirstMe, updateMe } from "../../lib/scripts";
+import { setAuthUser } from "../../redux/slices/authSlice";
+import { User } from "../../types";
+import countryList from "react-select-country-list";
 
 const Onboarding = () => {
   const [name, setName] = useState<string>("");
@@ -36,9 +49,27 @@ const Onboarding = () => {
   );
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isFreePlan, setIsFreePlan] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [shortnameHint, setShortnameHint] = useState<string | null>(null);
+  const [country, setCountry] = useState<string>("");
+  const [region, setRegion] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [about, setAbout] = useState<string>("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  const { open } = useAppKit();
+  const { address, isConnected } = useAppKitAccount();
+  const { chainId } = useAppKitNetworkCore();
+  const { walletProvider } = useAppKitProvider<Provider>("eip155");
+  const { width, height } = useWindowSize();
+  const countryCode = countryList();
+
+  const { users } = useSelector((state: RootState) => state.users);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -49,34 +80,64 @@ const Onboarding = () => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setAvatar(imageUrl);
+      setAvatarFile(file);
     }
   };
 
-  const { open } = useAppKit();
-  const { address, isConnected } = useAppKitAccount();
-  const { chainId } = useAppKitNetworkCore();
-  const { walletProvider } = useAppKitProvider<Provider>("eip155");
-  const { width, height } = useWindowSize();
-
-  const navigate = useNavigate();
-
   const handleUserInfo = async () => {
-    setFirst(true);
+    try {
+      setLoading(true);
+      let formData = new FormData();
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
+      }
+      formData.append("name", name);
+      formData.append("shortname", shortname);
+      if (user?._id) {
+        const response = await updateFirstMe({ id: user._id, formData });
+        if (response.ok) {
+          const { user } = response.data;
+          dispatch(setAuthUser({ user }));
+          setFirst(true);
+        }
+      }
+    } catch (error) {
+      console.log("handle user info error: ", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSelectPlan = (
+  const handleSelectPlan = async (
     month: 1 | 3 | 6 | 12,
     price: number,
     isFree: boolean
   ) => {
-    if (isFree) {
-      setIsFreePlan(true);
-      setSecond(true);
-      return;
+    try {
+      setLoading(true);
+      if (user) {
+        if (isFree) {
+          const updatingUser: User = {
+            ...user,
+            membership: "free",
+          };
+          const response = await updateMe({ user: updatingUser });
+          if (response.ok) {
+            const { user } = response.data;
+            dispatch(setAuthUser({ user }));
+            setSecond(true);
+          }
+        } else {
+          setSelectedMonth(month);
+          setSelectedPrice(price);
+          setModalOpen(true);
+        }
+      }
+    } catch (error) {
+      console.log("handle select plan error: ", error);
+    } finally {
+      setLoading(false);
     }
-    setSelectedMonth(month);
-    setSelectedPrice(price);
-    setModalOpen(true);
   };
 
   const getCharlieContract = (signer: Signer) => {
@@ -126,11 +187,70 @@ const Onboarding = () => {
     }
   };
 
+  const isValidShortname = (name: string): boolean => {
+    return !!users.find((user) => user?.shortname === name);
+  };
+
+  const handleCountryContinue = async () => {
+    try {
+      setLoading(true);
+      const updatingUser = {
+        ...user,
+        title,
+        region,
+        about,
+        country: countryCode.getValue(country),
+      };
+      const response = await updateMe({ user: updatingUser as any });
+      if (response.ok) {
+        const { user } = response.data;
+        dispatch(setAuthUser({ user }));
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.log("handle country continue error: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (name === "") return;
+
+    const generateUsername = async () => {
+      setLoading(true);
+      const baseUsername = name.toLowerCase().replace(/\s+/g, ".");
+
+      try {
+        let suggestedUsername = baseUsername;
+        let isTaken = users.find(
+          (user) => user?.shortname === suggestedUsername
+        );
+        let counter = 1;
+
+        while (isTaken) {
+          suggestedUsername = `${baseUsername}${counter}`;
+          isTaken = users.find((user) => user?.shortname === suggestedUsername);
+          counter++;
+        }
+
+        setShortnameHint(suggestedUsername);
+      } catch (error) {
+        console.error("Error checking username:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    generateUsername();
+  }, [name]);
+
   return (
     <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {loading && <Spinner />}
       <AnimatePresence mode="wait">
-        {!first ? (
+        {!user?.name ? (
           <motion.div
             key="first-onboarding-section"
             initial={{ x: 300, opacity: 0 }}
@@ -157,7 +277,7 @@ const Onboarding = () => {
               transition={{ duration: 0.8 }}
               className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
             >
-              <div className="w-full h-full flex flex-col items-center justify-center gap-8">
+              <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                 <div className="w-full px-12 flex flex-col items-center justify-center">
                   <img
                     src="./logo.png"
@@ -170,19 +290,31 @@ const Onboarding = () => {
                 </div>
                 <div className="flex flex-col gap-4 w-full px-12">
                   <button
-                    className="w-full flex flex-row items-center gap-4 group border hover:border-[#c4f70f] hover:shadow-lg transition-all duration-300 ease-in-out rounded-xl"
+                    className="w-full flex flex-row items-center gap-4 group border hover:border-[#c4f70f] hover:shadow-lg transition-all duration-300 ease-in-out rounded-xl p-2"
                     onClick={handleUploadClick}
                   >
-                    <img
-                      src={avatar}
-                      alt={name}
-                      className="w-[100px] h-[100px] rounded-full object-cover object-center"
-                    />
-                    <div className="flex flex-1 flex-row items-center gap-2">
-                      <Icon
-                        icon="solar:cloud-upload-bold-duotone"
-                        className="w-14 h-14"
+                    {avatar === "" ? (
+                      <div className="w-[100px] h-[100px] rounded-full flex flex-col items-center justify-center">
+                        <Icon
+                          icon="solar:shield-user-bold-duotone"
+                          className="text-[#353737] w-14 h-14"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={avatar}
+                        alt={name}
+                        className="w-[100px] h-[100px] rounded-full object-cover object-center"
                       />
+                    )}
+                    <Icon
+                      icon="solar:cloud-upload-bold-duotone"
+                      className="w-10 h-10"
+                    />
+                    <div className="flex-1 flex flex-col items-start gap-1">
+                      <span className="text-sm text-black">
+                        File limits 5MB
+                      </span>
                       <span className="text-sm text-black">
                         Upload your avatar
                       </span>
@@ -196,7 +328,6 @@ const Onboarding = () => {
                     onChange={handleFileChange}
                   />
                 </div>
-
                 <div className="w-full flex flex-col items-center justify-center gap-4">
                   <div className="flex flex-col gap-4 w-full px-12">
                     <Input
@@ -205,16 +336,35 @@ const Onboarding = () => {
                       icon="solar:user-bold-duotone"
                       invalid={name === ""}
                       invalidTxt="Input your full name"
+                      value={name}
                       onChange={setName}
                     />
-                    <Input
-                      type="text"
-                      placeholder="Your user id"
-                      icon="solar:shield-user-bold-duotone"
-                      invalid={shortname === ""}
-                      invalidTxt="Wrong id"
-                      onChange={setShortname}
-                    />
+                    <div className="w-full flex flex-col gap-1">
+                      <Input
+                        type="text"
+                        placeholder="Your user id"
+                        icon="solar:shield-user-bold-duotone"
+                        value={shortname}
+                        invalid={
+                          shortname === "" || isValidShortname(shortname)
+                        }
+                        invalidTxt="Wrong id"
+                        onChange={setShortname}
+                      />
+                      {shortnameHint && shortnameHint !== "" && (
+                        <p className="text-xs p-1 text-black">
+                          Suggesting your id:{" "}
+                          <button
+                            className="text-blue-500 hover:underline cursor-pointer"
+                            onClick={() => {
+                              setShortname(shortnameHint);
+                            }}
+                          >
+                            <strong>{shortnameHint}</strong>
+                          </button>
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-4">
                     <Button
@@ -226,6 +376,70 @@ const Onboarding = () => {
                     />
                   </div>
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : !user?.country ? (
+          <motion.div
+            key="country-onboarding-section"
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 100 }}
+            exit={{ x: -300, opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="w-full flex flex-row gap-4"
+          >
+            <motion.div
+              initial={{ x: -600 }}
+              animate={{ x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="basis-2/3 bg-white rounded-xl shadow-lg"
+            >
+              <img
+                src="../assets/pngs/model2.png"
+                alt="MODEL"
+                className="w-full h-full rounded-xl"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ x: 300 }}
+              animate={{ x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
+            >
+              <div className="w-full h-full flex flex-col items-center justify-center gap-4 px-12">
+                <RegionSelect
+                  country={country}
+                  region={region}
+                  onCountryChange={setCountry}
+                  onRegionChange={setRegion}
+                />
+                <Input
+                  type="text"
+                  placeholder="Title"
+                  value={title}
+                  invalid={title === ""}
+                  invalidTxt="Input your professional title"
+                  onChange={setTitle}
+                />
+                <Textarea
+                  invalid={about === ""}
+                  invalidTxt="Input your description"
+                  placeholder="About yourself"
+                  value={about}
+                  onChange={setAbout}
+                />
+                <Button
+                  type="transparent"
+                  label="Continue"
+                  icon="solar:skip-next-broken"
+                  disabled={
+                    country === "" ||
+                    region === "" ||
+                    title === "" ||
+                    about === ""
+                  }
+                  onClick={handleCountryContinue}
+                />
               </div>
             </motion.div>
           </motion.div>

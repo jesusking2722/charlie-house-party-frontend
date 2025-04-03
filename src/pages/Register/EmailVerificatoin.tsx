@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { Button, Input } from "../../components";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const EmailVerification = () => {
   const [code, setCode] = useState<string>("");
   const [timePassed, setTimePassed] = useState<number>(0);
   const [buttonLabel, setButtonLabel] = useState<string>("Submit");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -21,6 +23,7 @@ const EmailVerification = () => {
 
   const handleSubmit = async () => {
     try {
+      navigate("/onboarding");
     } catch (error) {}
   };
 
@@ -38,6 +41,7 @@ const EmailVerification = () => {
       animate={{ x: 0 }}
       exit={{ x: -50, opacity: 0 }}
       transition={{ type: "spring", duration: 0.8 }}
+      className="w-full"
     >
       <div className="flex flex-col gap-4 w-full px-12">
         <Input
@@ -50,7 +54,7 @@ const EmailVerification = () => {
         <Button
           type="outline"
           label={buttonLabel}
-          icon="solar:rewind-back-bold-duotone"
+          icon="solar:skip-next-bold"
           onClick={buttonLabel === "Resend" ? handleResend : handleSubmit}
         />
       </div>

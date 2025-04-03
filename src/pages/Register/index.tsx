@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   CustomPhoneInput,
@@ -12,11 +12,12 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { emailRegister, googleLogin } from "../../lib/scripts";
 import toast from "react-hot-toast";
 import { setAuthToken } from "../../lib/fetchInstance";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "../../redux/slices/authSlice";
 import EmailVerification from "./EmailVerificatoin";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { useAppKit } from "@reown/appkit/react";
+import { RootState } from "../../redux/store";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -28,6 +29,7 @@ const Register = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const { open } = useAppKit();
 
@@ -99,6 +101,12 @@ const Register = () => {
     }
   };
 
+  useEffect(() => {
+    if (user && !user?.emailVerified) {
+      setEmailVerifySection(true);
+    }
+  }, [user]);
+
   return (
     <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {loading && <Spinner />}
@@ -132,7 +140,9 @@ const Register = () => {
               </p>
             </div>
             <AnimatePresence mode="wait">
-              {!phoneSelected ? (
+              {emailVerifySection ? (
+                <EmailVerification />
+              ) : !phoneSelected ? (
                 <motion.div
                   key="email-section"
                   initial={{ x: 50 }}
@@ -147,7 +157,7 @@ const Register = () => {
                       placeholder="example.com"
                       icon="solar:inbox-line-bold-duotone"
                       value={email}
-                      invalid={!validate()}
+                      invalid={!validateEmail(email)}
                       invalidTxt="Input your correct email"
                       onChange={setEmail}
                     />
@@ -233,7 +243,6 @@ const Register = () => {
                   </div>
                 </motion.div>
               )}
-              {emailVerifySection && <EmailVerification />}
             </AnimatePresence>
             <div className="mt-6 flex flex-col w-full items-center justify-center gap-4">
               <p className="text-white text-sm">Have you already account?</p>

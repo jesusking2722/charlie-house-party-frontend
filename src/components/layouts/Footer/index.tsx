@@ -19,7 +19,11 @@ const Footer = () => {
       <div className="w-full flex flex-row">
         <div className="flex flex-col gap-4 basis-2/3">
           <Link to="/" className="flex items-center gap-4">
-            <img src="./logo.png" alt="LOGO" className="w-[100px] h-auto" />
+            <img
+              src="http://localhost:3000/logo.png"
+              alt="LOGO"
+              className="w-[100px] h-auto"
+            />
             <h1 className="text-xl font-semibold text-[#353537]">
               CHARLIE UNICORN AI
             </h1>
@@ -74,22 +78,22 @@ const Footer = () => {
       </div>
       <div className="w-full flex flex-row items-center justify-between gap-14 p-4">
         <img
-          src="./assets/logos/kyc_gempad_compliant.png"
+          src="http://localhost:3000/assets/logos/kyc_gempad_compliant.png"
           alt="KYC GEMPAD"
           className="w-[200px] h-auto"
         />
         <img
-          src="./assets/logos/kyc_gold.png"
+          src="http://localhost:3000/assets/logos/kyc_gold.png"
           alt="KYC GOLD"
           className="w-[200px] h-auto"
         />
         <img
-          src="./assets/logos/kyc_pinksale_compliant.png"
+          src="http://localhost:3000/assets/logos/kyc_pinksale_compliant.png"
           alt="KYC PINK SALE"
           className="w-[200px] h-auto"
         />
         <img
-          src="./assets/logos/solid.png"
+          src="http://localhost:3000/assets/logos/solid.png"
           alt="SOLID"
           className="w-[130px] h-auto rounded-lg"
         />

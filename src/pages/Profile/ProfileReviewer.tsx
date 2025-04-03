@@ -30,9 +30,10 @@ const ProfileReviewer = ({ reviews }: { reviews: Review[] }) => {
           return (
             <motion.div
               key={index}
-              initial={{ y: 50 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -50, opacity: 0 }}
+              transition={{ duration: 0.3, type: "spring", delay: index * 0.1 }}
               className="w-full flex flex-col gap-4 p-4 border border-[#c4f70f] shadow-lg rounded-xl bg-black/10 backdrop-blur-sm"
             >
               <div

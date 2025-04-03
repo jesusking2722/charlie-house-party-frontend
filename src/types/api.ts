@@ -5,8 +5,16 @@ export interface AuthResponse {
   user: User | null;
 }
 
+export interface UserResponse {
+  user: User | null;
+}
+
 export interface ApiResponse<T> {
   ok: boolean;
   message: string;
   data: T;
+}
+
+export interface AllUsersResponse {
+  users: User[];
 }

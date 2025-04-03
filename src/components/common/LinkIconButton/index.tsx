@@ -7,7 +7,6 @@ interface LinkIconButtonProps {
   icon: string;
   path: string;
   active?: boolean;
-  onClick?: (val: string) => void;
 }
 
 const LinkIconButton: FC<LinkIconButtonProps> = ({
@@ -15,19 +14,11 @@ const LinkIconButton: FC<LinkIconButtonProps> = ({
   icon,
   path,
   active,
-  onClick,
 }) => {
   return (
     <Link
       to={path ?? ""}
       className="flex flex-col items-center justify-center gap-2 bg-transparent group"
-      onClick={
-        onClick
-          ? () => {
-              onClick(label);
-            }
-          : () => {}
-      }
     >
       <Icon
         icon={icon}

@@ -1,9 +1,12 @@
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router";
+import { RootState } from "../redux/store";
 
 const useAuth = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const token = localStorage.getItem("Authorization");
@@ -11,6 +14,13 @@ const useAuth = () => {
       if (!pathname.includes("register")) navigate("/login");
     }
   }, [pathname, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      if (!user.emailVerified) navigate("/register");
+      else if (!user.name) navigate("/onboarding");
+    }
+  }, [user]);
 };
 
 export default useAuth;

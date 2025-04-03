@@ -11,8 +11,11 @@ import ProfileDescripter from "./ProfileDescripter";
 import ProfileHeader from "./ProfileHeader";
 import ProfileReviewer from "./ProfileReviewer";
 import { Review, User } from "../../types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileEdit from "./ProfileEdit";
+import { useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const initialReviews: Review[] = [
   {
@@ -24,7 +27,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -43,7 +46,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -62,7 +65,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -81,7 +84,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -100,7 +103,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -119,7 +122,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -138,7 +141,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "./assets/pngs/user.png",
+      avatar: "http://localhost:3000/assets/pngs/user.png",
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -150,32 +153,37 @@ const initialReviews: Review[] = [
   },
 ];
 
-const initialUser: User = {
-  name: "Lukas Boruski",
-  shortname: "lukasboruski",
-  avatar: "./assets/pngs/user.png",
-  email: "lukas.boruski@gmail.com",
-  phone: "",
-  createdAt: new Date(),
-  emailVerified: true,
-  phoneVerified: false,
-  kycVerified: true,
-  reviews: [],
-};
-
 const Profile = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const { userId } = useParams();
+
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (user?._id === userId) {
+      setSelectedUser(user);
+      console.log(user);
+    }
+  }, [userId, user]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
-      <Banner />
+      <Banner
+        avatar={selectedUser?.avatar ?? ""}
+        banner={selectedUser?.banner ?? ""}
+      />
       <div className="w-full p-4 flex flex-col gap-4">
         <div className="w-full flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2">
-            <h2 className="text-lg text-black font-semibold">Jhon Doe.</h2>
-            <h2 className="text-lg text-black font-semibold">@jhondoe</h2>
+            <h2 className="text-lg text-black font-semibold">
+              {selectedUser?.name}.
+            </h2>
+            <h2 className="text-lg text-black font-semibold">
+              @{selectedUser?.shortname}
+            </h2>
             <Badge type="kyc" />
-            <Badge type="premium" />
+            {selectedUser?.membership === "premium" && <Badge type="premium" />}
           </div>
           <div className="flex flex-row items-center gap-2">
             <Button
@@ -195,15 +203,12 @@ const Profile = () => {
           <div className="flex flex-col gap-4 flex-1">
             <Rater rate={3.5} />
             <ProfileHeader
-              title="Senior Party Owner"
+              title={selectedUser?.title ?? ""}
               parites={7}
-              countryCode="US"
-              joinedDate={new Date()}
+              countryCode={selectedUser?.country ?? ""}
+              joinedDate={selectedUser?.createdAt ?? new Date()}
             />
-            <ProfileDescripter
-              description="Hi, I am a senior party owner with 5 years of experience in opening and managing several kinds of parties. 
-              I owned some kinds of happy parties and all members enjoyed together."
-            />
+            <ProfileDescripter description={selectedUser?.about ?? ""} />
           </div>
           <StickerPockets />
         </div>
@@ -217,7 +222,7 @@ const Profile = () => {
           setModalOpen(false);
         }}
       >
-        <ProfileEdit user={initialUser} />
+        <ProfileEdit user={selectedUser} />
       </Modal>
     </div>
   );

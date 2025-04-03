@@ -1,9 +1,15 @@
 import { Icon } from "@iconify/react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router";
+import { RootState } from "../../../redux/store";
+import { BACKEND_BASE_URL } from "../../../constant";
 
 const ProfileDropdown = () => {
   const [active, setActive] = useState<boolean>(false);
+
+  const { user } = useSelector((state: RootState) => state.auth);
+  const avatar = user?.avatar ?? "";
 
   return (
     <div className="max-w-lg mx-auto relative w-[200px]">
@@ -13,13 +19,13 @@ const ProfileDropdown = () => {
         onClick={() => setActive(!active)}
       >
         <img
-          src="./assets/pngs/user.png"
-          alt="USER"
+          src={BACKEND_BASE_URL + avatar}
+          alt={user?.name ?? ""}
           className="w-[60px] h-[60px] object-cover rounded-full shadow-lg"
         />
         <div className="flex flex-row items-center gap-2">
           <span className="text-[#353537] group-hover:text-[#c1eb2a] font-semibold text-sm transition-all duration-300 ease-in-out">
-            User
+            {user?.name}
           </span>
           <Icon
             icon="solar:alt-arrow-down-linear"
@@ -34,7 +40,7 @@ const ProfileDropdown = () => {
           <ul className="py-1" aria-labelledby="dropdown">
             <li className="group hover:bg-[#c1eb2a] transition-all duration-300 ease-in-out cursor-pointer px-4 py-2">
               <Link
-                to="/profile"
+                to={`/profile/${user?._id}`}
                 className=" flex flex-row items-center justify-between"
                 onClick={() => {
                   setActive(false);
