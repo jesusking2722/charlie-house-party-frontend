@@ -14,11 +14,14 @@ import {
 } from "../../components";
 import { BASE_URL, PARTY_TYPES } from "../../constant";
 import { useState } from "react";
-import { Geo } from "../../types";
-import { validateAddress } from "../../utils";
+import { Geo, Party, PartyType } from "../../types";
+import { getRegionName, validateAddress } from "../../utils";
 import countryList from "react-select-country-list";
 import { AnimatePresence, motion } from "motion/react";
 import OpenAiForm from "./OpenAiForm";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import socket from "../../lib/socketInstance";
 
 const CreateParty = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,11 +33,14 @@ const CreateParty = () => {
   const [invalidAddress, setInvalidAddress] = useState<boolean>(false);
   const [activeScreen, setActiveScreen] = useState<
     "basic" | "complete" | "welcome"
-  >("complete");
-  const [partyType, setPartyType] = useState<string>("");
+  >("basic");
+  const [partyType, setPartyType] = useState<PartyType | string>("");
   const [description, setDescription] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [region, setRegion] = useState<string | null>(null);
   const countryCode = countryList();
+
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleBasic = async () => {
     try {
@@ -44,8 +50,16 @@ const CreateParty = () => {
       if (addressInfo) {
         if (addressInfo.geo) {
           setAddress(addressInfo.address);
-          setAddressGeo(addressInfo.geo);
+          setAddressGeo({
+            lat: addressInfo.geo.latitude,
+            lng: addressInfo.geo.longitude,
+          });
         }
+        const selectedRegion = getRegionName(
+          addressInfo.geo.latitude,
+          addressInfo.geo.longitude
+        );
+        setRegion(selectedRegion);
         setActiveScreen("complete");
       } else {
         setInvalidAddress(true);
@@ -60,6 +74,21 @@ const CreateParty = () => {
   const handleComplete = async () => {
     try {
       setLoading(true);
+      if (!user && partyType !== "" && !region) return;
+      const newParty: Party = {
+        type: partyType ?? "",
+        _id: "",
+        title,
+        address: address + "%" + addressGeo?.lat + "%" + addressGeo?.lng,
+        country: countryCode.getValue(country),
+        region,
+        description,
+        applicants: [],
+        openingAt: openingAt ?? new Date(),
+        createdAt: new Date(),
+        creator: user,
+      };
+      socket.emit("create_party", newParty);
     } catch (error) {
       console.log("handle complete error: ", error);
     } finally {
@@ -84,7 +113,7 @@ const CreateParty = () => {
           initial={{ x: -300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="w-1/2 rounded-xl shadow-xl"
+          className="w-1/3 rounded-xl shadow-xl"
         >
           <img
             src={BASE_URL + "/assets/pngs/create.png"}
@@ -96,7 +125,7 @@ const CreateParty = () => {
           initial={{ x: 300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="w-1/2 relative bg-gradient rounded-xl shadow-xl"
+          className="w-2/3 relative bg-gradient rounded-xl shadow-xl"
         >
           <div className="absolute inset-[1px] bg-white rounded-xl">
             <AnimatePresence mode="wait">

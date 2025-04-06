@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../redux/store";
+import socket from "../lib/socketInstance";
 
 const useAuth = () => {
   const { pathname } = useLocation();
@@ -18,9 +19,13 @@ const useAuth = () => {
   useEffect(() => {
     if (user) {
       if (!user.emailVerified) navigate("/register");
-      else if (!user.name || !user.country) navigate("/onboarding");
+      else if (!user.name || !user.country) {
+        navigate("/onboarding");
+      }
     }
   }, [user]);
+
+  useEffect(() => {}, [socket]);
 };
 
 export default useAuth;

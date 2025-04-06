@@ -15,7 +15,7 @@ import ProfileReviewer from "./ProfileReviewer";
 import { Review, User } from "../../types";
 import { useEffect, useState } from "react";
 import ProfileEdit from "./ProfileEdit";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateBannerMe } from "../../lib/scripts";
@@ -194,6 +194,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    console.log(userId);
     if (user?._id === userId) {
       setSelectedUser(user);
       setIsMe(true);

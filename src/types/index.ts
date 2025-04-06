@@ -39,16 +39,18 @@ export interface Applicant {
   appliedAt: Date;
 }
 
+export type PartyType = "birthday" | "common" | "wedding" | "corporate";
+
 export interface Party {
-  id: string;
-  type: "birthday" | "common" | "wedding" | "corporate";
+  _id?: string;
+  type: PartyType | string;
   title: string;
   description: string;
   openingAt: Date;
-  country: string;
-  region: string;
-  address: string;
-  creator: User;
+  country: string | null;
+  address: string | null;
+  region: string | null;
+  creator: User | null;
   applicants: Applicant[];
   createdAt: Date;
 }

@@ -8,7 +8,7 @@ const initialPartyTypes = ["birthday", "common", "wedding", "corporate"];
 
 const initialParties: Party[] = [
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -33,7 +33,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -58,7 +58,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -83,7 +83,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -108,7 +108,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -133,7 +133,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -158,7 +158,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -183,7 +183,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",
@@ -208,7 +208,7 @@ const initialParties: Party[] = [
       "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
   },
   {
-    id: "1",
+    _id: "1",
     title: "Birth Day Party",
     type: "birthday",
     country: "US",

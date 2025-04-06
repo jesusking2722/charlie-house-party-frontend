@@ -6,18 +6,22 @@ import Navbar from "../Navbar";
 const Container = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
 
-  const isAuthPage = ["register", "login", "onboarding"].includes(pathname);
+  const isAuthPage = ["/register", "/login", "/onboarding"].includes(pathname);
 
-  const isPartyDetailPage = pathname.startsWith("parties/");
-  const isProfileDetailPage = pathname.startsWith("profile/");
+  const isPartyDetailPage = pathname.startsWith("/parties/");
+  const isProfileDetailPage = pathname.startsWith("/profile/");
 
   const isNotFound = !(
     isAuthPage ||
     isPartyDetailPage ||
     isProfileDetailPage ||
-    ["dashboard", "profile", "pricing", "parties", "create-party"].includes(
-      pathname
-    )
+    [
+      "/dashboard",
+      "/profile",
+      "/pricing",
+      "/parties",
+      "/create-party",
+    ].includes(pathname)
   );
 
   return (

@@ -81,3 +81,43 @@ export const validateAddress = async (
     return null;
   }
 };
+
+interface GeocoderResult {
+  address_components: {
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }[];
+  formatted_address: string;
+  geometry: {
+    location: google.maps.LatLng;
+  };
+}
+
+export const getRegionName = (
+  lat: string | number,
+  lng: string | number
+): any => {
+  const geocoder = new google.maps.Geocoder();
+
+  const latLng: google.maps.LatLngLiteral = {
+    lat: typeof lat === "string" ? parseFloat(lat) : lat,
+    lng: typeof lng === "string" ? parseFloat(lng) : lng,
+  };
+
+  geocoder.geocode(
+    { location: latLng },
+    (results: GeocoderResult[] | null, status: google.maps.GeocoderStatus) => {
+      if (status === "OK" && results?.[0]) {
+        const addressComponents = results[0].address_components;
+        const region = addressComponents.find((component) =>
+          component.types.includes("administrative_area_level_1")
+        )?.long_name;
+
+        return region;
+      } else {
+        console.error("Geocoder failed due to:", status);
+      }
+    }
+  );
+};

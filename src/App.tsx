@@ -27,6 +27,7 @@ import { setAuthUser } from "./redux/slices/authSlice";
 import { setUsers } from "./redux/slices/usersSlice";
 import "react-chat-elements/dist/main.css";
 import { BASE_URL } from "./constant";
+import useSocket from "./hooks/useSocket";
 
 const metadata = {
   name: "House Party | Charlie Unicorn AI",
@@ -51,7 +52,8 @@ createAppKit({
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  // useAuth();
+  useAuth();
+  useSocket();
 
   useEffect(() => {
     const fetchMyInfo = async (id: string) => {
