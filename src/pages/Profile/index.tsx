@@ -20,7 +20,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateBannerMe } from "../../lib/scripts";
 import { setAuthUser } from "../../redux/slices/authSlice";
-import { DOMAIN } from "../../constant";
+import { BASE_URL, DOMAIN } from "../../constant";
 
 const initialReviews: Review[] = [
   {
@@ -32,7 +32,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -51,7 +51,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -70,7 +70,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -89,7 +89,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -108,7 +108,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -127,7 +127,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),
@@ -146,7 +146,7 @@ const initialReviews: Review[] = [
     reviewer: {
       name: "Lukas Boruski",
       shortname: "lukasboruski",
-      avatar: "http://localhost:3000/assets/pngs/user.png",
+      avatar: `${BASE_URL}/assets/pngs/user.png`,
       email: "lukas.boruski@gmail.com",
       phone: "",
       createdAt: new Date(),

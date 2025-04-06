@@ -7,7 +7,7 @@ import {
   Spinner,
 } from "../../components";
 import { AnimatePresence, motion } from "motion/react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { emailRegister, googleLogin } from "../../lib/scripts";
 import toast from "react-hot-toast";

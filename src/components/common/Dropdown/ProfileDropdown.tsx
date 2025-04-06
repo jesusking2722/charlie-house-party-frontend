@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { BACKEND_BASE_URL } from "../../../constant";
 
 const ProfileDropdown = ({
@@ -43,7 +43,7 @@ const ProfileDropdown = ({
           <ul className="py-1" aria-labelledby="dropdown">
             <li className="group hover:bg-[#c1eb2a] transition-all duration-300 ease-in-out cursor-pointer px-4 py-2">
               <Link
-                to={`/profile/${userId}`}
+                to={`profile/${userId}`}
                 className=" flex flex-row items-center justify-between"
                 onClick={() => {
                   setActive(false);

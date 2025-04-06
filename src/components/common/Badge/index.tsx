@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Tooltip from "../Tooltip";
 import { Icon } from "@iconify/react";
+import { BASE_URL } from "../../../constant";
 
 interface BadgeProps {
   type: "premium" | "kyc";
@@ -19,7 +20,7 @@ const Badge: FC<BadgeProps> = ({ type }) => {
     >
       {type === "premium" && (
         <img
-          src="http://localhost:3000/assets/svgs/premium.svg"
+          src={BASE_URL + "/assets/svgs/premium.svg"}
           alt="premium"
           className="w-6 h-6"
         />

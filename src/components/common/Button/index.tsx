@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { FC } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 interface ButtonProps {
   type:
@@ -17,6 +17,7 @@ interface ButtonProps {
   disabled?: boolean;
   width?: "full";
   path?: string;
+  isRight?: boolean;
   onClick?: () => void;
 }
 
@@ -27,6 +28,7 @@ const Button: FC<ButtonProps> = ({
   width,
   path,
   disabled,
+  isRight,
   onClick,
 }) => {
   if (type === "link" && path) {
@@ -42,7 +44,7 @@ const Button: FC<ButtonProps> = ({
 
   return (
     <button
-      className={`flex flex-row items-center justify-center gap-2 group transition-all duration-300 ease-in-out group rounded-xl text-sm ${
+      className={`flex flex-row items-center justify-center gap-2 group transition-all duration-300 ease-in-out group rounded-xl text-xs z-10 ${
         width === "full" ? "w-full py-3" : "px-7 py-3"
       } shadow-lg
         ${
@@ -63,17 +65,21 @@ const Button: FC<ButtonProps> = ({
             : type === "red"
             ? `bg-red-500 hover:bg-red-600`
             : type === "gradient"
-            ? "bg-gradient text-white"
+            ? ` text-white transition-all duration-700 ease-in-out ${
+                disabled
+                  ? "cursor-not-allowed bg-gray-500 text-white"
+                  : "bg-gradient-to-r from-[#fdfc47] to-[#24fe41] hover:from-[#00c3ff] hover:to-[#ffff1c]"
+              }`
             : ""
         }
     `}
       disabled={disabled}
       onClick={onClick}
     >
-      {icon && (
+      {!isRight && icon && (
         <Icon
           icon={icon}
-          className={`w-6 h-6 transition-all duration-300 ease-in-out ${
+          className={`w-4 h-4 transition-all duration-300 ease-in-out ${
             type === "primary"
               ? "text-black group-hover:text-[#c4f70f]"
               : type === "outline"
@@ -89,6 +95,24 @@ const Button: FC<ButtonProps> = ({
         />
       )}
       {label}
+      {isRight && icon && (
+        <Icon
+          icon={icon}
+          className={`w-4 h-4 transition-all duration-300 ease-in-out ${
+            type === "primary"
+              ? "text-black group-hover:text-[#c4f70f]"
+              : type === "outline"
+              ? `${
+                  disabled
+                    ? "text-white"
+                    : "text-[#c4f70f] group-hover:text-black"
+                }`
+              : type === "transparent" || type === "gradient"
+              ? "text-white"
+              : ""
+          }`}
+        />
+      )}
     </button>
   );
 };

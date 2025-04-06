@@ -1,7 +1,8 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Button, Input, Textarea } from "../../common";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
+import { BASE_URL } from "../../../constant";
 
 const Footer = () => {
   const [text, setText] = useState<string>("");
@@ -18,9 +19,9 @@ const Footer = () => {
     <footer className="w-[80%] mx-auto py-8 flex flex-col gap-8">
       <div className="w-full flex flex-row">
         <div className="flex flex-col gap-4 basis-2/3">
-          <Link to="/" className="flex items-center gap-4">
+          <Link to="dashboard" className="flex items-center gap-4">
             <img
-              src="http://localhost:3000/logo.png"
+              src={BASE_URL + "/logo.png"}
               alt="LOGO"
               className="w-[100px] h-auto"
             />
@@ -78,22 +79,22 @@ const Footer = () => {
       </div>
       <div className="w-full flex flex-row items-center justify-between gap-14 p-4">
         <img
-          src="http://localhost:3000/assets/logos/kyc_gempad_compliant.png"
+          src={BASE_URL + "/assets/logos/kyc_gempad_compliant.png"}
           alt="KYC GEMPAD"
           className="w-[200px] h-auto"
         />
         <img
-          src="http://localhost:3000/assets/logos/kyc_gold.png"
+          src={BASE_URL + "/assets/logos/kyc_gold.png"}
           alt="KYC GOLD"
           className="w-[200px] h-auto"
         />
         <img
-          src="http://localhost:3000/assets/logos/kyc_pinksale_compliant.png"
+          src={BASE_URL + "/assets/logos/kyc_pinksale_compliant.png"}
           alt="KYC PINK SALE"
           className="w-[200px] h-auto"
         />
         <img
-          src="http://localhost:3000/assets/logos/solid.png"
+          src={BASE_URL + "/assets/logos/solid.png"}
           alt="SOLID"
           className="w-[130px] h-auto rounded-lg"
         />

@@ -1,4 +1,5 @@
-export const formatDate = (date: Date | string): string => {
+export const formatDate = (date: Date | string | null): string => {
+  if (!date) return "";
   const parsedDate = typeof date === "string" ? new Date(date) : date;
 
   if (isNaN(parsedDate.getTime())) {

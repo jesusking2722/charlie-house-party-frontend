@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Route, Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import { Container, Spinner } from "./components";
 import {
+  CreateParty,
   Home,
   Login,
   NotFound,
@@ -24,12 +25,14 @@ import { jwtDecode } from "jwt-decode";
 import { fetchAllUsers, fetchMe } from "./lib/scripts";
 import { setAuthUser } from "./redux/slices/authSlice";
 import { setUsers } from "./redux/slices/usersSlice";
+import "react-chat-elements/dist/main.css";
+import { BASE_URL } from "./constant";
 
 const metadata = {
   name: "House Party | Charlie Unicorn AI",
   description: "House party application powered by Charlie Unicorn AI",
-  url: "https://charlieunicornai-houseparty.vercel.app",
-  icons: ["https://charlieunicornai-houseparty.vercel.app/logo.png"],
+  url: BASE_URL,
+  icons: [`${BASE_URL}/logo.png`],
 };
 
 createAppKit({
@@ -48,7 +51,7 @@ createAppKit({
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  useAuth();
+  // useAuth();
 
   useEffect(() => {
     const fetchMyInfo = async (id: string) => {
@@ -91,15 +94,16 @@ function App() {
   return (
     <Container>
       <Routes>
-        <Route path="/register" Component={Register} />
-        <Route path="/login" Component={Login} />
-        <Route path="/onboarding" Component={Onboarding} />
-        <Route path="/dashboard" Component={Home} />
-        <Route path="/profile/:userId" Component={Profile} />
-        <Route path="/pricing" Component={Pricing} />
-        <Route path="/parties" Component={Parites} />
-        <Route path="/parties/:partyId" Component={Party} />
-        <Route path="*" Component={NotFound} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="onboarding" element={<Onboarding />} />
+        <Route index path="dashboard" element={<Home />} />
+        <Route path="profile/:userId" element={<Profile />} />
+        <Route path="pricing" element={<Pricing />} />
+        <Route path="parties" element={<Parites />} />
+        <Route path="parties/:partyId" element={<Party />} />
+        <Route path="create-party" element={<CreateParty />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="top-right" reverseOrder={false} />
       {loading && <Spinner />}

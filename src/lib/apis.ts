@@ -13,3 +13,6 @@ export const FETCH_KYC_DECISION = "/auth/kyc";
 
 // user apis
 export const FETCH_ALL_USERS = "/user/all";
+
+// ai apis
+export const FETCH_AI_RESPONSE_CREATE_PARTY = "/ai/create-party";

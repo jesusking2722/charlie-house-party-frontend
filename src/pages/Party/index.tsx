@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react";
 import { Badge, Rater } from "../../components";
 import ApplicantGroup from "./ApplicantGroup";
 import { Applicant } from "../../types";
+import { BASE_URL } from "../../constant";
 
 const initialApplicants: Applicant[] = [
   {
@@ -186,7 +187,7 @@ const Party = () => {
         <div className="py-4 px-8 rounded-xl bg-white/10 backdrop-blur-sm shadow-lg border border-white flex flex-col">
           <div className="flex flex-row items-center gap-8">
             <img
-              src="http://localhost:3000/assets/pngs/user.png"
+              src={BASE_URL + "/assets/pngs/user.png"}
               alt="USER"
               className="w-[60px] h-[60px] rounded-full border border-white shadow-lg object-cover object-center"
             />

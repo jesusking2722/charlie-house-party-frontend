@@ -22,13 +22,13 @@ const Textarea: FC<TextareaProps> = ({
     <div className="w-full flex flex-col gap-1">
       <div
         className={`group w-full flex items-center gap-2 rounded-lg px-3 py-2 h-[150px]
-bg-transparent border border-[#696969] transition-all duration-300
+bg-transparent border border-gray-400 transition-all duration-300
 hover:border-[#c4f70f] hover:shadow-lg focus-within:border-[#c4f70f] focus-within:shadow-lg ${
           isInvalid ? "border-red-500" : ""
         }`}
       >
         <textarea
-          className="w-full h-full border-none outline-none bg-transparent text-sm text-black placeholder-[#696969]"
+          className="w-full h-full border-none outline-none bg-transparent text-xs text-black placeholder-[#696969]"
           placeholder={placeholder ?? "Type here..."}
           style={{ resize: "none" }}
           value={value}

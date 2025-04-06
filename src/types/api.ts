@@ -18,3 +18,7 @@ export interface ApiResponse<T> {
 export interface AllUsersResponse {
   users: User[];
 }
+
+export interface AiResponse {
+  content: string;
+}

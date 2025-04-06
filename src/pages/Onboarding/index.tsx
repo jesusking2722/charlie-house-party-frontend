@@ -30,7 +30,7 @@ import { CHARLIE_TOKEN_ABI, CHARLIE_TOKEN_ADDRESS } from "../../contract";
 import toast from "react-hot-toast";
 import { useWindowSize } from "react-use";
 import Confetti from "react-confetti";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -39,6 +39,7 @@ import { setAuthUser } from "../../redux/slices/authSlice";
 import { User } from "../../types";
 import countryList from "react-select-country-list";
 import KycVerifier from "./KycVerifier";
+import { BASE_URL } from "../../constant";
 
 const Onboarding = () => {
   const [name, setName] = useState<string>("");
@@ -266,7 +267,7 @@ const Onboarding = () => {
     };
 
     generateUsername();
-  }, [name]);
+  }, [name, users]);
 
   useEffect(() => {
     if (user) {
@@ -503,7 +504,7 @@ const Onboarding = () => {
             </h1>
             <VideoShower
               title="How to verify KYC"
-              videoSource="http://localhost:3000/assets/videos/kyc.mp4"
+              videoSource={BASE_URL + "/assets/videos/kyc.mp4"}
             />
             <div className="w-full flex flex-row items-center justify-center gap-14">
               <Button

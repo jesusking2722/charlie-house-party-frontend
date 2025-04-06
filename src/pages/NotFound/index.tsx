@@ -1,5 +1,6 @@
 import { Button } from "../../components";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constant";
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const NotFound = () => {
       <div className="w-full grid grid-cols-2 gap-4">
         <div className="">
           <img
-            src="http://localhost:3000/assets/pngs/404.png"
+            src={BASE_URL + "/assets/pngs/404.png"}
             alt="404"
             className="w-full h-auto"
           />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../components";
+import { BASE_URL } from "../../constant";
 
 const StickerPockets = () => {
   const [expand, setExpand] = useState<boolean>(false);
@@ -14,92 +15,92 @@ const StickerPockets = () => {
         } `}
       >
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />
         <img
-          src="http://localhost:3000/logo.png"
+          src={BASE_URL + "/logo.png"}
           alt="STICKER"
           className="w-[80px] h-[80px]"
         />

@@ -1,10 +1,23 @@
 .bg-gradient {
-  background: linear-gradient(to right, #c4f70f, #5df803, #fcb900) !important;
+  background: linear-gradient(to right, #fdfc47, #24fe41) !important;
+}
+
+.bg-gradient-hover {
+  background: linear-gradient(to right, #00c3ff, #ffff1c) !important;
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #c4f70f, #5df803, #fcb900);
+  background: linear-gradient(to right, #fdfc47, #24fe41) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+}
+
+.gradient-text:hover {
+  background: linear-gradient(to right, #833ab4 #fd1d1d #fcb045) !important;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent !important;
 }
+
+/* #833ab4 #fd1d1d #fcb045 */

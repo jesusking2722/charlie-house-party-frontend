@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import Footer from "../Footer";
 import Header from "../Header";
 import Navbar from "../Navbar";
@@ -6,21 +6,23 @@ import Navbar from "../Navbar";
 const Container = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
 
-  const isAuthPage = ["/register", "/login", "/onboarding"].includes(pathname);
+  const isAuthPage = ["register", "login", "onboarding"].includes(pathname);
 
-  const isPartyDetailPage = pathname.startsWith("/parties/");
-  const isProfileDetailPage = pathname.startsWith("/profile/");
+  const isPartyDetailPage = pathname.startsWith("parties/");
+  const isProfileDetailPage = pathname.startsWith("profile/");
 
   const isNotFound = !(
     isAuthPage ||
     isPartyDetailPage ||
     isProfileDetailPage ||
-    ["/dashboard", "/profile", "/pricing", "/parties"].includes(pathname)
+    ["dashboard", "profile", "pricing", "parties", "create-party"].includes(
+      pathname
+    )
   );
 
   return (
     <div
-      className="min-h-screen w-full flex flex-row justify-between bg-cover bg-center bg-no-repeat"
+      className="min-h-screen w-full flex flex-row justify-between bg-cover bg-center bg-no-repeat overflow-x-hidden"
       style={{ backgroundImage: `url('../assets/pngs/bg.png')` }}
     >
       {!isAuthPage && !isNotFound && (

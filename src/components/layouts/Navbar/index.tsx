@@ -1,6 +1,6 @@
 import { LinkIconButton } from "../../common";
 import { motion } from "motion/react";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -17,13 +17,13 @@ const Navbar = () => {
           <LinkIconButton
             label="Create"
             icon="solar:document-add-bold-duotone"
-            path=""
+            path="create-party"
             active={pathname.includes("create")}
           />
           <LinkIconButton
             label="Parties"
             icon="solar:documents-bold-duotone"
-            path="/parties"
+            path="parties"
             active={pathname.includes("parties")}
           />
           <LinkIconButton
@@ -47,7 +47,7 @@ const Navbar = () => {
           <LinkIconButton
             label="Pricing"
             icon="solar:tag-price-bold-duotone"
-            path="/pricing"
+            path="pricing"
             active={pathname.includes("pricing")}
           />
         </ul>

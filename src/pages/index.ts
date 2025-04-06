@@ -7,3 +7,4 @@ export { default as Onboarding } from "./Onboarding";
 export { default as NotFound } from "./NotFound";
 export { default as Parites } from "./Parties";
 export { default as Party } from "./Party";
+export { default as CreateParty } from "./CreateParty";

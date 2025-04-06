@@ -24,10 +24,9 @@ const Input: FC<InputFieldProps> = ({
   readonly,
   onChange,
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [touched, setTouched] = useState(false); // Track if input has been touched
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [touched, setTouched] = useState<boolean>(false);
 
-  // Function to determine password strength
   const getPasswordStrength = (password: string) => {
     if (!password) return null;
     if (password.length === 0) return null; // No indicator when empty
@@ -41,7 +40,6 @@ const Input: FC<InputFieldProps> = ({
   const passwordStrength =
     type === "password" ? getPasswordStrength(value) : null;
 
-  // Validation logic: apply invalid state only if the field is touched
   const isInvalid = touched && invalid;
 
   return (
@@ -54,15 +52,15 @@ const Input: FC<InputFieldProps> = ({
 
       <div
         className={`group w-full flex items-center gap-2 rounded-lg px-3 py-2
-          bg-transparent border border-[#696969] transition-all duration-300
-          hover:border-[#c4f70f] hover:shadow-lg focus-within:border-[#c4f70f] focus-within:shadow-lg ${
+          bg-transparent border border-gray-400 transition-all duration-300
+          hover:border-[#c4f70f] hover:bg-white focus-within:bg-white hover:shadow-lg focus-within:border-[#c4f70f] focus-within:shadow-lg ${
             isInvalid ? "border-red-500" : ""
           }`}
       >
         {icon && (
           <Icon
             icon={icon}
-            className={`text-[#696969] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-6 h-6 ${
+            className={`text-[#696969] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-4 h-4 ${
               isInvalid && "text-red-500"
             }`}
           />
@@ -70,7 +68,7 @@ const Input: FC<InputFieldProps> = ({
         <input
           type={type === "password" && !showPassword ? "password" : "text"}
           className="bg-transparent border-none outline-none focus:border-none text-black 
-            text-sm w-full placeholder-[#696969]"
+            text-xs w-full placeholder-[#696969]"
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChange?.(e.target.value)}

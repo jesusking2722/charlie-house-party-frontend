@@ -1,10 +1,13 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import {
   APIProvider,
   Map as GoogleMap,
   AdvancedMarker,
 } from "@vis.gl/react-google-maps";
 import "./style.css";
+import { GOOGLE_MAP_API } from "../../../constant";
+import { Icon } from "@iconify/react";
+import { motion } from "motion/react";
 
 export interface PartyLocation {
   id: string;
@@ -31,36 +34,58 @@ const PartyMarker = ({
         onClick(party);
       }}
     >
-      <span className="relative flex size-3">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-        <span className="relative inline-flex size-3 rounded-full bg-red-500"></span>
-      </span>
+      <motion.div
+        initial={{ y: -5 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{
+          y: {
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 1,
+            ease: "easeInOut",
+          },
+        }}
+        className="w-4 h-4"
+      >
+        <Icon
+          icon="solar:map-point-wave-bold-duotone"
+          className="text-red-500 w-full h-full"
+        />
+      </motion.div>
     </AdvancedMarker>
   );
 };
 
-interface Center {
+export interface Center {
   lat: number;
   lng: number;
 }
 
 export interface MapInterface {
   parties: PartyLocation[];
-  center: Center;
+  center: Center | null;
   zoom: number | null;
+  setZoom: (zoom: number) => void;
   onClick: (party: PartyLocation) => void;
 }
 
-const Map: FC<MapInterface> = ({ parties, center, zoom, onClick }) => {
+const Map: FC<MapInterface> = ({ parties, center, zoom, setZoom, onClick }) => {
+  const onZoomChanged = useCallback((e: any) => {
+    const newZoom = e.detail.zoom;
+    setZoom(newZoom);
+  }, []);
+
   return (
-    <APIProvider apiKey="AIzaSyDRgkhZgl0RG7UoQiqU6LkFv1BsT6Upg1Y">
+    <APIProvider apiKey={GOOGLE_MAP_API}>
       <GoogleMap
-        defaultZoom={5}
+        defaultCenter={{ lat: 52.237, lng: 19.017 }}
+        defaultZoom={2}
         center={center}
         zoom={zoom}
         gestureHandling={"greedy"}
-        mapId={"AIzaSyDRgkhZgl0RG7UoQiqU6LkFv1BsT6Upg1Y"}
+        mapId={GOOGLE_MAP_API}
         className="w-full h-full map rounded-[20px] shadow-lg border border-[#d5fd42]"
+        onZoomChanged={onZoomChanged}
       >
         {parties.map((party) => (
           <PartyMarker key={party.id} party={party} onClick={onClick} />

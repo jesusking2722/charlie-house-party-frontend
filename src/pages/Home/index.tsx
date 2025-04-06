@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Button,
   CardEffectSlider,
@@ -10,7 +10,9 @@ import {
   RegionSelect,
 } from "../../components";
 import countryList from "react-select-country-list";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { Center, Spinner } from "../../components/common";
+import { getCountryGeo, getRegionGeo } from "../../utils";
 
 const initialPartyLocations: PartyLocation[] = [
   {
@@ -20,7 +22,7 @@ const initialPartyLocations: PartyLocation[] = [
     address: "123 Main St, San Francisco, CA",
     partyType: "Birthday Party",
     attendees: 50,
-    country: "US",
+    country: "United States",
     region: "California",
   },
   {
@@ -30,7 +32,7 @@ const initialPartyLocations: PartyLocation[] = [
     address: "456 Broadway, San Francisco, CA",
     partyType: "Wedding Reception",
     attendees: 100,
-    country: "US",
+    country: "United States",
     region: "California",
   },
   {
@@ -40,7 +42,7 @@ const initialPartyLocations: PartyLocation[] = [
     address: "789 Market St, San Francisco, CA",
     partyType: "Graduation Party",
     attendees: 75,
-    country: "US",
+    country: "United States",
     region: "California",
   },
 ];
@@ -51,17 +53,17 @@ const initialSlides: CardEffectSliderItemType[] = [
   {
     title: "Special House Party",
     subtitle: "Enjoy our special house party",
-    imgSource: "./assets/pngs/model1.png",
-  },
-  {
-    title: "Special House Party",
-    subtitle: "Enjoy our special house party",
     imgSource: "./assets/pngs/model2.png",
   },
   {
     title: "Special House Party",
     subtitle: "Enjoy our special house party",
     imgSource: "./assets/pngs/model3.png",
+  },
+  {
+    title: "Special House Party",
+    subtitle: "Enjoy our special house party",
+    imgSource: "./assets/pngs/model1.png",
   },
   {
     title: "Special House Party",
@@ -86,6 +88,9 @@ const Home = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedPartyType, setSelectedPartyType] = useState<string>("");
+  const [mapCenter, setMapCenter] = useState<Center | null>(null);
+  const [mapZoom, setMapZoom] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const countryCode = countryList();
   const navigate = useNavigate();
 
@@ -94,44 +99,44 @@ const Home = () => {
     setModalOpen(true);
   };
 
-  // Dynamic map center based on selected country
-  const [mapCenter, setMapCenter] = useState({ lat: 37.7749, lng: -122.4194 });
-  const [mapZoom, setMapZoom] = useState(null);
-
-  // Update map center and zoom when the country changes
-  // useEffect(() => {
-  //   if (selectedCountry && countryCoordinates[selectedCountry]) {
-  //     const coordinates = countryCoordinates[selectedCountry];
-  //     setMapCenter(coordinates); // Update center
-  //     setMapZoom(6); // Default zoom for country level
-  //   }
-  // }, [selectedCountry]);
-
   const handleCountryChange = (val: any) => {
-    setSelectedCountry(val);
+    const code = countryCode.getValue(val);
     const filteredParties = initialPartyLocations.filter(
-      (party) => party.country === countryCode.getValue(selectedCountry)
+      (party) => party.country === val
     );
+    const center = getCountryGeo(code);
+    setSelectedCountry(val);
     setParties(filteredParties);
+    setMapCenter(center);
+    setMapZoom(5);
   };
 
-  const handleRegionChange = (val: any) => {
-    setSelectedRegion(val);
+  const handleRegionChange = async (val: any) => {
+    setLoading(true);
+    const code = countryCode.getValue(selectedCountry);
+    const regionGeo = await getRegionGeo(code, val);
     const filteredParties = initialPartyLocations.filter(
-      (party) =>
-        party.country === selectedCountry || party.region === selectedRegion
+      (party) => party.country === selectedCountry && party.region === val
     );
+    setSelectedRegion(val);
     setParties(filteredParties);
+    setMapCenter(regionGeo);
+    setMapZoom(8);
+    setLoading(false);
   };
 
   const handleResetAll = () => {
     setSelectedCountry("");
     setSelectedRegion("");
     setSelectedPartyType("");
+    setParties(initialPartyLocations);
+    setMapCenter(null);
+    setMapZoom(null);
   };
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
+      {loading && <Spinner />}
       <CardEffectSlider slides={initialSlides} />
       <div className="w-full flex flex-col gap-8">
         <div className="w-full grid grid-cols-2">
@@ -170,6 +175,7 @@ const Home = () => {
             parties={parties}
             center={mapCenter}
             zoom={mapZoom}
+            setZoom={setMapZoom}
             onClick={handleLocationClick}
           />
         </div>

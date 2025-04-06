@@ -7,7 +7,7 @@ import {
   Spinner,
 } from "../../components";
 import { motion, AnimatePresence } from "motion/react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { useGoogleLogin } from "@react-oauth/google";
 import { emailLogin, googleLogin } from "../../lib/scripts";

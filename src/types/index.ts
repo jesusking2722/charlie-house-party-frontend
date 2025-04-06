@@ -1,4 +1,4 @@
-export type { ApiResponse, AuthResponse } from "./api";
+export type { ApiResponse, AuthResponse, AiResponse } from "./api";
 
 export interface User {
   _id?: string;
@@ -67,4 +67,9 @@ export interface Kyc {
     | "Expired"
     | "Abandoned";
   url: string;
+}
+
+export interface Geo {
+  lat: any;
+  lng: any;
 }

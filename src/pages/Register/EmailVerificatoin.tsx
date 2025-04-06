@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button, Input } from "../../components";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const EmailVerification = () => {
   const [code, setCode] = useState<string>("");

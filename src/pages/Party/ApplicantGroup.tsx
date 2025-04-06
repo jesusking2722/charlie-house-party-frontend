@@ -2,9 +2,10 @@ import { FC, useState } from "react";
 import { Badge, Pagination, Rater, Tooltip } from "../../components";
 import { Applicant } from "../../types";
 import { motion } from "motion/react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { getTimeAgo } from "../../utils";
+import { BASE_URL } from "../../constant";
 
 interface ApplicantGroupProps {
   applicants: Applicant[];
@@ -42,12 +43,12 @@ const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
           className=""
         >
           <Link
-            to={`/profile/${applicant.applier._id}`}
+            to={`profile/${applicant.applier._id}`}
             className="w-full flex flex-1 flex-row items-start gap-4 rounded-xl border border-white bg-white/10 backdrop-blur-sm p-2 hover:shadow-lg hover:border-[#c4f70f] transition-all duration-300 ease-in-out"
           >
             <div className="flex flex-col gap-2 items-center justify-center">
               <img
-                src="http://localhost:3000/assets/pngs/user.png"
+                src={BASE_URL + "/assets/pngs/user.png"}
                 alt="User"
                 className="w-[100px] h-[100px] rounded-full shadow-lg object-cover object-center"
               />

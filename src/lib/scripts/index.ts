@@ -11,3 +11,4 @@ export {
   fetchKyc,
 } from "./auth";
 export { fetchAllUsers } from "./user";
+export { fetchAiResponse } from "./ai";

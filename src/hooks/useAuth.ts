@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../redux/store";
 
 const useAuth = () => {

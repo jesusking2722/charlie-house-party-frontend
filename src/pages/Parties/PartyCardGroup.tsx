@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Party } from "../../types";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { formatDate, getDayAgo } from "../../utils";
 import { motion } from "motion/react";
 import { Pagination } from "../../components";
@@ -33,7 +33,7 @@ const PartyCardGroup: FC<PartyCardGroupProps> = ({ parties }) => {
             transition={{ duration: 0.3, type: "spring", delay: index * 0.1 }}
           >
             <Link
-              to={`/parties/${party.id}`}
+              to={`parties/${party.id}`}
               className="w-full flex flex-1 flex-row items-start gap-4 overflow-hidden p-4 hover:shadow-lg border border-white bg-white/10 backdrop-blur-sm rounded-xl transition-all duration-300 ease-in-out hover:border-[#c4f70f]"
             >
               <img
