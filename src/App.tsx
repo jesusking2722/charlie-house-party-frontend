@@ -9,7 +9,7 @@ import {
   NotFound,
   Onboarding,
   Parites,
-  Party,
+  PartyPreview,
   Pricing,
   Profile,
   Register,
@@ -22,12 +22,13 @@ import { EthersAdapter } from "@reown/appkit-adapter-ethers";
 import { bsc } from "@reown/appkit/networks";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import { fetchAllUsers, fetchMe } from "./lib/scripts";
+import {fetchAllParties, fetchAllUsers, fetchMe} from "./lib/scripts";
 import { setAuthUser } from "./redux/slices/authSlice";
 import { setUsers } from "./redux/slices/usersSlice";
 import "react-chat-elements/dist/main.css";
 import { BASE_URL } from "./constant";
 import useSocket from "./hooks/useSocket";
+import {setParty} from "./redux/slices/partySlice";
 
 const metadata = {
   name: "House Party | Charlie Unicorn AI",
@@ -85,11 +86,24 @@ function App() {
       }
     };
 
+    const fetchAllPartiesInfo = async () => {
+      try {
+        const response = await fetchAllParties();
+        if(response.ok) {
+          const { parties } = response.data;
+          dispatch(setParty({parties}));
+        }
+      } catch (error) {
+        console.log("fetch all parties info error: ", error);
+      }
+    }
+
     const token = localStorage.getItem("Authorization");
     if (token) {
       const decoded = jwtDecode(token) as any;
       fetchMyInfo(decoded.id);
       fetchAllUsersInfo();
+      fetchAllPartiesInfo();
     }
   }, [dispatch]);
 
@@ -103,7 +117,7 @@ function App() {
         <Route path="profile/:userId" element={<Profile />} />
         <Route path="pricing" element={<Pricing />} />
         <Route path="parties" element={<Parites />} />
-        <Route path="parties/:partyId" element={<Party />} />
+        <Route path="parties/:partyId" element={<PartyPreview />} />
         <Route path="create-party" element={<CreateParty />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

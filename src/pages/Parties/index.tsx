@@ -3,268 +3,43 @@ import { Dropdown, IconButton, RegionSelect, Tooltip } from "../../components";
 import { Party } from "../../types";
 import PartyCardGroup from "./PartyCardGroup";
 import countryList from "react-select-country-list";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
 
 const initialPartyTypes = ["birthday", "common", "wedding", "corporate"];
 
-const initialParties: Party[] = [
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-  {
-    _id: "1",
-    title: "Birth Day Party",
-    type: "birthday",
-    country: "US",
-    region: "Califonia",
-    address: "",
-    createdAt: new Date(),
-    openingAt: new Date(),
-    creator: {
-      name: "Jhon Doe",
-      email: "jhondoe@gmail.com",
-      avatar: "./assets/pngs/user.png",
-      emailVerified: true,
-      phone: "",
-      phoneVerified: false,
-      kycVerified: false,
-      shortname: "@jhondoe",
-      reviews: [],
-      createdAt: new Date(),
-    },
-    applicants: [],
-    description:
-      "Hey everyone! 🎂🥳 It's that time of the year again, and I’m throwing an epic birthday party to celebrate! I’d love for you to join me for a night full of fun, laughter, music, and great vibes! 🎶✨. It won’t be the same without you, so come celebrate with me! Let’s make this a legendary night! 🔥 RSVP by [Insert RSVP Deadline] so I can plan accordingly. Can’t wait to see you all there! 🥳🎈",
-  },
-];
-
 const Parites = () => {
-  const [parties, setParties] = useState<Party[]>(initialParties);
+  const [availableParties, setAvailableParties] = useState<Party[]>([]);
   const [country, setCountry] = useState<string>("");
   const [region, setRegion] = useState<string>("");
   const [partyType, setPartyType] = useState<string>("");
   const [scrolled, setScrolled] = useState<boolean>(false);
 
   const countryCode = countryList();
+  const  {parties} = useSelector((state: RootState) => state.party)
 
   const handleCountryChange = (selectedCountry: string) => {
-    const selectedParites = parties.filter(
+    const selectedParites = availableParties.filter(
       (party) => party.country === countryCode.getValue(selectedCountry)
     );
-    setParties(selectedParites);
+    setAvailableParties(selectedParites);
     setCountry(selectedCountry);
     setRegion("");
   };
 
   const handleRegionChange = (selectedRegion: string) => {
-    const selectedParties = parties.filter(
-      (party) => party.region === selectedRegion
+    const selectedParties = availableParties.filter(
+      (party) => selectedRegion.includes(party.region ?? '')
     );
-    setParties(selectedParties);
+    setAvailableParties(selectedParties);
     setRegion(selectedRegion);
   };
 
   const handlePartyTypeChange = (selectedPartyType: string) => {
-    const selectedParties = parties.filter(
+    const selectedParties = availableParties.filter(
       (party) => party.type === selectedPartyType
     );
-    setParties(selectedParties);
+    setAvailableParties(selectedParties);
     setPartyType(selectedPartyType);
   };
 
@@ -272,7 +47,7 @@ const Parites = () => {
     setCountry("");
     setRegion("");
     setPartyType("");
-    setParties(initialParties);
+    setAvailableParties(parties);
   };
 
   useEffect(() => {
@@ -290,6 +65,12 @@ const Parites = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if(parties.length > 0) {
+      setAvailableParties(parties);
+    }
+  }, [parties]);
 
   return (
     <div
@@ -326,7 +107,7 @@ const Parites = () => {
           </Tooltip>
         </div>
       </div>
-      <PartyCardGroup parties={parties} />
+      <PartyCardGroup parties={availableParties} />
     </div>
   );
 };

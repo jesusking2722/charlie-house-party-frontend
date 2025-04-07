@@ -18,6 +18,7 @@ import EmailVerification from "./EmailVerificatoin";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { useAppKit } from "@reown/appkit/react";
 import { RootState } from "../../redux/store";
+import {BASE_URL} from "../../constant";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -115,19 +116,19 @@ const Register = () => {
           initial={{ x: -300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-2/3 bg-white rounded-xl shadow-lg"
+          className="basis-2/3 xl:basis-1/2 bg-white rounded-xl shadow-lg"
         >
           <img
-            src="../assets/pngs/model1.png"
+            src={BASE_URL + '/assets/pngs/model1.png'}
             alt="MODEL"
-            className="w-full h-full rounded-xl"
+            className="w-full h-full rounded-xl object-cover object-center"
           />
         </motion.div>
         <motion.div
           initial={{ x: 300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
+          className="basis-1/3 xl:basis-1/2 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
         >
           <div className="w-full h-full flex flex-col items-center justify-center gap-4">
             <img src="./logo.png" alt="LOGO" className="w-[120px] h-auto" />

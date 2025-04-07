@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { formatDate, getDayAgo } from "../../utils";
 import { motion } from "motion/react";
 import { Pagination } from "../../components";
+import {BACKEND_BASE_URL} from "../../constant";
 
 interface PartyCardGroupProps {
   parties: Party[];
@@ -34,11 +35,11 @@ const PartyCardGroup: FC<PartyCardGroupProps> = ({ parties }) => {
               transition={{ duration: 0.3, type: "spring", delay: index * 0.1 }}
             >
               <Link
-                to={`parties/${party._id}`}
+                to={`/parties/${party._id}`}
                 className="w-full flex flex-1 flex-row items-start gap-4 overflow-hidden p-4 hover:shadow-lg border border-white bg-white/10 backdrop-blur-sm rounded-xl transition-all duration-300 ease-in-out hover:border-[#c4f70f]"
               >
                 <img
-                  src={party.creator.avatar ?? ""}
+                  src={BACKEND_BASE_URL + party.creator.avatar ?? ""}
                   alt={party.creator.name ?? ""}
                   className="w-[100px] h-[100px] rounded-full shadow-lg object-cover object-center"
                 />
@@ -60,7 +61,7 @@ const PartyCardGroup: FC<PartyCardGroupProps> = ({ parties }) => {
                       <strong>{formatDate(party.openingAt)}</strong>
                     </h2>
                     <h2 className="text-cyan-500 text-sm">
-                      Party Type: <strong>{party.type.toUpperCase()}</strong>
+                      Type: <strong>{party.type.toUpperCase()}</strong>
                     </h2>
                   </div>
                 </div>

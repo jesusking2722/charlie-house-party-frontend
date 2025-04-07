@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { setAuth } from "../../redux/slices/authSlice";
 import { useAppKit } from "@reown/appkit/react";
+import {BASE_URL} from "../../constant";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -103,19 +104,19 @@ const Login = () => {
           initial={{ x: -300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-2/3 bg-white rounded-xl shadow-lg"
+          className="basis-2/3 xl:basis-1/2 bg-white rounded-xl shadow-lg"
         >
           <img
-            src="../assets/pngs/model1.png"
+            src={BASE_URL + "/assets/pngs/model3.png"}
             alt="MODEL"
-            className="w-full h-auto rounded-xl"
+            className="w-full h-full rounded-xl object-cover object-center"
           />
         </motion.div>
         <motion.div
           initial={{ x: 300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg flex flex-col items-center justify-center gap-2"
+          className="basis-1/3 xl:basis-1/2 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 p-4"
         >
           <img src="./logo.png" alt="LOGO" className="w-[120px] h-auto" />
           <div className="gap-1 flex flex-col items-center justify-center">

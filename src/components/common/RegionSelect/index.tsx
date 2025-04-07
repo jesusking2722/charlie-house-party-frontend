@@ -9,6 +9,7 @@ interface RegionSelectProps {
   country: string;
   region?: string;
   hideRegion?: boolean;
+  positioning?: "horizontal" | "vertical";
   onCountryChange: (val: any) => void;
   onRegionChange?: (val: any) => void;
 }
@@ -18,6 +19,7 @@ const RegionSelect: FC<RegionSelectProps> = ({
   country,
   region,
   hideRegion,
+    positioning,
   onCountryChange,
   onRegionChange,
 }) => {
@@ -49,7 +51,7 @@ const RegionSelect: FC<RegionSelectProps> = ({
           />
         </div>
       ) : (
-        <div className="w-full flex flex-row items-center gap-4">
+        <div className={`w-full flex gap-4 ${positioning === 'vertical' ? 'flex-col items-start' : 'flex-row items-center'}`}>
           <div className="flex flex-col gap-1">
             <div
               className="group w-full flex items-center gap-2 rounded-lg px-3 py-2 cursor-pointer

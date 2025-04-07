@@ -1,6 +1,5 @@
 import countries from "world-countries";
 import { GEOAPIFY_API, GOOGLE_MAP_API } from "../constant";
-import { Geo } from "../types";
 
 export const getRegionGeo = async (
   countryCode: string,
@@ -66,8 +65,7 @@ export const validateAddress = async (
 
     if (
       data.result &&
-      data.result.verdict &&
-      !data.result.verdict.hasUnconfirmedComponents
+      data.result.verdict
     ) {
       const validatedAddress = data.result.address.formattedAddress;
       const geo = data.result.geocode.location;
@@ -82,42 +80,54 @@ export const validateAddress = async (
   }
 };
 
+interface AddressComponent {
+  long_name: string;
+  short_name: string;
+  types: string[];
+}
+
 interface GeocoderResult {
-  address_components: {
-    long_name: string;
-    short_name: string;
-    types: string[];
-  }[];
+  address_components: AddressComponent[];
   formatted_address: string;
   geometry: {
     location: google.maps.LatLng;
   };
 }
 
-export const getRegionName = (
-  lat: string | number,
-  lng: string | number
-): any => {
+export const getCityName = async (
+    lat: string | number,
+    lng: string | number,
+): Promise<string | null> => {
   const geocoder = new google.maps.Geocoder();
 
   const latLng: google.maps.LatLngLiteral = {
-    lat: typeof lat === "string" ? parseFloat(lat) : lat,
-    lng: typeof lng === "string" ? parseFloat(lng) : lng,
+    lat: typeof lat === 'string' ? parseFloat(lat) : lat,
+    lng: typeof lng === 'string' ? parseFloat(lng) : lng
   };
 
-  geocoder.geocode(
-    { location: latLng },
-    (results: GeocoderResult[] | null, status: google.maps.GeocoderStatus) => {
-      if (status === "OK" && results?.[0]) {
-        const addressComponents = results[0].address_components;
-        const region = addressComponents.find((component) =>
-          component.types.includes("administrative_area_level_1")
-        )?.long_name;
+  try {
+    const response = await new Promise<GeocoderResult[]>((resolve, reject) => {
+      geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === 'OK' && results) {
+          resolve(results);
+        } else {
+          reject(new Error(`Geocoder failed with status: ${status}`));
+        }
+      });
+    });
 
-        return region;
-      } else {
-        console.error("Geocoder failed due to:", status);
-      }
-    }
-  );
+    if (!response?.[0]) return null;
+
+    // Find the city (locality) component
+    const cityComponent = response[0].address_components.find(component =>
+        component.types.includes('route')
+    );
+
+    return cityComponent?.long_name || null;
+  } catch (error) {
+    console.error('Error in getCityName:', error);
+    throw error;
+  }
 };
+
+

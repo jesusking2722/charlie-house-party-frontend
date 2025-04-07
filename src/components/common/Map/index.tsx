@@ -8,6 +8,7 @@ import "./style.css";
 import { GOOGLE_MAP_API } from "../../../constant";
 import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
+import {Party} from "../../../types";
 
 export interface PartyLocation {
   id: string;
@@ -24,12 +25,12 @@ const PartyMarker = ({
   party,
   onClick,
 }: {
-  party: PartyLocation;
-  onClick: (party: PartyLocation) => void;
+  party: Party;
+  onClick: (party: Party) => void;
 }) => {
   return (
     <AdvancedMarker
-      position={{ lat: party.lat, lng: party.lng }}
+      position={{lat: party.geo.lat, lng: party.geo.lng}}
       onClick={() => {
         onClick(party);
       }}
@@ -62,11 +63,11 @@ export interface Center {
 }
 
 export interface MapInterface {
-  parties: PartyLocation[];
+  parties: Party[];
   center: Center | null;
   zoom: number | null;
   setZoom: (zoom: number) => void;
-  onClick: (party: PartyLocation) => void;
+  onClick: (party: Party) => void;
 }
 
 const Map: FC<MapInterface> = ({ parties, center, zoom, setZoom, onClick }) => {
@@ -88,7 +89,7 @@ const Map: FC<MapInterface> = ({ parties, center, zoom, setZoom, onClick }) => {
         onZoomChanged={onZoomChanged}
       >
         {parties.map((party) => (
-          <PartyMarker key={party.id} party={party} onClick={onClick} />
+          <PartyMarker key={party._id} party={party} onClick={onClick} />
         ))}
       </GoogleMap>
     </APIProvider>

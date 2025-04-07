@@ -5,6 +5,7 @@ const KycVerifier = ({ link }: { link: string }) => {
 
   return (
     <iframe
+        title='kyc verify'
       src={link}
       height={(height / 3) * 2}
       className="rounded-xl shadow-lg w-full"

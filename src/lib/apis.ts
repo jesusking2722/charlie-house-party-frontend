@@ -16,3 +16,6 @@ export const FETCH_ALL_USERS = "/user/all";
 
 // ai apis
 export const FETCH_AI_RESPONSE_CREATE_PARTY = "/ai/create-party";
+
+// party apis
+export const FETCH_ALL_PARTIES = "/party/all";

@@ -1,4 +1,4 @@
-export type { ApiResponse, AuthResponse, AiResponse } from "./api";
+export type { ApiResponse, AuthResponse, AiResponse, PartyAllResponse } from "./api";
 
 export interface User {
   _id?: string;
@@ -51,6 +51,10 @@ export interface Party {
   address: string | null;
   region: string | null;
   creator: User | null;
+  geo: {
+    lat: number;
+    lng: number;
+  };
   applicants: Applicant[];
   createdAt: Date;
 }

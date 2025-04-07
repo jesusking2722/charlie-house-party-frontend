@@ -7,12 +7,13 @@ import { Party } from "../types";
 
 const useSocket = () => {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!user) return;
 
     const handleNewParty = (newParty: Party) => {
+      debugger
       dispatch(addNewParty({ newParty }));
     };
 
@@ -21,7 +22,7 @@ const useSocket = () => {
     return () => {
       socket.off("party:created", handleNewParty);
     };
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, user]);
 };
 
 export default useSocket;

@@ -15,13 +15,17 @@ import {
 import { BASE_URL, PARTY_TYPES } from "../../constant";
 import { useState } from "react";
 import { Geo, Party, PartyType } from "../../types";
-import { getRegionName, validateAddress } from "../../utils";
+import {getCityName, validateAddress} from "../../utils";
 import countryList from "react-select-country-list";
 import { AnimatePresence, motion } from "motion/react";
 import OpenAiForm from "./OpenAiForm";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import socket from "../../lib/socketInstance";
+import Confetti from "react-confetti";
+import {useWindowSize} from "react-use";
+import {useNavigate} from "react-router-dom";
+import toast from "react-hot-toast";
 
 const CreateParty = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,9 +42,13 @@ const CreateParty = () => {
   const [description, setDescription] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [region, setRegion] = useState<string | null>(null);
+  const [newCreatedParty, setNewCreatedParty] = useState<Party | null>(null);
   const countryCode = countryList();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const {parties} = useSelector((state: RootState) => state.party);
+  const { width, height } = useWindowSize();
+  const navigate = useNavigate();
 
   const handleBasic = async () => {
     try {
@@ -48,6 +56,11 @@ const CreateParty = () => {
       const code = countryCode.getValue(country);
       const addressInfo = await validateAddress(address, code);
       if (addressInfo) {
+        if(typeof addressInfo === 'boolean') {
+          toast.error("Unsupported country");
+          setLoading(false);
+          return;
+        }
         if (addressInfo.geo) {
           setAddress(addressInfo.address);
           setAddressGeo({
@@ -55,10 +68,11 @@ const CreateParty = () => {
             lng: addressInfo.geo.longitude,
           });
         }
-        const selectedRegion = getRegionName(
+        const selectedRegion = await getCityName(
           addressInfo.geo.latitude,
           addressInfo.geo.longitude
         );
+        console.log(selectedRegion);
         setRegion(selectedRegion);
         setActiveScreen("complete");
       } else {
@@ -73,14 +87,17 @@ const CreateParty = () => {
 
   const handleComplete = async () => {
     try {
-      setLoading(true);
       if (!user && partyType !== "" && !region) return;
+      setLoading(true);
       const newParty: Party = {
         type: partyType ?? "",
-        _id: "",
         title,
-        address: address + "%" + addressGeo?.lat + "%" + addressGeo?.lng,
-        country: countryCode.getValue(country),
+        address,
+        geo: {
+          lat: Number(addressGeo?.lat),
+          lng: Number(addressGeo?.lng),
+        },
+        country,
         region,
         description,
         applicants: [],
@@ -89,6 +106,10 @@ const CreateParty = () => {
         creator: user,
       };
       socket.emit("create_party", newParty);
+      debugger;
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      setNewCreatedParty(parties[0]);
+      setActiveScreen('welcome');
     } catch (error) {
       console.log("handle complete error: ", error);
     } finally {
@@ -113,7 +134,7 @@ const CreateParty = () => {
           initial={{ x: -300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="w-1/3 rounded-xl shadow-xl"
+          className="basis-1/3 xl:basis-2/5 rounded-xl shadow-xl"
         >
           <img
             src={BASE_URL + "/assets/pngs/create.png"}
@@ -125,18 +146,18 @@ const CreateParty = () => {
           initial={{ x: 300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="w-2/3 relative bg-gradient rounded-xl shadow-xl"
+          className="basis-2/3 xl:basis-3/5 relative bg-gradient rounded-xl shadow-xl"
         >
           <div className="absolute inset-[1px] bg-white rounded-xl">
             <AnimatePresence mode="wait">
               {activeScreen === "basic" ? (
                 <motion.div
                   key="basic-section"
-                  initial={{ x: 50, opacity: 0 }}
+                  initial={{ x: 20, opacity: 0 }}
                   animate={{ x: 0, opacity: 100 }}
-                  exit={{ x: -50, opacity: 0 }}
+                  exit={{ x: -20, opacity: 0 }}
                   transition={{ duration: 0.8, type: "spring" }}
-                  className="absolute inset-[1px] rounded-xl w-full flex flex-col items-center justify-center gap-4 py-4 px-12"
+                  className="absolute inset-[1px] rounded-xl w-full flex flex-col items-center justify-center gap-4 py-4 px-12 xl:px-8 xl:py-8"
                 >
                   <Input
                     type="text"
@@ -185,9 +206,9 @@ const CreateParty = () => {
               ) : activeScreen === "complete" ? (
                 <motion.div
                   key="complete-section"
-                  initial={{ x: 50, opacity: 0 }}
+                  initial={{ x: 20, opacity: 0 }}
                   animate={{ x: 0, opacity: 100 }}
-                  exit={{ x: -50, opacity: 0 }}
+                  exit={{ x: -20, opacity: 0 }}
                   transition={{ duration: 0.8, type: "spring" }}
                   className="absolute inset-[1px] rounded-xl w-full flex flex-col items-center justify-center gap-4 py-4 px-12"
                 >
@@ -226,17 +247,39 @@ const CreateParty = () => {
               ) : activeScreen === "welcome" ? (
                 <motion.div
                   key="welcome-section"
-                  initial={{ x: 50, opacity: 0 }}
+                  initial={{ x: 20, opacity: 0 }}
                   animate={{ x: 0, opacity: 100 }}
-                  exit={{ x: -50, opacity: 0 }}
+                  exit={{ x: -20, opacity: 0 }}
                   transition={{ duration: 0.8, type: "spring" }}
-                  className=""
-                ></motion.div>
+                  className="w-full flex flex-col gap-4 items-center justify-center h-full"
+                >
+                    <h1 className="text-black text-2xl">
+                      Congratulations!
+                    </h1>
+                    <p className="text-black text-lg">
+                      Your party has been created successfully
+                    </p>
+                    <div className="flex flex-row items-center justify-center gap-4">
+                      <Button
+                        type="gradient"
+                        label="Go to your party"
+                        icon="solar:arrow-right-linear"
+                        isRight={true}
+                        onClick={() => {
+                          debugger;
+                          if(newCreatedParty) {
+                            navigate(`/parties/${newCreatedParty._id}`)
+                          }
+                        }}
+                      />
+                  </div>
+                </motion.div>
               ) : null}
             </AnimatePresence>
           </div>
         </motion.div>
       </div>
+      {activeScreen === 'welcome' && <Confetti width={width} height={height} />}
       <Modal
         title="Write with AI"
         isOpen={modalOpen}

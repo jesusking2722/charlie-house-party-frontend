@@ -27,7 +27,7 @@ const ProfileDropdown = ({
           className="w-[60px] h-[60px] object-cover rounded-full shadow-lg"
         />
         <div className="flex flex-row items-center gap-2">
-          <span className="text-[#353537] group-hover:text-[#c1eb2a] font-semibold text-sm transition-all duration-300 ease-in-out">
+          <span className="text-[#353537] group-hover:text-[#c1eb2a] font-semibold text-xs transition-all duration-300 ease-in-out">
             {name}
           </span>
           <Icon

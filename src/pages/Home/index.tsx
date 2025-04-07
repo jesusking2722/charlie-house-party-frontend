@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {
   Button,
   CardEffectSlider,
@@ -6,46 +6,15 @@ import {
   Dropdown,
   Map,
   Modal,
-  PartyLocation,
   RegionSelect,
 } from "../../components";
 import countryList from "react-select-country-list";
 import { useNavigate } from "react-router-dom";
 import { Center, Spinner } from "../../components/common";
 import { getCountryGeo, getRegionGeo } from "../../utils";
-
-const initialPartyLocations: PartyLocation[] = [
-  {
-    id: "1",
-    lat: 37.7749,
-    lng: -122.4194,
-    address: "123 Main St, San Francisco, CA",
-    partyType: "Birthday Party",
-    attendees: 50,
-    country: "United States",
-    region: "California",
-  },
-  {
-    id: "2",
-    lat: 37.7849,
-    lng: -122.4094,
-    address: "456 Broadway, San Francisco, CA",
-    partyType: "Wedding Reception",
-    attendees: 100,
-    country: "United States",
-    region: "California",
-  },
-  {
-    id: "3",
-    lat: 37.7649,
-    lng: -122.4294,
-    address: "789 Market St, San Francisco, CA",
-    partyType: "Graduation Party",
-    attendees: 75,
-    country: "United States",
-    region: "California",
-  },
-];
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
+import {Party} from "../../types";
 
 const initialPartyTypes = ["Birthday Party", "Wedding", "Corporate Event"];
 
@@ -78,10 +47,10 @@ const initialSlides: CardEffectSliderItemType[] = [
 ];
 
 const Home = () => {
-  const [parties, setParties] = useState<PartyLocation[]>(
-    initialPartyLocations
+  const [availableParties, setAvailableParties] = useState<Party[]>(
+    []
   );
-  const [selectedParty, setSelectedParty] = useState<PartyLocation | null>(
+  const [selectedParty, setSelectedParty] = useState<Party | null>(
     null
   );
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -94,19 +63,21 @@ const Home = () => {
   const countryCode = countryList();
   const navigate = useNavigate();
 
-  const handleLocationClick = (party: PartyLocation) => {
+  const {parties} = useSelector((state: RootState) => state.party);
+
+  const handleLocationClick = (party: Party) => {
     setSelectedParty(party);
     setModalOpen(true);
   };
 
   const handleCountryChange = (val: any) => {
     const code = countryCode.getValue(val);
-    const filteredParties = initialPartyLocations.filter(
+    const filteredParties = availableParties.filter(
       (party) => party.country === val
     );
     const center = getCountryGeo(code);
     setSelectedCountry(val);
-    setParties(filteredParties);
+    setAvailableParties(filteredParties);
     setMapCenter(center);
     setMapZoom(5);
   };
@@ -115,11 +86,11 @@ const Home = () => {
     setLoading(true);
     const code = countryCode.getValue(selectedCountry);
     const regionGeo = await getRegionGeo(code, val);
-    const filteredParties = initialPartyLocations.filter(
-      (party) => party.country === selectedCountry && party.region === val
+    const filteredParties = availableParties.filter(
+      (party) => party.country === selectedCountry && val.includes(party.region)
     );
     setSelectedRegion(val);
-    setParties(filteredParties);
+    setAvailableParties(filteredParties);
     setMapCenter(regionGeo);
     setMapZoom(8);
     setLoading(false);
@@ -129,10 +100,16 @@ const Home = () => {
     setSelectedCountry("");
     setSelectedRegion("");
     setSelectedPartyType("");
-    setParties(initialPartyLocations);
+    setAvailableParties(parties);
     setMapCenter(null);
     setMapZoom(null);
   };
+
+  useEffect(() => {
+      if(parties.length > 0) {
+        setAvailableParties(parties);
+      }
+  }, [parties]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
@@ -181,7 +158,7 @@ const Home = () => {
         </div>
       </div>
       <Modal
-        title={selectedParty?.partyType ?? ""}
+        title={selectedParty?.type ?? ""}
         isOpen={modalOpen}
         onClose={() => {
           setModalOpen(false);
@@ -193,7 +170,7 @@ const Home = () => {
           </h2>
           <h2 className="text-sm text-black">
             <strong>Attendees: </strong>
-            {selectedParty?.attendees}
+            {selectedParty?.applicants.length}
           </h2>
         </div>
         <div className="mt-6 flex flex-row items-center justify-end gap-4">

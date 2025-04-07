@@ -290,7 +290,7 @@ const Onboarding = () => {
   }, [user]);
 
   return (
-    <div className="w-[80%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <div className="w-[80%] xl:w-[90%] mx-auto min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {loading && <Spinner />}
       <AnimatePresence mode="wait">
         {activeScreen === "name" ? (
@@ -307,10 +307,10 @@ const Onboarding = () => {
               initial={{ x: -600 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.8 }}
-              className="basis-2/3 bg-white rounded-xl shadow-lg"
+              className="basis-2/3 xl:basis-3/5 bg-white rounded-xl shadow-lg"
             >
               <img
-                src="../assets/pngs/model2.png"
+                src={BASE_URL + '/assets/pngs/model2.png'}
                 alt="MODEL"
                 className="w-full h-full rounded-xl object-cover object-center"
               />
@@ -319,17 +319,17 @@ const Onboarding = () => {
               initial={{ x: 300 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.8 }}
-              className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
+              className="basis-1/3 xl:basis-2/5 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
             >
               <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                 {/* Avatar upload and name input */}
                 <div className="w-full px-12 flex flex-col items-center justify-center">
                   <img
-                    src="./logo.png"
+                    src={BASE_URL + '/logo.png'}
                     alt="LOGO"
                     className="w-[120px] h-auto"
                   />
-                  <h1 className="gradient-text font-semibold text-2xl text-center">
+                  <h1 className="gradient-text font-semibold text-2xl xl:text-xl text-center">
                     WELCOME TO YOUR ONBOARDING !!!
                   </h1>
                 </div>
@@ -438,10 +438,10 @@ const Onboarding = () => {
               initial={{ x: -600 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.8 }}
-              className="basis-2/3 bg-white rounded-xl shadow-lg"
+              className="basis-2/3 xl:basis-3/5 bg-white rounded-xl shadow-lg"
             >
               <img
-                src="../assets/pngs/model3.png"
+                src={BASE_URL + '/assets/pngs/model3.png'}
                 alt="MODEL"
                 className="w-full h-full rounded-xl object-cover object-center"
               />
@@ -450,12 +450,13 @@ const Onboarding = () => {
               initial={{ x: 300 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.8 }}
-              className="basis-1/3 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
+              className="basis-1/3 xl:basis-2/5 bg-black/5 border border-white backdrop-blur-sm rounded-xl shadow-lg py-4"
             >
               <div className="w-full h-full flex flex-col items-center justify-center gap-4 px-12">
                 <RegionSelect
                   country={country}
                   region={region}
+                  positioning='vertical'
                   onCountryChange={setCountry}
                   onRegionChange={setRegion}
                 />

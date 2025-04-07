@@ -4,5 +4,5 @@ export {
   getCountryGeo,
   getRegionGeo,
   validateAddress,
-  getRegionName,
+  getCityName,
 } from "./country";
