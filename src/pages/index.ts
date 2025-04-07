@@ -5,6 +5,6 @@ export { default as Profile } from "./Profile";
 export { default as Pricing } from "./Pricing";
 export { default as Onboarding } from "./Onboarding";
 export { default as NotFound } from "./NotFound";
-export { default as Parites } from "./Parties";
+export { default as Parties } from "./Parties";
 export { default as PartyPreview } from "./PartyPreview";
 export { default as CreateParty } from "./CreateParty";

@@ -125,7 +125,7 @@ const CreateParty = () => {
           <h1 className="text-black text-2xl">
             Create your <strong>happy party</strong> post
           </h1>
-          <Icon icon="solar:document-add-bold" className="text-black w-8 h-8" />
+          <Icon icon="solar:document-add-bold" className="text-green-500 w-8 h-8" />
         </div>
         <p className="text-black text-lg">Let's make the best post together</p>
       </div>

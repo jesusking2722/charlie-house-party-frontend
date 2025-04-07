@@ -8,7 +8,7 @@ import {
   Login,
   NotFound,
   Onboarding,
-  Parites,
+  Parties,
   PartyPreview,
   Pricing,
   Profile,
@@ -116,7 +116,7 @@ function App() {
         <Route index path="dashboard" element={<Home />} />
         <Route path="profile/:userId" element={<Profile />} />
         <Route path="pricing" element={<Pricing />} />
-        <Route path="parties" element={<Parites />} />
+        <Route path="parties" element={<Parties />} />
         <Route path="parties/:partyId" element={<PartyPreview />} />
         <Route path="create-party" element={<CreateParty />} />
         <Route path="*" element={<NotFound />} />

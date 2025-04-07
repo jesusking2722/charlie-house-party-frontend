@@ -87,7 +87,7 @@ const Pricing = () => {
           our own happy parites !!!
         </h2>
       </div>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between xl:grid xl:grid-cols-3 xl:gap-8">
         <PricingCard free={true} active={true} />
         <PricingCard price={5} month={1} onSelect={handleSelectPlan} />
         <PricingCard price={13} month={3} onSelect={handleSelectPlan} />

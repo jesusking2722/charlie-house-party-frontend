@@ -19,8 +19,9 @@ const Parites = () => {
   const  {parties} = useSelector((state: RootState) => state.party)
 
   const handleCountryChange = (selectedCountry: string) => {
+    debugger;
     const selectedParites = availableParties.filter(
-      (party) => party.country === countryCode.getValue(selectedCountry)
+      (party) => party.country === selectedCountry
     );
     setAvailableParties(selectedParites);
     setCountry(selectedCountry);
@@ -28,6 +29,7 @@ const Parites = () => {
   };
 
   const handleRegionChange = (selectedRegion: string) => {
+    debugger;
     const selectedParties = availableParties.filter(
       (party) => selectedRegion.includes(party.region ?? '')
     );

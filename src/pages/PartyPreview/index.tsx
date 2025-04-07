@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Badge, Rater } from "../../components";
+import {Alert, Badge, Rater} from "../../components";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
@@ -72,10 +72,7 @@ const PartyPreview = () => {
       <div className="h-28"></div>
       {user?.membership === 'premium'
           ? <ApplicantGroup applicants={selectedParty?.applicants ?? []} />
-          : (<div className='w-full flex flex-row gap-2'>
-            <Icon icon='solar:info-square-broken' className='w-6 h-6 text-blue-500' />
-            <p className='text-blue-500 text-lg'>To review all of your competitive applicants, you need to become a <strong>premium</strong> member</p>
-          </div>)
+          : (<Alert type='info' title='Tip for winner' message='You need to be a premium member to see applicants' />)
       }
     </div>
   );

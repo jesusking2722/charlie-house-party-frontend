@@ -21,3 +21,4 @@ export { default as SharingButtonGroup } from "./SharingButtonGroup";
 export { default as VideoShower } from "./VideoShower";
 export { default as DatePicker } from "./DatePicker";
 export { default as PlaceAutoComplete } from "./PlaceAutoComplete";
+export {default as Alert} from './Alert';

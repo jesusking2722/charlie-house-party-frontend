@@ -60,9 +60,7 @@ const RegionSelect: FC<RegionSelectProps> = ({
             >
               {country && (
                 <Icon
-                  icon={`flagpack:${countryCode
-                    .getValue(country)
-                    .toLowerCase()}`}
+                  icon={`flag:${countryCode.getValue(country).toLowerCase()}-4x3`}
                   className="text-[#353537] group-hover:text-[#c4f70f] group-focus-within:text-[#c4f70f] transition-all duration-300 w-4 h-4"
                 />
               )}

@@ -120,6 +120,7 @@ const Home = () => {
           <RegionSelect
             country={selectedCountry}
             region={selectedRegion}
+            positioning='vertical'
             onCountryChange={handleCountryChange}
             onRegionChange={handleRegionChange}
           />
