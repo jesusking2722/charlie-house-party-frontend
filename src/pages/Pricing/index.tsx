@@ -82,9 +82,9 @@ const Pricing = () => {
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
       <div className="flex flex-row items-center justify-center">
-        <h2 className="text-2xl gradient-text font-semibold">
+        <h2 className="text-2xl text-green-500 font-semibold">
           Let's subscribe to become a <strong>PREMIUM</strong> member for owning
-          our own happy parites !!!
+          our own happy parties !!!
         </h2>
       </div>
       <div className="flex flex-row items-center justify-between xl:grid xl:grid-cols-3 xl:gap-8">
