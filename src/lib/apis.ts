@@ -1,4 +1,6 @@
-export const BASE_URL = "http://localhost:5001/api";
+import { BACKEND_BASE_URL } from "../constant";
+
+export const BASE_URL = BACKEND_BASE_URL + "/api";
 
 export const GOOGLE_LOGIN = "/auth/google-login";
 export const EMAIL_REGISTER = "/auth/email-register";

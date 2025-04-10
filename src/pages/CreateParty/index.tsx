@@ -65,14 +65,17 @@ const CreateParty = () => {
         if (addressInfo.geo) {
           setAddress(addressInfo.address);
           setAddressGeo(addressInfo.geo);
+          const selectedRegion = await getCityName(
+            addressInfo.geo.lat,
+            addressInfo.geo.lng
+          );
+          if (selectedRegion) {
+            setRegion(selectedRegion);
+            setActiveScreen("complete");
+          } else {
+            setInvalidAddress(true);
+          }
         }
-        const selectedRegion = await getCityName(
-          addressInfo.geo.lat,
-          addressInfo.geo.lng
-        );
-        console.log(selectedRegion);
-        setRegion(selectedRegion);
-        setActiveScreen("complete");
       } else {
         setInvalidAddress(true);
       }
@@ -85,6 +88,7 @@ const CreateParty = () => {
 
   const handleComplete = async () => {
     try {
+      debugger;
       if (!user && partyType !== "" && !region) return;
       setLoading(true);
       const newParty: Party = {

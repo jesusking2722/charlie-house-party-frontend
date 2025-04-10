@@ -1,5 +1,4 @@
-const BASE_URL = "http://localhost:5001/api";
-// "https://charlie-house-party-backend-production.up.railway.app/api";
+import { BACKEND_BASE_URL } from "../constant";
 
 // Function to get headers including Authorization token
 const getHeaders = (): HeadersInit => {
@@ -13,7 +12,7 @@ const getHeaders = (): HeadersInit => {
 // Function to make a fetch request
 const fetchInstance = async <T>(url: string, options: any): Promise<T> => {
   try {
-    const response = await fetch(`${BASE_URL}${url}`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/api${url}`, {
       ...options,
       headers: { ...getHeaders(), ...options.headers },
     });

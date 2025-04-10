@@ -96,6 +96,11 @@ export const getCityName = async (
   lat: string | number,
   lng: string | number
 ): Promise<string | null> => {
+  if (!window.google?.maps?.Geocoder) {
+    console.error("Google Maps Geocoder is not available");
+    return null;
+  }
+
   const geocoder = new google.maps.Geocoder();
 
   const latLng: google.maps.LatLngLiteral = {
@@ -116,14 +121,17 @@ export const getCityName = async (
 
     if (!response?.[0]) return null;
 
-    // Find the city (locality) component
-    const cityComponent = response[0].address_components.find((component) =>
-      component.types.includes("route")
+    // Find the route (street name) component
+    const routeComponent = response[0].address_components.find(
+      (component) =>
+        component.types.includes("route") ||
+        component.types.includes("locality") ||
+        component.types.includes("administrative_area_level_2")
     );
 
-    return cityComponent?.long_name || null;
+    return routeComponent?.long_name || null;
   } catch (error) {
     console.error("Error in getCityName:", error);
-    throw error;
+    return null;
   }
 };
