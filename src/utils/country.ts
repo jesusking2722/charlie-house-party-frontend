@@ -31,45 +31,43 @@ export const getCountryGeo = (code: string) => {
   return country ? { lat: country.latlng[0], lng: country.latlng[1] } : null;
 };
 
+interface GoogleGeocodeResponse {
+  results: Array<{
+    formatted_address: string;
+    geometry: {
+      location: {
+        lat: number;
+        lng: number;
+      };
+    };
+  }>;
+  status: string;
+}
+
 export const validateAddress = async (
   address: string,
   countryCode: string,
   locality?: string
-): Promise<any> => {
-  const url = `https://addressvalidation.googleapis.com/v1:validateAddress?key=${GOOGLE_MAP_API}`;
-
-  const body: any = {
-    address: {
-      regionCode: countryCode,
-      addressLines: [address],
-    },
-  };
-
-  if (locality) {
-    body.address.locality = locality;
-  }
+): Promise<{ address: string; geo: { lat: number; lng: number } } | null> => {
+  const query = locality
+    ? `${address}, ${locality}, ${countryCode}`
+    : `${address}, ${countryCode}`;
+  const encodedQuery = encodeURIComponent(query);
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedQuery}&key=${GOOGLE_MAP_API}`;
 
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(url);
+    const data: GoogleGeocodeResponse = await response.json();
 
-    const data = await response.json();
-
-    if (data.error && data.error.message.includes("Unsupported region code")) {
-      console.warn(`Unsupported region code: ${countryCode}`);
-      return true;
-    }
-
-    if (
-      data.result &&
-      data.result.verdict
-    ) {
-      const validatedAddress = data.result.address.formattedAddress;
-      const geo = data.result.geocode.location;
-      return { address: validatedAddress, geo };
+    if (data.status === "OK" && data.results.length > 0) {
+      const result = data.results[0] as any;
+      return {
+        address: result.formatted_address,
+        geo: {
+          lat: result.geometry.location.lat,
+          lng: result.geometry.location.lng,
+        },
+      };
     } else {
       console.error("Invalid or incomplete address.");
       return null;
@@ -95,20 +93,20 @@ interface GeocoderResult {
 }
 
 export const getCityName = async (
-    lat: string | number,
-    lng: string | number,
+  lat: string | number,
+  lng: string | number
 ): Promise<string | null> => {
   const geocoder = new google.maps.Geocoder();
 
   const latLng: google.maps.LatLngLiteral = {
-    lat: typeof lat === 'string' ? parseFloat(lat) : lat,
-    lng: typeof lng === 'string' ? parseFloat(lng) : lng
+    lat: typeof lat === "string" ? parseFloat(lat) : lat,
+    lng: typeof lng === "string" ? parseFloat(lng) : lng,
   };
 
   try {
     const response = await new Promise<GeocoderResult[]>((resolve, reject) => {
       geocoder.geocode({ location: latLng }, (results, status) => {
-        if (status === 'OK' && results) {
+        if (status === "OK" && results) {
           resolve(results);
         } else {
           reject(new Error(`Geocoder failed with status: ${status}`));
@@ -119,15 +117,13 @@ export const getCityName = async (
     if (!response?.[0]) return null;
 
     // Find the city (locality) component
-    const cityComponent = response[0].address_components.find(component =>
-        component.types.includes('route')
+    const cityComponent = response[0].address_components.find((component) =>
+      component.types.includes("route")
     );
 
     return cityComponent?.long_name || null;
   } catch (error) {
-    console.error('Error in getCityName:', error);
+    console.error("Error in getCityName:", error);
     throw error;
   }
 };
-
-

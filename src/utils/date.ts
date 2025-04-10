@@ -24,9 +24,17 @@ export const getDayAgo = (createdAt: Date) => {
   return `${diffInDays} days ago`;
 };
 
-export const getTimeAgo = (date: Date): string => {
+export const getTimeAgo = (date: Date | string | number): string => {
+  const inputDate = new Date(date);
+
+  if (isNaN(inputDate.getTime())) {
+    throw new Error("Invalid date input");
+  }
+
   const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const diffInSeconds = Math.floor(
+    (now.getTime() - inputDate.getTime()) / 1000
+  );
 
   if (diffInSeconds < 60) return "1 minute ago";
   const diffInMinutes = Math.floor(diffInSeconds / 60);

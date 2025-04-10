@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../types";
+import { Notification, User } from "../../types";
 
 interface AuthStateType {
   isAuthenticated: boolean;
@@ -34,8 +34,28 @@ const authSlice = createSlice({
     ) {
       state.user = action.payload.user;
     },
+    addNewNotification(
+      state: AuthStateType,
+      action: PayloadAction<{ newNotification: Notification }>
+    ) {
+      state.user?.notifications?.unshift(action.payload.newNotification);
+    },
+    updateNotifications(
+      state: AuthStateType,
+      action: PayloadAction<{ updatedNotifications: Notification[] }>
+    ) {
+      if (state.user) {
+        state.user.notifications = action.payload.updatedNotifications;
+      }
+    },
   },
 });
 
-export const { setAuth, setAuthenticated, setAuthUser } = authSlice.actions;
+export const {
+  setAuth,
+  setAuthenticated,
+  setAuthUser,
+  addNewNotification,
+  updateNotifications,
+} = authSlice.actions;
 export default authSlice.reducer;

@@ -23,7 +23,7 @@ const Textarea: FC<TextareaProps> = ({
       <div
         className={`group w-full flex items-center gap-2 rounded-lg px-3 py-2 h-[150px]
 bg-transparent border border-gray-400 transition-all duration-300
-hover:border-[#c4f70f] hover:shadow-lg focus-within:border-[#c4f70f] focus-within:shadow-lg ${
+hover:border-[#c4f70f] hover:bg-white focus-within:bg-white hover:shadow-lg focus-within:border-[#c4f70f] focus-within:shadow-lg ${
           isInvalid ? "border-red-500" : ""
         }`}
       >
