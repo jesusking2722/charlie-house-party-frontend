@@ -22,6 +22,7 @@ import { RootState } from "../../redux/store";
 import { updateBannerMe } from "../../lib/scripts";
 import { setAuthUser } from "../../redux/slices/authSlice";
 import { BASE_URL, DOMAIN } from "../../constant";
+import PartyInviteCardGroup from "./PartyInviteCardGroup";
 
 const initialReviews: Review[] = [
   {
@@ -162,6 +163,7 @@ const initialReviews: Review[] = [
 const Profile = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [shareOpen, setShareOpen] = useState<boolean>(false);
+  const [partyInviteOpen, setPartyInviteOpen] = useState<boolean>(false);
   const [isMe, setIsMe] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [sharingLink, setSharingLink] = useState<string>("");
@@ -170,6 +172,7 @@ const Profile = () => {
 
   const { user } = useSelector((state: RootState) => state.auth, shallowEqual);
   const { users } = useSelector((state: RootState) => state.users);
+  const { parties } = useSelector((state: RootState) => state.party);
   const dispatch = useDispatch();
 
   const handleBannerUpload = async (bannerFile: File) => {
@@ -240,7 +243,13 @@ const Profile = () => {
                 }}
               />
             )}
-            <Button type="transparent" label="Invite to party" />
+            <Button
+              type="transparent"
+              label="Invite to party"
+              onClick={() => {
+                setPartyInviteOpen(true);
+              }}
+            />
             <Tooltip message="Share profile">
               <IconButton
                 icon="solar:share-line-duotone"
@@ -301,6 +310,17 @@ const Profile = () => {
             text="Try to see my awesome house party profile !!!"
           />
         </div>
+      </Modal>
+      <Modal
+        title="Invite to your parties"
+        isOpen={partyInviteOpen}
+        onClose={() => {
+          setPartyInviteOpen(false);
+        }}
+      >
+        <PartyInviteCardGroup
+          parties={parties.filter((party) => party.creator?._id === user?._id)}
+        />
       </Modal>
     </div>
   );

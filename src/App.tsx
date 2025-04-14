@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import { Container, Spinner } from "./components";
+import { Spinner, ContainerRoute } from "./components";
 import {
   CreateParty,
   Home,
@@ -61,23 +61,26 @@ function App() {
   }, [socket]);
 
   return (
-    <Container>
+    <>
       <Routes>
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
-        <Route path="onboarding" element={<Onboarding />} />
-        <Route index path="dashboard" element={<Home />} />
-        <Route path="profile/:userId" element={<Profile />} />
-        <Route path="pricing" element={<Pricing />} />
-        <Route path="parties" element={<Parties />} />
-        <Route path="parties/:partyId" element={<PartyPreview />} />
-        <Route path="create-party" element={<CreateParty />} />
-        <Route path="notification" element={<Notification />} />
-        <Route path="*" element={<NotFound />} />
+        <Route element={<ContainerRoute />}>
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="onboarding" element={<Onboarding />} />
+          <Route index path="dashboard" element={<Home />} />
+          <Route path="profile/:userId" element={<Profile />} />
+          <Route path="pricing" element={<Pricing />} />
+          <Route path="parties" element={<Parties />} />
+          <Route path="parties/:partyId" element={<PartyPreview />} />
+          <Route path="create-party" element={<CreateParty />} />
+          <Route path="notification" element={<Notification />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
+
       <Toaster position="top-right" reverseOrder={false} />
       {loading && <Spinner />}
-    </Container>
+    </>
   );
 }
 
