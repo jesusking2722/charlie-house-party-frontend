@@ -28,6 +28,7 @@ const Button: FC<ButtonProps> = ({
   width,
   path,
   disabled,
+  loading,
   isRight,
   onClick,
 }) => {
@@ -49,16 +50,20 @@ const Button: FC<ButtonProps> = ({
       } shadow-lg
         ${
           type === "primary"
-            ? "bg-[#c4f70f] border border-[#c4f70f] hover:bg-white text-black hover:text-[#c4f70f]"
+            ? `${
+                disabled || loading
+                  ? "cursor-not-allowed bg-gray-500 text-white"
+                  : "bg-[#c4f70f] border border-[#c4f70f] hover:bg-white text-black hover:text-[#c4f70f]"
+              }`
             : type === "outline"
             ? `border bg-transparent ${
-                disabled
+                disabled || loading
                   ? "border-gray-200 text-gray-200 cursor-not-allowed"
                   : "hover:bg-[#c4f70f] hover:text-black border-[#c4f70f] text-[#c4f70f]"
               }`
             : type === "transparent"
             ? `bg-black/10 text-white ${
-                disabled
+                disabled || loading
                   ? "cursor-not-allowed"
                   : "hover:bg-black/15 backdrop-blur-sm cursor-pointer"
               }`
@@ -66,14 +71,14 @@ const Button: FC<ButtonProps> = ({
             ? `bg-red-500 hover:bg-red-600`
             : type === "gradient"
             ? ` text-white transition-all duration-700 ease-in-out ${
-                disabled
+                disabled || loading
                   ? "cursor-not-allowed bg-gray-500 text-white"
                   : "bg-gradient-to-r from-[#fdfc47] to-[#24fe41] hover:from-[#00c3ff] hover:to-[#ffff1c]"
               }`
             : ""
         }
     `}
-      disabled={disabled}
+      disabled={disabled || loading}
       onClick={onClick}
     >
       {!isRight && icon && (
@@ -112,6 +117,9 @@ const Button: FC<ButtonProps> = ({
               : ""
           }`}
         />
+      )}
+      {loading && (
+        <Icon icon="svg-spinners:ring-resize" className="text-black w-4 h-4" />
       )}
     </button>
   );

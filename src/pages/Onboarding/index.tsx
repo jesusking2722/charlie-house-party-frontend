@@ -35,7 +35,7 @@ import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { startKyc, updateFirstMe, updateMe } from "../../lib/scripts";
-import { setAuthUser } from "../../redux/slices/authSlice";
+import { setAuthUser, updateAuthKyc } from "../../redux/slices/authSlice";
 import { User } from "../../types";
 import countryList from "react-select-country-list";
 import KycVerifier from "./KycVerifier";
@@ -225,11 +225,17 @@ const Onboarding = () => {
 
   const handleStartVerification = async () => {
     try {
+      if (!user) return;
       setLoading(true);
-      const response = await startKyc();
+      debugger;
+      const response = await startKyc(user);
       if (response.ok) {
         const { user } = response.data;
-        dispatch(setAuthUser({ user }));
+        if (user) {
+          dispatch(updateAuthKyc({ user }));
+        }
+      } else {
+        toast.error(response.message);
       }
     } catch (error) {
       console.log("handle start verification error: ", error);
@@ -270,6 +276,7 @@ const Onboarding = () => {
   }, [name, users]);
 
   useEffect(() => {
+    console.log(user);
     if (user) {
       if (!user.name) {
         setActiveScreen("name");
@@ -310,7 +317,7 @@ const Onboarding = () => {
               className="basis-2/3 xl:basis-3/5 bg-white rounded-xl shadow-lg"
             >
               <img
-                src={BASE_URL + '/assets/pngs/model2.png'}
+                src={BASE_URL + "/assets/pngs/model2.png"}
                 alt="MODEL"
                 className="w-full h-full rounded-xl object-cover object-center"
               />
@@ -325,7 +332,7 @@ const Onboarding = () => {
                 {/* Avatar upload and name input */}
                 <div className="w-full px-12 flex flex-col items-center justify-center">
                   <img
-                    src={BASE_URL + '/logo.png'}
+                    src={BASE_URL + "/logo.png"}
                     alt="LOGO"
                     className="w-[120px] h-auto"
                   />
@@ -441,7 +448,7 @@ const Onboarding = () => {
               className="basis-2/3 xl:basis-3/5 bg-white rounded-xl shadow-lg"
             >
               <img
-                src={BASE_URL + '/assets/pngs/model3.png'}
+                src={BASE_URL + "/assets/pngs/model3.png"}
                 alt="MODEL"
                 className="w-full h-full rounded-xl object-cover object-center"
               />
@@ -456,7 +463,7 @@ const Onboarding = () => {
                 <RegionSelect
                   country={country}
                   region={region}
-                  positioning='vertical'
+                  positioning="vertical"
                   onCountryChange={setCountry}
                   onRegionChange={setRegion}
                 />
@@ -621,14 +628,26 @@ const Onboarding = () => {
       >
         <div className="w-full flex flex-col gap-8">
           <KycVerifier link={user?.kyc?.url ?? ""} />
-          <div className="w-full flex flex-row items-center justify-end gap-2">
-            <Button
-              type="primary"
-              label="Start"
-              icon="solar:square-double-alt-arrow-right-broken"
-              onClick={handleStartVerification}
-            />
-          </div>
+          {user?.kyc?.url ? (
+            <div className="w-full flex flex-row items-center justify-center gap-2">
+              <span className="text-xs text-green-500 font-semibold">
+                {user.kyc.status}
+              </span>
+              <Icon
+                icon="svg-spinners:clock"
+                className="text-green-500 w-4 h-4"
+              />
+            </div>
+          ) : (
+            <div className="w-full flex flex-row items-center justify-end gap-2">
+              <Button
+                type="primary"
+                label="Start"
+                icon="solar:square-double-alt-arrow-right-broken"
+                onClick={handleStartVerification}
+              />
+            </div>
+          )}
         </div>
       </Modal>
     </div>

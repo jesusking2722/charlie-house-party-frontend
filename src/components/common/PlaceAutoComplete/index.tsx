@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import AutoComplete from "react-google-autocomplete";
 import { GOOGLE_MAP_API } from "../../../constant";
 import { Geo } from "../../../types";
@@ -30,6 +30,19 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
   setGeo,
 }) => {
   const [touched, setTouched] = useState<boolean>(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !window.google) {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API}&libraries=places`;
+      script.async = true;
+      script.onload = () => setIsScriptLoaded(true);
+      document.body.appendChild(script);
+    } else {
+      setIsScriptLoaded(true);
+    }
+  }, []);
 
   const isInvalid = touched && invalid;
 
@@ -43,6 +56,27 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
       console.error("No geometry data found for selected place.");
     }
   };
+
+  if (!isScriptLoaded) {
+    return (
+      <div className="w-full flex flex-col gap-1">
+        {label && (
+          <label className="text-[#696969] text-sm font-semibold mb-1">
+            {label}
+          </label>
+        )}
+        <div className="w-full flex items-center gap-2 rounded-lg px-3 py-2 bg-transparent border border-gray-400">
+          {icon && <Icon icon={icon} className="text-[#696969] w-4 h-4" />}
+          <input
+            type="text"
+            className="bg-transparent border-none outline-none text-black text-xs w-full placeholder-[#696969]"
+            placeholder="Loading..."
+            readOnly
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex flex-col gap-1">

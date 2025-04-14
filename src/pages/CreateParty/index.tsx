@@ -154,7 +154,7 @@ const CreateParty = () => {
           initial={{ x: -300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-1/3 xl:basis-2/5 rounded-xl shadow-xl"
+          className="w-1/2 rounded-xl shadow-xl"
         >
           <img
             src={BASE_URL + "/assets/pngs/create.png"}
@@ -166,7 +166,7 @@ const CreateParty = () => {
           initial={{ x: 300 }}
           animate={{ x: 0 }}
           transition={{ type: "spring" }}
-          className="basis-2/3 xl:basis-3/5 bg-white/10 backdrop-blur-sm border border-white rounded-xl shadow-xl"
+          className="w-1/2 xl:basis-3/5 bg-white/10 backdrop-blur-sm border border-white rounded-xl shadow-xl flex flex-col items-center justify-center"
         >
           <AnimatePresence mode="wait">
             {activeScreen === "basic" ? (
@@ -176,7 +176,7 @@ const CreateParty = () => {
                 animate={{ x: 0, opacity: 100 }}
                 exit={{ x: -20, opacity: 0 }}
                 transition={{ duration: 0.8, type: "spring" }}
-                className="w-full flex flex-col items-center justify-center gap-4 py-4 px-12 xl:px-8 xl:py-8"
+                className="w-full flex flex-col items-center justify-center gap-8 py-4 px-12 xl:px-8 xl:py-8"
               >
                 <Input
                   type="text"
@@ -229,7 +229,7 @@ const CreateParty = () => {
                 animate={{ x: 0, opacity: 100 }}
                 exit={{ x: -20, opacity: 0 }}
                 transition={{ duration: 0.8, type: "spring" }}
-                className="absolute inset-[1px] rounded-xl w-full flex flex-col items-center justify-center gap-4 py-4 px-12"
+                className="absolute inset-[1px] rounded-xl w-full flex flex-col items-center justify-center gap-8 py-4 px-12"
               >
                 <Dropdown
                   label="Party type"

@@ -34,6 +34,11 @@ const authSlice = createSlice({
     ) {
       state.user = action.payload.user;
     },
+    updateAuthKyc(state: AuthStateType, action: PayloadAction<{ user: User }>) {
+      if (state.user) {
+        state.user.kyc = action.payload.user.kyc;
+      }
+    },
     addNewNotification(
       state: AuthStateType,
       action: PayloadAction<{ newNotification: Notification }>
@@ -55,6 +60,7 @@ export const {
   setAuth,
   setAuthenticated,
   setAuthUser,
+  updateAuthKyc,
   addNewNotification,
   updateNotifications,
 } = authSlice.actions;

@@ -19,7 +19,6 @@ const useSocket = () => {
     };
 
     const handleNewNotification = (newNotification: Notification) => {
-      debugger;
       dispatch(addNewNotification({ newNotification }));
       toast.success("New notification added");
     };

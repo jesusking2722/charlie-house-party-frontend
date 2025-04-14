@@ -81,6 +81,7 @@ const PartyPreview = () => {
   const [isApplying, setIsApplying] = useState<boolean>(false);
   const [steps, setSteps] = useState<StepperItem[]>(initialSteps);
   const [stickers, setStickers] = useState<StickerCheckbox[]>(initialStickers);
+  const [loadingApply, setLoadingApply] = useState<boolean>(false);
 
   const { partyId } = useParams();
 
@@ -122,12 +123,14 @@ const PartyPreview = () => {
               onClick={() => setShareOpen(true)}
             />
           </Tooltip>
-          <Button
-            type="primary"
-            label="Apply"
-            icon="solar:document-add-bold-duotone"
-            onClick={() => setIsApplying(true)}
-          />
+          {selectedParty && selectedParty.creator?._id !== user?._id && (
+            <Button
+              type="primary"
+              label="Apply"
+              icon="solar:document-add-bold-duotone"
+              onClick={() => setIsApplying(true)}
+            />
+          )}
         </div>
       </div>
       <div className="w-full flex flex-1 flex-row items-start justify-between gap-14">
@@ -176,9 +179,11 @@ const PartyPreview = () => {
                 <strong>{selectedParty?.creator?.totalCompleted}</strong>
               </h3>
             </div>
-            <Tooltip message="Send direct message to creator">
-              <IconButton icon="solar:plain-bold-duotone" />
-            </Tooltip>
+            {user?.membership === "premium" && (
+              <Tooltip message="Send direct message to creator">
+                <IconButton icon="solar:plain-bold-duotone" />
+              </Tooltip>
+            )}
           </div>
         </div>
       </div>
@@ -236,11 +241,22 @@ const PartyPreview = () => {
               value={apply}
               onChange={setApply}
             />
-            <Button
-              type="primary"
-              label="Apply"
-              icon="solar:document-add-bold-duotone"
-            />
+            <div className="w-full flex flex-1 flex-row items-center gap-4">
+              <div className="flex-1">
+                <Button
+                  type="primary"
+                  label="Apply"
+                  icon="solar:document-add-bold-duotone"
+                  width="full"
+                  loading={loadingApply}
+                />
+              </div>
+              {user?.membership === "premium" && (
+                <Tooltip message="Write with AI">
+                  <IconButton icon="solar:magic-stick-3-broken" />
+                </Tooltip>
+              )}
+            </div>
           </div>
         </motion.div>
       )}

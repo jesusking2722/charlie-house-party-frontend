@@ -103,9 +103,12 @@ export const updateMe = async ({
   });
 };
 
-export const startKyc = async (): Promise<ApiResponse<UserResponse>> => {
+export const startKyc = async (
+  user: User
+): Promise<ApiResponse<UserResponse>> => {
   return await fetchInstance<ApiResponse<UserResponse>>(START_KYC, {
-    method: "GET",
+    method: "POST",
+    body: JSON.stringify({ user }),
   });
 };
 

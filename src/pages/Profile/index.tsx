@@ -186,6 +186,7 @@ const Profile = () => {
           const { user } = response.data;
           dispatch(setAuthUser({ user }));
           setSelectedUser(user);
+          window.location.reload();
         }
       }
     } catch (error) {
