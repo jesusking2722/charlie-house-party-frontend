@@ -25,142 +25,6 @@ import { BASE_URL, DOMAIN } from "../../constant";
 import PartyInviteCardGroup from "./PartyInviteCardGroup";
 import toast from "react-hot-toast";
 
-const initialReviews: Review[] = [
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 5,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 3.2,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 2.5,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 4.3,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 1.6,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 0.8,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-  {
-    partyTitle: "Happy Party",
-    partyType: "Birthday",
-    rate: 0.8,
-    description: "I really enjoyed with him in this happy party",
-    createdAt: new Date(),
-    reviewer: {
-      name: "Lukas Boruski",
-      shortname: "lukasboruski",
-      avatar: `${BASE_URL}/assets/pngs/user.png`,
-      email: "lukas.boruski@gmail.com",
-      phone: "",
-      createdAt: new Date(),
-      emailVerified: true,
-      phoneVerified: false,
-      kycVerified: true,
-      reviews: [],
-    },
-  },
-];
-
 const Profile = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [shareOpen, setShareOpen] = useState<boolean>(false);
@@ -287,11 +151,22 @@ const Profile = () => {
             />
             <ProfileDescripter description={selectedUser?.about ?? ""} />
           </div>
-          <StickerPockets />
+          <div className="w-1/3 flex flex-col gap-4">
+            <h2 className="text-sn">
+              {selectedUser?._id === user?._id
+                ? "My"
+                : `${selectedUser?.name}'s`}{" "}
+              stickers:{" "}
+              <strong className="text-green-500">
+                {selectedUser?.stickers ? selectedUser?.stickers?.length : 0}
+              </strong>
+            </h2>
+            <StickerPockets stickers={selectedUser?.stickers ?? []} />
+          </div>
         </div>
       </div>
       {/* Profile Reviews */}
-      <ProfileReviewer reviews={initialReviews} />
+      <ProfileReviewer reviews={selectedUser?.reviews ?? []} />
       <Modal
         title="Edit profile"
         isOpen={modalOpen}

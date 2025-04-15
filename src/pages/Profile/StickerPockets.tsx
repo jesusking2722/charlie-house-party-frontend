@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "../../components";
-import { BASE_URL } from "../../constant";
+import { BACKEND_BASE_URL, BASE_URL } from "../../constant";
+import { Sticker } from "../../types";
 
-const StickerPockets = () => {
+const StickerPockets = ({ stickers }: { stickers: Sticker[] }) => {
   const [expand, setExpand] = useState<boolean>(false);
 
   return (
@@ -14,107 +15,27 @@ const StickerPockets = () => {
           !expand ? "overflow-hidden h-[300px]" : "h-[400px]"
         } `}
       >
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
-        <img
-          src={BASE_URL + "/logo.png"}
-          alt="STICKER"
-          className="w-[80px] h-[80px]"
-        />
+        {stickers.map((sticker, index) => (
+          <img
+            key={index}
+            src={BACKEND_BASE_URL + sticker.image}
+            alt={sticker.name ?? ""}
+            className="w-[80px] h-[80px] object-center object-cover"
+          />
+        ))}
       </div>
-      <div className="w-full p-2 flex items-center justify-center left-0">
-        <Button
-          type="transparent"
-          width="full"
-          label={expand ? "Expand Little" : "Expand All"}
-          onClick={() => {
-            setExpand(!expand);
-          }}
-        />
-      </div>
+      {stickers.length > 0 && (
+        <div className="w-full p-2 flex items-center justify-center left-0">
+          <Button
+            type="transparent"
+            width="full"
+            label={expand ? "Expand Little" : "Expand All"}
+            onClick={() => {
+              setExpand(!expand);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

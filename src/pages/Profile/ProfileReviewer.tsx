@@ -22,7 +22,7 @@ const ProfileReviewer = ({ reviews }: { reviews: Review[] }) => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <Rater rate={averageRate} />
+      {reviews.length > 0 && <Rater rate={averageRate} />}
       <div className="w-full flex flex-col gap-8">
         {reviews.slice(0, currentReviews).map((review, index) => {
           const isExpanded = expandedReviews.includes(index);
