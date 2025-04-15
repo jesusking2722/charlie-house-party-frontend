@@ -86,7 +86,7 @@ const Button: FC<ButtonProps> = ({
           icon={icon}
           className={`w-4 h-4 transition-all duration-300 ease-in-out ${
             type === "primary"
-              ? "text-black group-hover:text-[#c4f70f]"
+              ? `${disabled ? "" : "group-hover:text-[#c4f70f]"} text-black`
               : type === "outline"
               ? `${
                   disabled

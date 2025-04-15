@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Party } from "../../types";
+import { Applicant, Party } from "../../types";
 
 interface PartyState {
   parties: Party[];
@@ -22,8 +22,18 @@ const partySlice = createSlice({
     addNewParty(state: PartyState, action: PayloadAction<{ newParty: Party }>) {
       state.parties.unshift(action.payload.newParty);
     },
+    addNewApplicant(
+      state: PartyState,
+      action: PayloadAction<{ selectedParty: Party; newApplicant: Applicant }>
+    ) {
+      const { selectedParty, newApplicant } = action.payload;
+      const party = state.parties.find((p) => p._id === selectedParty._id);
+      if (party) {
+        party.applicants.unshift(newApplicant);
+      }
+    },
   },
 });
 
-export const { setParty, addNewParty } = partySlice.actions;
+export const { setParty, addNewParty, addNewApplicant } = partySlice.actions;
 export default partySlice.reducer;

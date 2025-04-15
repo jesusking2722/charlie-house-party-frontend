@@ -17,11 +17,12 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { Party } from "../../types";
+import { RootState, store } from "../../redux/store";
+import { Applicant, Party } from "../../types";
 import { BACKEND_BASE_URL, DOMAIN } from "../../constant";
 import ApplicantGroup from "./ApplicantGroup";
 import { motion } from "motion/react";
+import socket from "../../lib/socketInstance";
 
 const initialSteps: StepperItem[] = [
   { icon: "solar:documents-bold", label: "Publish", completed: true },
@@ -64,6 +65,38 @@ const PartyPreview = () => {
         s._id === sticker._id ? { ...s, isChecked: !s.isChecked } : s
       )
     );
+  };
+
+  const handleApply = async () => {
+    if (!user) return;
+    try {
+      setLoadingApply(true);
+      const selectedStickers = stickers.filter((sticker) => sticker.isChecked);
+      const applicant: Applicant = {
+        applicant: apply,
+        applier: user,
+        stickers: selectedStickers,
+      };
+      const waitForNewParty = new Promise<Party>((resolve) => {
+        const unsubscribe = store.subscribe(() => {
+          const state = store.getState();
+          const latestParty = state.party.parties[0];
+          if (latestParty && latestParty._id) {
+            unsubscribe(); // Clean up the subscription
+            resolve(latestParty);
+          }
+        });
+      });
+
+      socket.emit("creating:applicant", {
+        newApplicant: applicant,
+        userId: user._id,
+      });
+    } catch (error) {
+      console.log("handle apply error: ", error);
+    } finally {
+      setLoadingApply(false);
+    }
   };
 
   useEffect(() => {
@@ -201,7 +234,7 @@ const PartyPreview = () => {
               Your stickers:
               <strong className="text-green-500"> {stickers.length}</strong>
             </p>
-            <div className="w-full h-[250px] overflow-auto bg-white border border-[#c4f70f] rounded-xl p-6">
+            <div className="w-full h-[250px] overflow-auto bg-white/10 backdrop-blur-sm border border-[#c4f70f] rounded-xl p-6 hover:shadow-lg transition-all duration-300 ease-in-out">
               <StickerCheckboxGroup
                 stickers={stickers}
                 onCheck={handleStickersCheck}
@@ -220,8 +253,9 @@ const PartyPreview = () => {
           </div>
           <div className="w-full flex flex-col gap-6">
             <Textarea
-              placeholder="Type here..."
+              placeholder="Write your awesome application to be chosen..."
               invalidTxt="Must be between 150 and 1000 letters"
+              invalid={apply.length < 150}
               value={apply}
               onChange={setApply}
             />
@@ -233,6 +267,8 @@ const PartyPreview = () => {
                   icon="solar:document-add-bold-duotone"
                   width="full"
                   loading={loadingApply}
+                  disabled={apply.length < 150}
+                  onClick={handleApply}
                 />
               </div>
               {user?.membership === "premium" && (

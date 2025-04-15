@@ -43,7 +43,7 @@ export interface Review {
 export interface Applicant {
   applier: User;
   applicant: string;
-  appliedAt: Date;
+  appliedAt?: Date;
   stickers: Sticker[];
 }
 
