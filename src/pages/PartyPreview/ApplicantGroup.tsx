@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { getTimeAgo } from "../../utils";
-import { BASE_URL } from "../../constant";
+import { BACKEND_BASE_URL, BASE_URL } from "../../constant";
 
 interface ApplicantGroupProps {
   applicants: Applicant[];
@@ -43,24 +43,26 @@ const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
           className=""
         >
           <Link
-            to={`profile/${applicant.applier._id}`}
+            to={`/profile/${applicant.applier._id}`}
             className="w-full flex flex-1 flex-row items-start gap-4 rounded-xl border border-white bg-white/10 backdrop-blur-sm p-2 hover:shadow-lg hover:border-[#c4f70f] transition-all duration-300 ease-in-out"
           >
             <div className="flex flex-col gap-2 items-center justify-center">
               <img
-                src={BASE_URL + "/assets/pngs/user.png"}
-                alt="User"
+                src={BACKEND_BASE_URL + applicant.applier.avatar}
+                alt={applicant.applier.name ?? ""}
                 className="w-[100px] h-[100px] rounded-full shadow-lg object-cover object-center"
               />
               <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-row items-center justify-center gap-2">
                   <h2 className="">
-                    <strong>Jhon Doe</strong>
+                    <strong>{applicant.applier.name}</strong>
                   </h2>
-                  <Badge type="kyc" />
-                  <Badge type="premium" />
+                  {applicant.applier.kycVerified && <Badge type="kyc" />}
+                  {applicant.applier.membership === "premium" && (
+                    <Badge type="premium" />
+                  )}
                 </div>
-                <Rater rate={4.5} />
+                <Rater rate={applicant.applier.rate ?? 0} />
               </div>
             </div>
             <div className="flex flex-1 flex-col gap-1 p-4">
@@ -73,13 +75,7 @@ const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
                 </h3>
               </div>
               <p className="text-sm text-black max-h-[150px] overflow-auto">
-                Hey everyone! 🎂🥳 It's that time of the year again, and I’m
-                throwing an epic birthday party to celebrate! I’d love for you
-                to join me for a night full of fun, laughter, music, and great
-                vibes! 🎶✨. It won’t be the same without you, so come celebrate
-                with me! Let’s make this a legendary night! 🔥 RSVP by [Insert
-                RSVP Deadline] so I can plan accordingly. Can’t wait to see you
-                all there! 🥳🎈
+                {applicant.applicant}
               </p>
             </div>
           </Link>

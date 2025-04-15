@@ -22,12 +22,15 @@ const partySlice = createSlice({
     addNewParty(state: PartyState, action: PayloadAction<{ newParty: Party }>) {
       state.parties.unshift(action.payload.newParty);
     },
-    addNewApplicant(
+    addNewApplicantToSelectedParty(
       state: PartyState,
-      action: PayloadAction<{ selectedParty: Party; newApplicant: Applicant }>
+      action: PayloadAction<{
+        selectedPartyId: string;
+        newApplicant: Applicant;
+      }>
     ) {
-      const { selectedParty, newApplicant } = action.payload;
-      const party = state.parties.find((p) => p._id === selectedParty._id);
+      const { selectedPartyId, newApplicant } = action.payload;
+      const party = state.parties.find((p) => p._id === selectedPartyId);
       if (party) {
         party.applicants.unshift(newApplicant);
       }
@@ -35,5 +38,6 @@ const partySlice = createSlice({
   },
 });
 
-export const { setParty, addNewParty, addNewApplicant } = partySlice.actions;
+export const { setParty, addNewParty, addNewApplicantToSelectedParty } =
+  partySlice.actions;
 export default partySlice.reducer;

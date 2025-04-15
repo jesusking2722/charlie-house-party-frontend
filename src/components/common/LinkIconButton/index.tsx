@@ -54,9 +54,9 @@ const LinkIconButton: FC<LinkIconButtonProps> = ({
       </span>
       {count && count > 0 && (
         <span className="absolute top-0 right-0 flex size-4">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75"></span>
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
           <span
-            className={`relative inline-flex ${notifySize} rounded-full bg-cyan-500 text-white text-xs font-semibold items-center justify-center`}
+            className={`relative inline-flex ${notifySize} rounded-full bg-green-500 text-white text-xs font-semibold items-center justify-center`}
           >
             {count}
           </span>

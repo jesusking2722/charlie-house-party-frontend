@@ -41,6 +41,7 @@ export interface Review {
 }
 
 export interface Applicant {
+  _id?: string;
   applier: User;
   applicant: string;
   appliedAt?: Date;

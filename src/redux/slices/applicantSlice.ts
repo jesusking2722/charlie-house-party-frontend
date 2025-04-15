@@ -19,8 +19,14 @@ const applicantSlice = createSlice({
     ) {
       state.applicants = action.payload.applicants;
     },
+    addNewApplicant(
+      state: ApplicantsState,
+      action: PayloadAction<{ newApplicant: Applicant }>
+    ) {
+      state.applicants.unshift(action.payload.newApplicant);
+    },
   },
 });
 
-export const { setApplicants } = applicantSlice.actions;
+export const { setApplicants, addNewApplicant } = applicantSlice.actions;
 export default applicantSlice.reducer;

@@ -23,6 +23,7 @@ import { updateBannerMe } from "../../lib/scripts";
 import { setAuthUser } from "../../redux/slices/authSlice";
 import { BASE_URL, DOMAIN } from "../../constant";
 import PartyInviteCardGroup from "./PartyInviteCardGroup";
+import toast from "react-hot-toast";
 
 const initialReviews: Review[] = [
   {
@@ -186,10 +187,11 @@ const Profile = () => {
           formData,
         });
         if (response.ok) {
-          const { user } = response.data;
-          dispatch(setAuthUser({ user }));
-          setSelectedUser(user);
-          window.location.reload();
+          const { user: updatedUser } = response.data;
+          const newUser = { ...updatedUser };
+          dispatch(setAuthUser({ user: newUser }));
+          setSelectedUser(newUser);
+          toast.success("Banner is changed successfully");
         }
       }
     } catch (error) {
@@ -200,7 +202,11 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    console.log(params.userId);
+    if (user && user._id === params.userId) {
+      setSelectedUser(user);
+      setIsMe(true);
+      return;
+    }
     const filterdUser = users.find((user) => user._id === params.userId);
     if (filterdUser && user) {
       setSelectedUser(filterdUser);
@@ -209,7 +215,7 @@ const Profile = () => {
       const encodedUrl = encodeURIComponent(profileUrl);
       setSharingLink(encodedUrl);
     }
-  }, [params, users]);
+  }, [params, users, user]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">

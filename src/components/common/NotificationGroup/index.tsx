@@ -62,7 +62,7 @@ const NotificationGroup = ({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -50, opacity: 0 }}
           transition={{ duration: 0.3, type: "spring", delay: index * 0.1 }}
-          className="flex items-center p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white hover:shadow-lg hover:border-[#c4f70f]"
+          className="flex items-start p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white hover:shadow-lg hover:border-[#c4f70f]"
         >
           <img
             src={
@@ -80,7 +80,7 @@ const NotificationGroup = ({
               }`
             }
             alt={notification.content}
-            className="w-[80px] h-[80px] rounded-full object-cover object-center"
+            className="w-[80px] h-[80px] rounded-full object-cover object-center mt-4"
           />
           <div className="ml-3 overflow-hidden w-full">
             <div className="flex flex-row items-center justify-between">
@@ -157,7 +157,7 @@ const NotificationGroup = ({
                 />
               </div>
             </div>
-            <p className="max-w-xs text-xs text-black mt-2">
+            <p className="text-xs text-black mt-2">
               {notification.type.includes("party")
                 ? notification?.party?.description
                 : notification.type.includes("applicant")

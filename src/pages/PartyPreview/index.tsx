@@ -23,6 +23,7 @@ import { BACKEND_BASE_URL, DOMAIN } from "../../constant";
 import ApplicantGroup from "./ApplicantGroup";
 import { motion } from "motion/react";
 import socket from "../../lib/socketInstance";
+import toast from "react-hot-toast";
 
 const initialSteps: StepperItem[] = [
   { icon: "solar:documents-bold", label: "Publish", completed: true },
@@ -69,29 +70,61 @@ const PartyPreview = () => {
 
   const handleApply = async () => {
     if (!user) return;
+    const hasAlreadyApplied = selectedParty?.applicants.some(
+      (applicant) => applicant.applier._id === user._id
+    );
+
+    if (hasAlreadyApplied) {
+      toast.error("You have already applied to this party");
+      return;
+    }
     try {
       setLoadingApply(true);
       const selectedStickers = stickers.filter((sticker) => sticker.isChecked);
-      const applicant: Applicant = {
+      const newApplicant: Applicant = {
         applicant: apply,
         applier: user,
         stickers: selectedStickers,
       };
-      const waitForNewParty = new Promise<Party>((resolve) => {
+
+      const waitForPartyUpdated = new Promise<Party>((resolve) => {
         const unsubscribe = store.subscribe(() => {
           const state = store.getState();
-          const latestParty = state.party.parties[0];
-          if (latestParty && latestParty._id) {
-            unsubscribe(); // Clean up the subscription
-            resolve(latestParty);
+          const updatedParty = state.party.parties.find(
+            (party) => party._id === selectedParty?._id
+          );
+          if (!updatedParty) return;
+          const latestApplicant = updatedParty.applicants.find(
+            (applicant) => applicant.applier._id === user._id
+          );
+          if (latestApplicant && latestApplicant._id) {
+            unsubscribe();
+            resolve(updatedParty);
           }
         });
       });
 
-      socket.emit("creating:applicant", {
-        newApplicant: applicant,
-        userId: user._id,
-      });
+      socket.emit(
+        "creating:applicant",
+        newApplicant,
+        selectedParty?._id,
+        selectedParty?.creator?._id
+      );
+
+      const updatedParty = await waitForPartyUpdated;
+      setSelectedParty(updatedParty);
+      setApply("");
+      setIsApplying(false);
+      if (user && user.stickers) {
+        const initialStickers: StickerCheckbox[] = user.stickers.map(
+          (sticker) => ({
+            ...sticker,
+            isChecked: false,
+          })
+        );
+        setStickers(initialStickers);
+      }
+      toast.success("Applied successfully");
     } catch (error) {
       console.log("handle apply error: ", error);
     } finally {
@@ -138,14 +171,18 @@ const PartyPreview = () => {
               onClick={() => setShareOpen(true)}
             />
           </Tooltip>
-          {selectedParty && selectedParty.creator?._id !== user?._id && (
-            <Button
-              type="primary"
-              label="Apply"
-              icon="solar:document-add-bold-duotone"
-              onClick={() => setIsApplying(true)}
-            />
-          )}
+          {selectedParty &&
+            selectedParty.creator?._id !== user?._id &&
+            !selectedParty.applicants.some(
+              (applicant) => applicant.applier._id === user?._id
+            ) && (
+              <Button
+                type="primary"
+                label="Apply"
+                icon="solar:document-add-bold-duotone"
+                onClick={() => setIsApplying(true)}
+              />
+            )}
         </div>
       </div>
       <div className="w-full flex flex-1 flex-row items-start justify-between gap-14">

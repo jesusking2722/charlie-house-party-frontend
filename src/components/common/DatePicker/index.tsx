@@ -24,6 +24,7 @@ const DatePicker: FC<DatePickerProps> = ({
   const [touched, setTouched] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [dateTxt, setDateTxt] = useState<string | null>(null);
+  const today = new Date();
 
   // Validation logic: apply invalid state only if the field is touched
   const isInvalid = touched && invalid;
@@ -74,8 +75,8 @@ const DatePicker: FC<DatePickerProps> = ({
       <ReactDatePicker
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        defaultValue={new Date(2025, 3, 4)}
-        minDate={new Date(2025, 3, 4)}
+        defaultValue={today}
+        minDate={today}
         headerFormat="DD, MM dd"
         onChange={(date: any) => {
           handleOnChange(date);

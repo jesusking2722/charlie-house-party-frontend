@@ -25,7 +25,7 @@ import "react-chat-elements/dist/main.css";
 import { BASE_URL } from "./constant";
 import useSocket from "./hooks/useSocket";
 import useInit from "./hooks/useInit";
-import socket from "./lib/socketInstance";
+// import socket from "./lib/socketInstance";
 import { jwtDecode } from "jwt-decode";
 
 const metadata = {
@@ -52,13 +52,6 @@ function App() {
   useAuth();
   useSocket();
   let { loading } = useInit();
-  useEffect(() => {
-    const token = localStorage.getItem("Authorization");
-    if (token) {
-      const decoded = jwtDecode(token) as any;
-      socket.emit("login", decoded.id);
-    }
-  }, [socket]);
 
   return (
     <>
