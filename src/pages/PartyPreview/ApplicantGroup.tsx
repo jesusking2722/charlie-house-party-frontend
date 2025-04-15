@@ -66,7 +66,10 @@ const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
             <div className="flex flex-1 flex-col gap-1 p-4">
               <div className="flex flex-row items-center justify-end gap-2">
                 <h3 className="text-cyan-500 text-sm">
-                  Applied: <strong>{getTimeAgo(applicant.appliedAt)}</strong>
+                  Applied:{" "}
+                  <strong>
+                    {getTimeAgo(applicant.appliedAt ?? new Date())}
+                  </strong>
                 </h3>
               </div>
               <p className="text-sm text-black max-h-[150px] overflow-auto">

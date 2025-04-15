@@ -11,7 +11,7 @@ import {
 import countryList from "react-select-country-list";
 import { useNavigate } from "react-router-dom";
 import { Center, Spinner } from "../../components/common";
-import { getCountryGeo, getRegionGeo } from "../../utils";
+import { getCountryGeo } from "../../utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Party } from "../../types";
@@ -51,7 +51,6 @@ const Home = () => {
   const [selectedParty, setSelectedParty] = useState<Party | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedPartyType, setSelectedPartyType] = useState<string>("");
   const [mapCenter, setMapCenter] = useState<Center | null>(null);
   const [mapZoom, setMapZoom] = useState<number | null>(null);
@@ -78,23 +77,8 @@ const Home = () => {
     setMapZoom(5);
   };
 
-  const handleRegionChange = async (val: any) => {
-    setLoading(true);
-    const code = countryCode.getValue(selectedCountry);
-    const regionGeo = await getRegionGeo(code, val);
-    const filteredParties = availableParties.filter(
-      (party) => party.country === selectedCountry && val.includes(party.region)
-    );
-    setSelectedRegion(val);
-    setAvailableParties(filteredParties);
-    setMapCenter(regionGeo);
-    setMapZoom(8);
-    setLoading(false);
-  };
-
   const handleResetAll = () => {
     setSelectedCountry("");
-    setSelectedRegion("");
     setSelectedPartyType("");
     setAvailableParties(parties);
     setMapCenter(null);
@@ -118,33 +102,29 @@ const Home = () => {
         <div className="w-full grid grid-cols-2">
           <RegionSelect
             country={selectedCountry}
-            region={selectedRegion}
-            positioning="vertical"
+            hideRegion={true}
             onCountryChange={handleCountryChange}
-            onRegionChange={handleRegionChange}
           />
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-4">
             <Dropdown
               label="Select party type"
               dropdowns={initialPartyTypes}
               selectedDropdown={selectedPartyType}
               onSelect={setSelectedPartyType}
             />
-            <div className="flex flex-row items-center gap-4">
-              <Button
-                type="transparent"
-                label="Reset All"
-                onClick={handleResetAll}
-              />
-              <Button
-                type="primary"
-                label="See All"
-                icon="solar:square-alt-arrow-right-line-duotone"
-                onClick={() => {
-                  navigate("/parties");
-                }}
-              />
-            </div>
+            <Button
+              type="transparent"
+              label="Reset All"
+              onClick={handleResetAll}
+            />
+            <Button
+              type="primary"
+              label="See All"
+              icon="solar:square-alt-arrow-right-line-duotone"
+              onClick={() => {
+                navigate("/parties");
+              }}
+            />
           </div>
         </div>
         <div className="w-full h-[500px] rounded-xl shadow-lg">
