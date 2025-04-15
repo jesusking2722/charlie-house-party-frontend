@@ -12,6 +12,7 @@
   -webkit-background-clip: text !important;
   color: transparent !important;
 }
+/* background: linear-gradient(to right, #ce89ca, #5885bf, #7258df, #75eea3); */
 
 .gradient-text:hover {
   background: linear-gradient(to right, #833ab4 #fd1d1d #fcb045) !important;

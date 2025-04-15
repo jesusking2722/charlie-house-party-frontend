@@ -28,6 +28,7 @@ export interface User {
   totalCompleted?: number;
   kyc?: Kyc;
   notifications?: Notification[];
+  stickers?: Sticker[];
 }
 
 export interface Review {
@@ -43,6 +44,7 @@ export interface Applicant {
   applier: User;
   applicant: string;
   appliedAt: Date;
+  stickers: Sticker[];
 }
 
 export interface Notification {
@@ -70,6 +72,7 @@ export interface Sticker {
   _id?: string;
   name: string;
   image: string;
+  price: number;
 }
 
 export type PartyType = "birthday" | "common" | "wedding" | "corporate";

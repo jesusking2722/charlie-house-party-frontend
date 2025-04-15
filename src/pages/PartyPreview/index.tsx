@@ -43,36 +43,6 @@ const initialSteps: StepperItem[] = [
   },
 ];
 
-const initialStickers: StickerCheckbox[] = [
-  { _id: "1", image: "", name: "Charlie1", isChecked: false },
-  { _id: "2", image: "", name: "Charlie2", isChecked: false },
-  { _id: "3", image: "", name: "Charlie3", isChecked: false },
-  { _id: "4", image: "", name: "Charlie", isChecked: false },
-  { _id: "5", image: "", name: "Charlie", isChecked: false },
-  { _id: "6", image: "", name: "Charlie", isChecked: false },
-  { _id: "7", image: "", name: "Charlie", isChecked: false },
-  { _id: "8", image: "", name: "Charlie", isChecked: false },
-  { _id: "9", image: "", name: "Charlie", isChecked: false },
-  { _id: "10", image: "", name: "Charlie1", isChecked: false },
-  { _id: "11", image: "", name: "Charlie2", isChecked: false },
-  { _id: "12", image: "", name: "Charlie3", isChecked: false },
-  { _id: "13", image: "", name: "Charlie", isChecked: false },
-  { _id: "14", image: "", name: "Charlie", isChecked: false },
-  { _id: "15", image: "", name: "Charlie", isChecked: false },
-  { _id: "16", image: "", name: "Charlie", isChecked: false },
-  { _id: "17", image: "", name: "Charlie", isChecked: false },
-  { _id: "18", image: "", name: "Charlie", isChecked: false },
-  { _id: "19", image: "", name: "Charlie1", isChecked: false },
-  { _id: "20", image: "", name: "Charlie2", isChecked: false },
-  { _id: "21", image: "", name: "Charlie3", isChecked: false },
-  { _id: "22", image: "", name: "Charlie", isChecked: false },
-  { _id: "23", image: "", name: "Charlie", isChecked: false },
-  { _id: "24", image: "", name: "Charlie", isChecked: false },
-  { _id: "25", image: "", name: "Charlie", isChecked: false },
-  { _id: "26", image: "", name: "Charlie", isChecked: false },
-  { _id: "27", image: "", name: "Charlie", isChecked: false },
-];
-
 const PartyPreview = () => {
   const [selectedParty, setSelectedParty] = useState<Party | null>(null);
   const [shareOpen, setShareOpen] = useState<boolean>(false);
@@ -80,7 +50,7 @@ const PartyPreview = () => {
   const [apply, setApply] = useState<string>("");
   const [isApplying, setIsApplying] = useState<boolean>(false);
   const [steps, setSteps] = useState<StepperItem[]>(initialSteps);
-  const [stickers, setStickers] = useState<StickerCheckbox[]>(initialStickers);
+  const [stickers, setStickers] = useState<StickerCheckbox[]>([]);
   const [loadingApply, setLoadingApply] = useState<boolean>(false);
 
   const { partyId } = useParams();
@@ -105,6 +75,18 @@ const PartyPreview = () => {
       setSharingLink(encodedUrl);
     }
   }, [partyId, parties]);
+
+  useEffect(() => {
+    if (user && user.stickers) {
+      const initialStickers: StickerCheckbox[] = user.stickers.map(
+        (sticker) => ({
+          ...sticker,
+          isChecked: false,
+        })
+      );
+      setStickers(initialStickers);
+    }
+  }, [user]);
 
   return (
     <div className="w-[80%] mx-auto py-8">
@@ -179,11 +161,12 @@ const PartyPreview = () => {
                 <strong>{selectedParty?.creator?.totalCompleted}</strong>
               </h3>
             </div>
-            {user?.membership === "premium" && (
-              <Tooltip message="Send direct message to creator">
-                <IconButton icon="solar:plain-bold-duotone" />
-              </Tooltip>
-            )}
+            {user?.membership === "premium" &&
+              user._id !== selectedParty?.creator?._id && (
+                <Tooltip message="Send direct message to creator">
+                  <IconButton icon="solar:plain-bold-duotone" />
+                </Tooltip>
+              )}
           </div>
         </div>
       </div>
@@ -215,9 +198,10 @@ const PartyPreview = () => {
               message="Stickers is the key to winning bid"
             />
             <p className="text-sm text-black font-semibold">
-              Your <strong className="text-green-500">stickers</strong>:{" "}
+              Your stickers:
+              <strong className="text-green-500"> {stickers.length}</strong>
             </p>
-            <div className="w-full h-[250px] overflow-auto bg-white/10 backdrop-blur-sm border border-[#c4f70f] rounded-xl p-6">
+            <div className="w-full h-[250px] overflow-auto bg-white border border-[#c4f70f] rounded-xl p-6">
               <StickerCheckboxGroup
                 stickers={stickers}
                 onCheck={handleStickersCheck}
@@ -265,7 +249,8 @@ const PartyPreview = () => {
       <div className="h-28"></div>
 
       {/*Applicants section*/}
-      {user?.membership === "premium" ? (
+      {user?.membership === "premium" ||
+      user?._id === selectedParty?.creator?._id ? (
         <ApplicantGroup applicants={selectedParty?.applicants ?? []} />
       ) : (
         <Alert

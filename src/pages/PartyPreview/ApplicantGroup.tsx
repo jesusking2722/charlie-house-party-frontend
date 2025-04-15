@@ -26,7 +26,7 @@ const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
     <div className="w-full flex flex-col gap-8">
       <div className="w-full flex flex-row items-center gap-2">
         <h1 className="text-black font-semibold text-3xl">Applicants</h1>
-        <Tooltip message="Total 9 applicants">
+        <Tooltip message={`Total ${selectedApplicants.length} applicants`}>
           <Icon
             icon="solar:documents-outline"
             className="text-green-500 w-8 h-8"

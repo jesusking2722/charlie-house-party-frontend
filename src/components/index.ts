@@ -26,6 +26,7 @@ export {
   Range,
   StickerCheckboxGroup,
   NotificationGroup,
+  Switch,
 } from "./common";
 export type {
   CardEffectSliderItemType,

@@ -47,7 +47,6 @@ const CreateParty = () => {
   const countryCode = countryList();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { parties } = useSelector((state: RootState) => state.party);
   const { width, height } = useWindowSize();
   const navigate = useNavigate();
 
@@ -88,7 +87,6 @@ const CreateParty = () => {
 
   const handleComplete = async () => {
     try {
-      debugger;
       if (!user && partyType !== "" && !region) return;
       setLoading(true);
       const newParty: Party = {

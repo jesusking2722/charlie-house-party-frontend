@@ -243,13 +243,16 @@ const Profile = () => {
                 }}
               />
             )}
-            <Button
-              type="transparent"
-              label="Invite to party"
-              onClick={() => {
-                setPartyInviteOpen(true);
-              }}
-            />
+            {parties.filter((party) => party.creator?._id === user?._id)
+              .length > 0 && (
+              <Button
+                type="transparent"
+                label="Invite to party"
+                onClick={() => {
+                  setPartyInviteOpen(true);
+                }}
+              />
+            )}
             <Tooltip message="Share profile">
               <IconButton
                 icon="solar:share-line-duotone"
