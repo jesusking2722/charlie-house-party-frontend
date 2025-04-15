@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../components";
-import { BACKEND_BASE_URL, BASE_URL } from "../../constant";
+import { BACKEND_BASE_URL } from "../../constant";
 import { Sticker } from "../../types";
 
 const StickerPockets = ({ stickers }: { stickers: Sticker[] }) => {

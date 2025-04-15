@@ -9,6 +9,7 @@ import { RootState } from "../redux/store";
 import { Applicant, Notification, Party } from "../types";
 import { addNewNotification } from "../redux/slices/authSlice";
 import toast from "react-hot-toast";
+import { addNewApplicant } from "../redux/slices/applicantSlice";
 
 const useSocket = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const useSocket = () => {
           selectedPartyId: partyId,
         })
       );
+      dispatch(addNewApplicant({ newApplicant }));
     };
 
     // party
@@ -44,15 +46,8 @@ const useSocket = () => {
     socket.on("applicant:created", handleNewApplied);
 
     // notification
-    socket.on("notification:party-opened", handleNewNotification);
-    socket.on("applicant:created", handleNewNotification);
-
-    return () => {
-      socket.off("party:created", handleNewParty);
-      socket.off("applicant:created", handleNewApplied);
-      socket.off("notification:party-opened", handleNewNotification);
-      socket.off("applicant:created", handleNewNotification);
-    };
+    socket.on("notification", handleNewNotification);
+    socket.on("notification", handleNewNotification);
   }, [dispatch, user]);
 };
 

@@ -5,10 +5,12 @@ import { setUsers } from "../redux/slices/usersSlice";
 import { setParty } from "../redux/slices/partySlice";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const useInit = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
   const fetchMyInfo = async (id: string) => {
     try {
@@ -100,7 +102,7 @@ const useInit = () => {
       fetchAllPartiesInfo();
       setLoading(false);
     }
-  }, [dispatch]);
+  }, [dispatch, pathname]);
 
   return { loading, fetchAllInitialInfo };
 };

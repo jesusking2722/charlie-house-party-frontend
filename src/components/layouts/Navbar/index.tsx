@@ -1,4 +1,4 @@
-import { LinkIconButton, Spinner } from "../../common";
+import { LinkIconButton } from "../../common";
 import { motion } from "motion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -10,7 +10,6 @@ import { setAuthUser } from "../../../redux/slices/authSlice";
 
 const Navbar = () => {
   const [unreadCount, setUnreadCount] = useState<number | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const { pathname } = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -61,7 +60,6 @@ const Navbar = () => {
       transition={{ type: "spring" }}
       className="w-[100px] fixed left-0 top-0 min-h-screen bg-black/5 backdrop-blur-sm shadow-lg"
     >
-      {loading && <Spinner />}
       <nav className="py-14 px-4 text-center">
         <ul className="flex flex-col gap-4">
           <LinkIconButton

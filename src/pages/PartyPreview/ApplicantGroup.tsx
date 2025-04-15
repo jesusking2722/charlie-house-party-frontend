@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { getTimeAgo } from "../../utils";
-import { BACKEND_BASE_URL, BASE_URL } from "../../constant";
+import { BACKEND_BASE_URL } from "../../constant";
 
 interface ApplicantGroupProps {
   applicants: Applicant[];

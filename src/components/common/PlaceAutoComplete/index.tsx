@@ -31,6 +31,7 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
 }) => {
   const [touched, setTouched] = useState<boolean>(false);
   const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && !window.google) {
@@ -42,12 +43,13 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
     } else {
       setIsScriptLoaded(true);
     }
-  }, []);
+  }, [GOOGLE_MAP_API]);
 
   const isInvalid = touched && invalid;
 
   const handlePlaceSelected = (place: any) => {
     if (place.geometry && place.geometry.location) {
+      setLoading(true);
       const lat = place.geometry.location.lat();
       const lng = place.geometry.location.lng();
       onChange(place.formatted_address);
@@ -55,6 +57,7 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
     } else {
       console.error("No geometry data found for selected place.");
     }
+    setLoading(false);
   };
 
   if (!isScriptLoaded) {
@@ -72,6 +75,10 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
             className="bg-transparent border-none outline-none text-black text-xs w-full placeholder-[#696969]"
             placeholder="Loading..."
             readOnly
+          />
+          <Icon
+            icon="svg-spinners:ring-resize"
+            className="text-gray-500 w-4 h-4"
           />
         </div>
       </div>
@@ -123,6 +130,12 @@ const PlaceAutoComplete: FC<PlaceAutoCompleteProps> = ({
           onBlur={() => setTouched(true)}
           readOnly={readonly}
         />
+        {loading && (
+          <Icon
+            icon="svg-spinners:ring-resize"
+            className="text-gray-500 w-4 h-4"
+          />
+        )}
       </div>
       {isInvalid && invalidTxt && (
         <p className="w-full text-red-500 text-xs font-semibold p-1">

@@ -13,7 +13,7 @@ import StickerPockets from "./StickerPockets";
 import ProfileDescripter from "./ProfileDescripter";
 import ProfileHeader from "./ProfileHeader";
 import ProfileReviewer from "./ProfileReviewer";
-import { Review, User } from "../../types";
+import { User } from "../../types";
 import { useEffect, useState } from "react";
 import ProfileEdit from "./ProfileEdit";
 import { useParams } from "react-router-dom";
@@ -21,7 +21,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateBannerMe } from "../../lib/scripts";
 import { setAuthUser } from "../../redux/slices/authSlice";
-import { BASE_URL, DOMAIN } from "../../constant";
+import { DOMAIN } from "../../constant";
 import PartyInviteCardGroup from "./PartyInviteCardGroup";
 import toast from "react-hot-toast";
 

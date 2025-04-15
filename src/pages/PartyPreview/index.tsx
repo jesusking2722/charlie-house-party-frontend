@@ -103,7 +103,7 @@ const PartyPreview = () => {
           }
         });
       });
-
+      debugger;
       socket.emit(
         "creating:applicant",
         newApplicant,

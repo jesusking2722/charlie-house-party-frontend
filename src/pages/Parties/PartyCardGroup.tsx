@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
 import { Party } from "../../types";
 import { Link } from "react-router-dom";
-import { formatDate, getDayAgo } from "../../utils";
+import { formatDate, getTimeAgo } from "../../utils";
 import { motion } from "motion/react";
 import { Pagination } from "../../components";
-import {BACKEND_BASE_URL} from "../../constant";
+import { BACKEND_BASE_URL } from "../../constant";
 
 interface PartyCardGroupProps {
   parties: Party[];
@@ -39,7 +39,7 @@ const PartyCardGroup: FC<PartyCardGroupProps> = ({ parties }) => {
                 className="w-full flex flex-1 flex-row items-start gap-4 overflow-hidden p-4 hover:shadow-lg border border-white bg-white/10 backdrop-blur-sm rounded-xl transition-all duration-300 ease-in-out hover:border-[#c4f70f]"
               >
                 <img
-                  src={BACKEND_BASE_URL + party.creator.avatar ?? ""}
+                  src={BACKEND_BASE_URL + `${party.creator.avatar ?? ""}`}
                   alt={party.creator.name ?? ""}
                   className="w-[100px] h-[100px] rounded-full shadow-lg object-cover object-center"
                 />
@@ -49,7 +49,10 @@ const PartyCardGroup: FC<PartyCardGroupProps> = ({ parties }) => {
                       <strong>{party.title}</strong>
                     </h1>
                     <h2 className="text-green-500 text-sm">
-                      <strong>{getDayAgo(party.createdAt)}</strong> posted
+                      <strong>
+                        {getTimeAgo(party.createdAt ?? new Date())}
+                      </strong>{" "}
+                      posted
                     </h2>
                   </div>
                   <p className="text-black text-sm h-[50px] overflow-hidden">
