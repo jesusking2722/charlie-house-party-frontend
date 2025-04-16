@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { FC, useState } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 
 interface DropdownProps {
   label: string;
@@ -17,12 +17,30 @@ const Dropdown: FC<DropdownProps> = ({
   onSelect,
 }) => {
   const [active, setActive] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setActive(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div
       className={`mx-auto relative ${
         width === "full" ? "w-full" : "w-[200px]"
       }`}
+      ref={dropdownRef}
     >
       <div
         className="group w-full flex items-center gap-2 rounded-lg px-3 py-2
