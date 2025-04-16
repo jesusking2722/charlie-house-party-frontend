@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
   Modal,
+  Progress,
   Rater,
   SharingButtonGroup,
   Stepper,
@@ -24,6 +25,11 @@ import ApplicantGroup from "./ApplicantGroup";
 import { motion } from "motion/react";
 import socket from "../../lib/socketInstance";
 import toast from "react-hot-toast";
+import {
+  formatDate,
+  getRemainingDays,
+  getRemaningDaysPercent,
+} from "../../utils";
 
 const initialSteps: StepperItem[] = [
   { icon: "solar:documents-bold", label: "Publish", completed: true },
@@ -103,7 +109,6 @@ const PartyPreview = () => {
           }
         });
       });
-      debugger;
       socket.emit(
         "creating:applicant",
         newApplicant,
@@ -187,9 +192,25 @@ const PartyPreview = () => {
       </div>
       <div className="w-full flex flex-1 flex-row items-start justify-between gap-14">
         <div className="flex-1 flex flex-col gap-4 bg-white/10 backdrop-blur-sm border border-white hover:border-[#c4f70f] shadow-lg rounded-xl p-6 transition-all duration-300 ease-in-out">
-          <h1 className="text-lg text-black">
-            <strong>{selectedParty?.title}</strong>
-          </h1>
+          <div className="w-full flex flex-row items-center justify-between">
+            <h1 className="text-lg text-black">
+              <strong>{selectedParty?.title}</strong>
+            </h1>
+            <div className="flex flex-row items-center gap-4 w-1/2 justify-end">
+              <Progress
+                value={getRemaningDaysPercent(
+                  selectedParty?.openingAt ?? new Date(),
+                  selectedParty?.createdAt ?? new Date()
+                )}
+              />
+              <span className="text-xs">
+                <strong className="text-green-500">
+                  {getRemainingDays(selectedParty?.openingAt ?? new Date())}
+                </strong>{" "}
+                left to be opened
+              </span>
+            </div>
+          </div>
           <p className="text-sm text-black max-h-[150px] overflow-auto">
             {selectedParty?.description}
           </p>

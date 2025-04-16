@@ -107,25 +107,31 @@ const NotificationGroup = ({
                       </span>
                     )}
                     {notification.type === "party-cancelled" && (
-                      <span className="text-gray-400">
+                      <span className="text-red-400">
                         {" "}
                         {notification.party?.title}{" "}
                       </span>
                     )}
-                    party
                   </span>
                 ) : notification.type.includes("applicant") ? (
                   <span>
                     {notification.type === "applicant-applied"
-                      ? `${notification.applicant?.applier?.name} applied to your ${notification.party?.title}`
+                      ? `${notification.applicant?.applier.name} applied your`
                       : notification.type === "applicant-accepted"
                       ? `${notification.party?.creator?.name} accepted your application`
                       : `${notification.party?.creator?.name} rejected your application`}
                     {notification.type === "applicant-applied" && (
-                      <span className="text-green-500">
-                        {" "}
-                        {notification.party?.title}
-                      </span>
+                      <>
+                        <span className="text-green-500">
+                          {" "}
+                          {notification.party?.title}
+                        </span>
+                        <span>
+                          {notification.applicant?.stickers &&
+                            notification.applicant.stickers.length > 0 &&
+                            ` with ${notification.applicant.stickers.length} stickers`}
+                        </span>
+                      </>
                     )}
                   </span>
                 ) : notification.type.includes("sticker") ? (

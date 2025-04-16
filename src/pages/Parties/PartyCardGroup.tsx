@@ -55,7 +55,7 @@ const PartyCardGroup: FC<PartyCardGroupProps> = ({ parties }) => {
                       posted
                     </h2>
                   </div>
-                  <p className="text-black text-sm h-[50px] overflow-hidden">
+                  <p className="text-black text-xs h-[60px] overflow-hidden">
                     {party.description}
                   </p>
                   <div className="w-full flex flex-row items-center justify-end gap-8">

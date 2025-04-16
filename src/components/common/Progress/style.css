@@ -1,0 +1,97 @@
+.bg-gradient-radial-custom {
+  background: radial-gradient(circle, #f5f7fa, #c3cfe2);
+}
+
+.shadow-progress-bar {
+  box-shadow: 0 0 15px #a8ff78, 0 0 30px #78ffd6;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #a8ff78, #78ffd6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 9999px;
+  z-index: 1;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px #a8ff78, 0 0 30px #78ffd6;
+}
+
+.progress-bar::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.07), transparent);
+  opacity: 0.5;
+  animation: ripple 3s infinite;
+  pointer-events: none;
+}
+
+/* Progress text shadow (subtle, for light backgrounds) */
+.text-shadow-custom {
+  text-shadow: 0 2px 4px rgba(180, 200, 255, 0.7);
+}
+
+/* Particle styles and animation (light theme) */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #78ffd6;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: float 5s infinite ease-in-out;
+}
+.particle:nth-child(1) {
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+}
+.particle:nth-child(2) {
+  top: 30%;
+  left: 70%;
+  animation-delay: 1s;
+}
+.particle:nth-child(3) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 2s;
+}
+.particle:nth-child(4) {
+  top: 80%;
+  left: 40%;
+  animation-delay: 1.5s;
+}
+.particle:nth-child(5) {
+  top: 90%;
+  left: 60%;
+  animation-delay: 2.5s;
+}
+
+/* Animations */
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}

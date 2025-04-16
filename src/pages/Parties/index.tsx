@@ -64,7 +64,12 @@ const Parties = () => {
 
   useEffect(() => {
     if (parties.length > 0) {
-      setAvailableParties(parties);
+      const sortedParties = [...parties].sort(
+        (partyA, partyB) =>
+          new Date(partyA.createdAt).getTime() -
+          new Date(partyB.createdAt).getTime()
+      );
+      setAvailableParties(sortedParties);
     }
   }, [parties]);
 

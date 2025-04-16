@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Badge, Pagination, Rater, Tooltip } from "../../components";
 import { Applicant } from "../../types";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import { getTimeAgo } from "../../utils";
+import { getApplicantScore, getTimeAgo } from "../../utils";
 import { BACKEND_BASE_URL } from "../../constant";
 
 interface ApplicantGroupProps {
@@ -13,15 +13,26 @@ interface ApplicantGroupProps {
 
 const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedApplicants, setSelectedApplicants] = useState<Applicant[]>([]);
   const applicantsPerPage = 6;
 
   // Calculate indexes for pagination
   const totalPages = Math.ceil(applicants.length / applicantsPerPage);
   const startIndex = (currentPage - 1) * applicantsPerPage;
-  const selectedApplicants = applicants.slice(
-    startIndex,
-    startIndex + applicantsPerPage
-  );
+
+  useEffect(() => {
+    if (applicants.length > 0) {
+      const sortedApplicants = [...applicants].sort(
+        (a, b) => getApplicantScore(b) - getApplicantScore(a)
+      );
+      const currentApplicants = sortedApplicants.slice(
+        startIndex,
+        startIndex + applicantsPerPage
+      );
+      setSelectedApplicants(currentApplicants);
+    }
+  }, [applicants]);
+
   return (
     <div className="w-full flex flex-col gap-8">
       <div className="w-full flex flex-row items-center gap-2">
@@ -46,7 +57,7 @@ const ApplicantGroup: FC<ApplicantGroupProps> = ({ applicants }) => {
             to={`/profile/${applicant.applier._id}`}
             className="w-full flex flex-1 flex-row items-start gap-4 rounded-xl border border-white bg-white/10 backdrop-blur-sm p-2 hover:shadow-lg hover:border-[#c4f70f] transition-all duration-300 ease-in-out"
           >
-            <div className="flex flex-col gap-2 items-center justify-center">
+            <div className="flex flex-col gap-2 items-center justify-center mt-4">
               <img
                 src={BACKEND_BASE_URL + applicant.applier.avatar}
                 alt={applicant.applier.name ?? ""}

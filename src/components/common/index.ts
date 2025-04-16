@@ -29,3 +29,4 @@ export { default as StickerCheckboxGroup } from "./StickerCheckboxGroup";
 export type { StickerCheckbox } from "./StickerCheckboxGroup";
 export { default as NotificationGroup } from "./NotificationGroup";
 export { default as Switch } from "./Switch";
+export { default as Progress } from "./Progress";
