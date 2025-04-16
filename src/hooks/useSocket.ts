@@ -47,7 +47,12 @@ const useSocket = () => {
 
     // notification
     socket.on("notification", handleNewNotification);
-    socket.on("notification", handleNewNotification);
+
+    return () => {
+      socket.off("party:created", handleNewParty);
+      socket.off("applicant:created", handleNewApplied);
+      socket.off("notification", handleNewNotification);
+    };
   }, [dispatch, user]);
 };
 
