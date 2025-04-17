@@ -1,4 +1,4 @@
-import { ChatItemType, Message } from "../../types";
+import { ChatItemType, IMessage } from "../../types";
 import {
   Badge,
   ChatItemGroup,
@@ -64,7 +64,7 @@ const initialChatList: ChatItemType[] = [
   },
 ];
 
-const initialMessages: Message[] = [
+const initialMessages: IMessage[] = [
   {
     id: "1",
     position: "left",
@@ -317,7 +317,7 @@ const initialMessages: Message[] = [
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
   const [chatList, setChatList] = useState<ChatItemType[]>(initialChatList);
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<IMessage[]>(initialMessages);
   const [selectedChatItem, setSelectedChatItem] = useState<ChatItemType | null>(
     null
   );

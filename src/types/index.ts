@@ -128,7 +128,7 @@ export interface ChatItemType {
   status: "online" | "offline";
 }
 
-export interface Message {
+export interface IMessage {
   id: string;
   position: "left" | "right";
   title: string;

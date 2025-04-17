@@ -1,8 +1,8 @@
 import { MessageBox } from "react-chat-elements";
 import "./style.css";
-import { Message } from "../../../types";
+import { IMessage } from "../../../types";
 
-const MessageBoxGroup = ({ messages }: { messages: Message[] }) => {
+const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
   return (
     <div className="flex-1 overflow-y-auto flex flex-col h-full">
       <div className="flex flex-col gap-4 p-2">
