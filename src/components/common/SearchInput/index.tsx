@@ -15,7 +15,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="relative flex items-center z-50">
+    <div className="relative flex items-center z-50 w-full">
       <input
         ref={inputRef}
         type="text"

@@ -125,3 +125,17 @@ export interface ChatItemType {
   date: Date;
   unread: number;
 }
+
+export interface Message {
+  id: string;
+  position: "left" | "right";
+  title: string;
+  type: "text";
+  text: string;
+  date: Date;
+  status: "read" | "waiting" | "sent" | "received";
+  focus: boolean;
+  forwarded: boolean;
+  notch: boolean;
+  retracted: boolean;
+}

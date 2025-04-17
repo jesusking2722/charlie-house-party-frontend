@@ -4,7 +4,7 @@ import "./style.css";
 
 const ChatItemGroup = ({ chatList }: { chatList: ChatItemType[] }) => {
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
       {chatList.map((chatList, index) => (
         <ChatItem
           id={index}

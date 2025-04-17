@@ -2,13 +2,13 @@
 .search-input:not(:placeholder-shown) {
   background-color: #fff;
   border: 1px solid #c4f70f;
-  width: 290px;
+  width: 100%;
   cursor: none;
   padding-left: 40px;
 }
 
 .search-icon {
-  pointer-events: none; /* Let clicks go to the input */
+  pointer-events: none;
 }
 
 .search-input:focus + .search-icon,

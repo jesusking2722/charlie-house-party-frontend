@@ -1,0 +1,17 @@
+.rce-citem {
+  background: transparent !important;
+  transition: 0.3s !important;
+  border-radius: 20px !important;
+}
+
+.rce-citem:hover {
+  background: white !important;
+}
+
+.rce-citem-body--top-title {
+  font-size: 14px !important;
+}
+
+.rce-citem-body--bottom-title {
+  font-size: 12px !important;
+}

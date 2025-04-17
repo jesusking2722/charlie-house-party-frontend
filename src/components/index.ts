@@ -30,6 +30,7 @@ export {
   Progress,
   SearchInput,
   ChatItemGroup,
+  MessageBoxGroup,
 } from "./common";
 export type {
   CardEffectSliderItemType,
