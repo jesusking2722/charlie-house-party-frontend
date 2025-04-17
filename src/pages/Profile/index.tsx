@@ -114,15 +114,16 @@ const Profile = () => {
               />
             )}
             {parties.filter((party) => party.creator?._id === user?._id)
-              .length > 0 && (
-              <Button
-                type="transparent"
-                label="Invite to party"
-                onClick={() => {
-                  setPartyInviteOpen(true);
-                }}
-              />
-            )}
+              .length > 0 &&
+              selectedUser?._id !== user?._id && (
+                <Button
+                  type="transparent"
+                  label="Invite to party"
+                  onClick={() => {
+                    setPartyInviteOpen(true);
+                  }}
+                />
+              )}
             <Tooltip message="Share profile">
               <IconButton
                 icon="solar:share-line-duotone"
@@ -132,11 +133,12 @@ const Profile = () => {
               />
             </Tooltip>
 
-            {/* {user?.membership === "premium" && ( */}
-            <Tooltip message="Send direct message">
-              <IconButton icon="solar:plain-bold-duotone" />
-            </Tooltip>
-            {/* )} */}
+            {user?.membership === "premium" &&
+              selectedUser?._id !== user?._id && (
+                <Tooltip message="Send direct message">
+                  <IconButton icon="solar:plain-bold-duotone" />
+                </Tooltip>
+              )}
           </div>
         </div>
         {/* Profile description */}

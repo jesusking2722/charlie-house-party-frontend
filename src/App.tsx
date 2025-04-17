@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { Spinner, ContainerRoute } from "./components";
 import {
+  Chat,
   CreateParty,
   Home,
   Login,
@@ -25,8 +26,6 @@ import "react-chat-elements/dist/main.css";
 import { BASE_URL } from "./constant";
 import useSocket from "./hooks/useSocket";
 import useInit from "./hooks/useInit";
-// import socket from "./lib/socketInstance";
-import { jwtDecode } from "jwt-decode";
 
 const metadata = {
   name: "House Party | Charlie Unicorn AI",
@@ -67,6 +66,7 @@ function App() {
           <Route path="parties/:partyId" element={<PartyPreview />} />
           <Route path="create-party" element={<CreateParty />} />
           <Route path="notification" element={<Notification />} />
+          <Route path="chat" element={<Chat />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
