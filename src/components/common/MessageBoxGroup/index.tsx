@@ -12,12 +12,76 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
               message.position === "left" ? "message-left" : "message-right"
             }`}
           >
-            <MessageBox
-              {...message}
-              titleColor="#09cbf9"
-              replyButton
-              removeButton
-            />
+            {message.type === "text" ? (
+              <MessageBox
+                {...message}
+                id={message._id}
+                type="text"
+                titleColor="#09cbf9"
+                replyButton
+                removeButton
+              />
+            ) : message.type === "photo" ? (
+              <MessageBox
+                {...message}
+                id={message._id}
+                type="photo"
+                data={{
+                  uri: message.photo ?? "",
+                  status: {
+                    autoDownload: true,
+                  },
+                }}
+                titleColor="#09cbf9"
+                replyButton
+                removeButton
+              />
+            ) : message.type === "file" ? (
+              <MessageBox
+                {...message}
+                id={message._id}
+                type="file"
+                data={{
+                  uri: message.file ?? "",
+                  status: {
+                    autoDownload: true,
+                  },
+                }}
+                titleColor="#09cbf9"
+                replyButton
+                removeButton
+              />
+            ) : message.type === "video" ? (
+              <MessageBox
+                {...message}
+                id={message._id}
+                type="video"
+                controlsList=""
+                data={{
+                  videoURL: message.video ?? "",
+                  thumbnailURL: "",
+                  status: {
+                    click: false,
+                    loading: 0,
+                  },
+                }}
+                titleColor="#09cbf9"
+                replyButton
+                removeButton
+              />
+            ) : message.type === "audio" ? (
+              <MessageBox
+                {...message}
+                id={message._id}
+                type="audio"
+                data={{
+                  audioURL: message.audio ?? "",
+                }}
+                titleColor="#09cbf9"
+                replyButton
+                removeButton
+              />
+            ) : null}
           </div>
         ))}
       </div>

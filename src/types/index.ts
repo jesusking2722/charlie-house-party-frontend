@@ -129,10 +129,11 @@ export interface ChatItemType {
 }
 
 export interface IMessage {
-  id: string;
+  _id: string;
   position: "left" | "right";
   title: string;
-  type: "text";
+  type: "photo" | "video" | "audio" | "file" | "text";
+
   text: string;
   date: Date;
   status: "read" | "waiting" | "sent" | "received";
@@ -140,4 +141,12 @@ export interface IMessage {
   forwarded: boolean;
   notch: boolean;
   retracted: boolean;
+  photo?: string;
+  file?: string;
+  video?: string;
+  audio?: string;
+}
+
+export interface Message {
+  _id?: string;
 }

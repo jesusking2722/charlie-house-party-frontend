@@ -66,7 +66,7 @@ const initialChatList: ChatItemType[] = [
 
 const initialMessages: IMessage[] = [
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -79,7 +79,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -92,7 +92,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -105,7 +105,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -118,7 +118,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -131,7 +131,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -144,7 +144,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -157,7 +157,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -170,7 +170,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -183,7 +183,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -196,7 +196,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -209,7 +209,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -222,7 +222,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -235,7 +235,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -248,7 +248,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -261,7 +261,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -274,7 +274,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -287,7 +287,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "right",
     title: "Charlie",
     type: "text",
@@ -300,7 +300,7 @@ const initialMessages: IMessage[] = [
     retracted: false,
   },
   {
-    id: "1",
+    _id: "1",
     position: "left",
     title: "Charlie",
     type: "text",
@@ -430,7 +430,7 @@ const Chat = () => {
             <h2 className="text-xs text-center border-b-[1px] border-gray-300 pb-1">
               <strong>Party Lover & Owner</strong>
             </h2>
-            <p className="text-xs flex-1 overflow-hidden text-ellipsis whitespace-nowrap p-1 overflow-x-hidden overflow-y-auto">
+            <p className="text-xs flex-1 overflow-h_idden text-ellipsis whitespace-nowrap p-1 overflow-x-hidden overflow-y-auto">
               I love to open my party
             </p>
           </div>
