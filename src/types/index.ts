@@ -116,3 +116,12 @@ export interface Geo {
   lat: any;
   lng: any;
 }
+
+export interface ChatItemType {
+  avatar: string;
+  alt: string;
+  title: string;
+  subtitle: string;
+  date: Date;
+  unread: number;
+}

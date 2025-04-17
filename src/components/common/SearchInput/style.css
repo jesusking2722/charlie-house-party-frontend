@@ -1,0 +1,24 @@
+.search-input:focus,
+.search-input:not(:placeholder-shown) {
+  background-color: #fff;
+  border: 1px solid #c4f70f;
+  width: 290px;
+  cursor: none;
+  padding-left: 40px;
+}
+
+.search-icon {
+  pointer-events: none; /* Let clicks go to the input */
+}
+
+.search-input:focus + .search-icon,
+.search-input:not(:placeholder-shown) + .search-icon {
+  z-index: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.search-input:hover + .search-icon {
+  transform: rotate(360deg);
+  transition: 0.2s ease-in-out;
+}

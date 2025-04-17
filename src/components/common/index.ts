@@ -30,3 +30,5 @@ export type { StickerCheckbox } from "./StickerCheckboxGroup";
 export { default as NotificationGroup } from "./NotificationGroup";
 export { default as Switch } from "./Switch";
 export { default as Progress } from "./Progress";
+export { default as SearchInput } from "./SearchInput";
+export { default as ChatItemGroup } from "./ChatItemGroup";

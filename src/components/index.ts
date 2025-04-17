@@ -28,6 +28,8 @@ export {
   NotificationGroup,
   Switch,
   Progress,
+  SearchInput,
+  ChatItemGroup,
 } from "./common";
 export type {
   CardEffectSliderItemType,
