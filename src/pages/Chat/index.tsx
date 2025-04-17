@@ -13,44 +13,54 @@ import { motion } from "motion/react";
 
 const initialChatList: ChatItemType[] = [
   {
+    _id: "1",
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
     alt: "kursat_avatar",
     title: "Kursat",
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(),
     unread: 3,
+    status: "online",
   },
   {
+    _id: "2",
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
     alt: "kursat_avatar",
     title: "Kursat",
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(),
     unread: 3,
+    status: "offline",
   },
   {
+    _id: "3",
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
     alt: "kursat_avatar",
     title: "Kursat",
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(),
     unread: 3,
+    status: "online",
   },
   {
+    _id: "4",
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
     alt: "kursat_avatar",
     title: "Kursat",
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(),
     unread: 3,
+    status: "offline",
   },
   {
+    _id: "5",
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
     alt: "kursat_avatar",
     title: "Kursat",
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(),
     unread: 3,
+    status: "online",
   },
 ];
 
@@ -308,7 +318,15 @@ const Chat = () => {
   const [search, setSearch] = useState<string>("");
   const [chatList, setChatList] = useState<ChatItemType[]>(initialChatList);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [selectedChatItem, setSelectedChatItem] = useState<ChatItemType | null>(
+    null
+  );
+
   const [text, setText] = useState<string>();
+
+  const handleChatListSelect = (chatItem: ChatItemType) => {
+    setSelectedChatItem(chatItem);
+  };
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
@@ -324,7 +342,11 @@ const Chat = () => {
             <SearchInput value={search} onChange={setSearch} />
           </div>
           <div className="w-full">
-            <ChatItemGroup chatList={chatList} />
+            <ChatItemGroup
+              chatList={chatList}
+              selectedChatItem={selectedChatItem}
+              onSelect={handleChatListSelect}
+            />
           </div>
         </motion.div>
 
@@ -344,13 +366,19 @@ const Chat = () => {
             <div className="flex flex-row items-center gap-2 p-1">
               <Input
                 type="text"
-                placeholder="Describe about your party here..."
+                placeholder="Type your message here...."
                 value={text}
                 onChange={setText}
               />
-              <button className="p-2 bg-white rounded-lg shrink-0">
+              <button className="p-2 bg-white rounded-lg shrink-0 transition-all duration-300 ease-in-out hover:bg-black/10 hover:backdrop-blur-sm hover:shadow-lg">
                 <Icon
                   icon="solar:plain-bold-duotone"
+                  className="text-black w-5 h-5"
+                />
+              </button>
+              <button className="p-2 bg-white rounded-lg shrink-0 transition-all duration-300 ease-in-out hover:bg-black/10 hover:backdrop-blur-sm hover:shadow-lg">
+                <Icon
+                  icon="solar:cloud-upload-bold-duotone"
                   className="text-black w-5 h-5"
                 />
               </button>
@@ -399,7 +427,7 @@ const Chat = () => {
             </span>
           </div>
           <div className="w-full flex-1 flex flex-col gap-2 mt-4">
-            <h2 className="text-sm text-center border-b-[1px] border-gray-300 pb-1">
+            <h2 className="text-xs text-center border-b-[1px] border-gray-300 pb-1">
               <strong>Party Lover & Owner</strong>
             </h2>
             <p className="text-xs flex-1 overflow-hidden text-ellipsis whitespace-nowrap p-1 overflow-x-hidden overflow-y-auto">

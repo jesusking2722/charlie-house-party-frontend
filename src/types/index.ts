@@ -118,12 +118,14 @@ export interface Geo {
 }
 
 export interface ChatItemType {
+  _id: string;
   avatar: string;
   alt: string;
   title: string;
   subtitle: string;
   date: Date;
   unread: number;
+  status: "online" | "offline";
 }
 
 export interface Message {

@@ -1,11 +1,13 @@
 .rce-citem {
   background: transparent !important;
   transition: 0.3s !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
 }
 
 .rce-citem:hover {
   background: white !important;
+  transition: 0.3s !important;
 }
 
 .rce-citem-body--top-title {
@@ -14,4 +16,9 @@
 
 .rce-citem-body--bottom-title {
   font-size: 12px !important;
+}
+
+.rce-citem-status {
+  width: 10px !important;
+  height: 10px !important;
 }
