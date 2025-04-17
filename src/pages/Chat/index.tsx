@@ -1,4 +1,4 @@
-import { IChatItem, IMessage, User } from "../../types";
+import { IChatItem, IMessage, Message, User } from "../../types";
 import {
   Badge,
   ChatItemGroup,
@@ -13,11 +13,12 @@ import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState, store } from "../../redux/store";
 import { BACKEND_BASE_URL } from "../../constant";
 import countryList from "react-select-country-list";
 import UploadGroup from "./UploadGroup";
 import ChatInput from "./ChatInput";
+import socket from "../../lib/socketInstance";
 
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
@@ -60,6 +61,30 @@ const Chat = () => {
 
   const handleUploadDelete = (idx: number) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== idx));
+  };
+
+  const handleSend = async () => {
+    try {
+      if (text === "" || !user || !selectedContacter) return;
+      const waitForNewMessage = new Promise<Message>((resolve) => {
+        const unsubscribe = store.subscribe(() => {
+          const state = store.getState();
+          const latestMessage = state.message.messages[0];
+          if (latestMessage && latestMessage._id) {
+            unsubscribe();
+            resolve(latestMessage);
+          }
+        });
+      });
+      if (files.length > 0) {
+        let formData = new FormData();
+      } else {
+        socket.emit("message-send:text", user._id, selectedContacter._id, text);
+        const latestMessage = await waitForNewMessage;
+      }
+    } catch (error) {
+      console.error("handle send error: ", error);
+    }
   };
 
   useEffect(() => {

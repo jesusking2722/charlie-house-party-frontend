@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice";
 import usersReducer from "./slices/usersSlice";
 import partyReducer from "./slices/partySlice";
 import applicantReducer from "./slices/applicantSlice";
+import messageReducer from "./slices/messageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     users: usersReducer,
     party: partyReducer,
     applicants: applicantReducer,
+    message: messageReducer,
   },
 });
 
