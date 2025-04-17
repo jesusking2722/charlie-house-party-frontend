@@ -14,10 +14,10 @@ const Rater = ({ rate }: { rate: number }) => {
         value={rate}
         style={{ margin: 0, padding: 0 }}
         itemStyles={myStyles}
-        className="max-w-[150px] p-0 m-0"
+        className="max-w-[120px] p-0 m-0"
         readOnly={true}
       />
-      <span className="text-sm font-semibold text-green-500">{rate}</span>
+      <span className="text-xs font-semibold text-green-500">{rate}</span>
     </div>
   );
 };

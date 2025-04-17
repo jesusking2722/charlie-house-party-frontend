@@ -18,19 +18,23 @@ const Badge: FC<BadgeProps> = ({ type }) => {
           : ""
       }
     >
-      {type === "premium" && (
+      {/* {type === "premium" && (
         <img
           src={BASE_URL + "/assets/svgs/premium.svg"}
           alt="premium"
           className="w-6 h-6"
         />
-      )}
-      {type === "kyc" && (
-        <Icon
-          icon="solar:verified-check-bold"
-          className="w-6 h-6 text-green-500"
-        />
-      )}
+      )} */}
+      {/* {type === "kyc" && ( */}
+      <Icon
+        icon={
+          type === "premium" ? "solar:star-bold" : "solar:verified-check-bold"
+        }
+        className={`w-5 h-5 ${
+          type === "kyc" ? "text-green-500" : "text-sky-500"
+        }`}
+      />
+      {/* )} */}
     </Tooltip>
   );
 };
