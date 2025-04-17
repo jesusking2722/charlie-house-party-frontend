@@ -29,6 +29,7 @@ export interface User {
   kyc?: Kyc;
   notifications?: Notification[];
   stickers?: Sticker[];
+  status?: "online" | "offline";
 }
 
 export interface Review {
@@ -133,20 +134,33 @@ export interface IMessage {
   position: "left" | "right";
   title: string;
   type: "photo" | "video" | "audio" | "file" | "text";
-
   text: string;
   date: Date;
   status: "read" | "waiting" | "sent" | "received";
   focus: boolean;
   forwarded: boolean;
-  notch: boolean;
   retracted: boolean;
   photo?: string;
   file?: string;
   video?: string;
   audio?: string;
+  unread: number;
 }
 
 export interface Message {
   _id?: string;
+  title: string;
+  type: "photo" | "video" | "audio" | "file" | "text";
+  date: Date;
+  status: "read" | "waiting" | "sent" | "received";
+  focus: boolean;
+  forwarded: boolean;
+  retracted: boolean;
+  photo?: string;
+  file?: string;
+  video?: string;
+  audio?: string;
+  sender: User;
+  receiver: User;
+  lastMessaged: User;
 }

@@ -22,7 +22,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       "/parties",
       "/create-party",
       "/notification",
-      "/message",
+      "/chat",
     ].includes(pathname)
   );
 

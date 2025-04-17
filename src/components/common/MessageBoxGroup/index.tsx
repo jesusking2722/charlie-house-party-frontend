@@ -16,6 +16,7 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
               <MessageBox
                 {...message}
                 id={message._id}
+                notch={true}
                 type="text"
                 titleColor="#09cbf9"
                 replyButton
@@ -25,6 +26,7 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
               <MessageBox
                 {...message}
                 id={message._id}
+                notch={true}
                 type="photo"
                 data={{
                   uri: message.photo ?? "",
@@ -40,6 +42,7 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
               <MessageBox
                 {...message}
                 id={message._id}
+                notch={true}
                 type="file"
                 data={{
                   uri: message.file ?? "",
@@ -55,6 +58,7 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
               <MessageBox
                 {...message}
                 id={message._id}
+                notch={true}
                 type="video"
                 controlsList=""
                 data={{
@@ -73,6 +77,7 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
               <MessageBox
                 {...message}
                 id={message._id}
+                notch={true}
                 type="audio"
                 data={{
                   audioURL: message.audio ?? "",
