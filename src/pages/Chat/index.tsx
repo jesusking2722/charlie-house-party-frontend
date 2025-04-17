@@ -1,4 +1,4 @@
-import { ChatItemType, IMessage } from "../../types";
+import { IChatItem, IMessage, User } from "../../types";
 import {
   Badge,
   ChatItemGroup,
@@ -7,76 +7,68 @@ import {
   Rater,
   SearchInput,
 } from "../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
-
-const initialChatList: ChatItemType[] = [
-  {
-    _id: "1",
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Kursat",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(),
-    unread: 3,
-    status: "online",
-  },
-  {
-    _id: "2",
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Kursat",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(),
-    unread: 3,
-    status: "offline",
-  },
-  {
-    _id: "3",
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Kursat",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(),
-    unread: 3,
-    status: "online",
-  },
-  {
-    _id: "4",
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Kursat",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(),
-    unread: 3,
-    status: "offline",
-  },
-  {
-    _id: "5",
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Kursat",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(),
-    unread: 3,
-    status: "online",
-  },
-];
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { BACKEND_BASE_URL } from "../../constant";
+import countryList from "react-select-country-list";
 
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
-  const [chatList, setChatList] = useState<ChatItemType[]>(initialChatList);
+  const [chatList, setChatList] = useState<IChatItem[]>([]);
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [selectedChatItem, setSelectedChatItem] = useState<ChatItemType | null>(
+  const [selectedChatItem, setSelectedChatItem] = useState<IChatItem | null>(
     null
   );
-
+  const [selectedContacter, setSelectedContacter] = useState<User | null>(null);
   const [text, setText] = useState<string>();
 
-  const handleChatListSelect = (chatItem: ChatItemType) => {
+  const countryConverter = countryList();
+
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  const params = useParams();
+
+  const handleChatListSelect = (chatItem: IChatItem) => {
     setSelectedChatItem(chatItem);
   };
+
+  useEffect(() => {
+    if (user) {
+      const chatList: IChatItem[] = user.contacts.map((contacter) => ({
+        _id: contacter._id ?? "",
+        avatar: contacter.avatar ?? "",
+        alt: contacter.name ?? "",
+        status: contacter.status ?? "offline",
+        date: new Date(),
+        title: contacter.name ?? "",
+        subtitle: "What are you doing?",
+        unread: 1,
+      }));
+      setChatList(chatList);
+    }
+    if (params.contacterId && user) {
+      const contacter = user.contacts.find(
+        (contacter) => contacter._id === params.contacterId
+      );
+      if (!contacter) return;
+      const chatItem: IChatItem = {
+        _id: contacter._id ?? "",
+        avatar: contacter.avatar ?? "",
+        alt: contacter.name ?? "",
+        status: contacter.status ?? "offline",
+        date: new Date(),
+        title: contacter.name ?? "",
+        subtitle: "What are you doing? Something else you are doing",
+        unread: 1,
+      };
+      setSelectedChatItem(chatItem);
+      setSelectedContacter(contacter);
+    }
+  }, [params, user]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
@@ -144,28 +136,40 @@ const Chat = () => {
           className="w-1/4 border border-white bg-white/20 backdrop-blur-md rounded-l-md rounded-r-xl shadow-lg flex flex-col items-center gap-2 p-16"
         >
           <img
-            src="https://avatars.githubusercontent.com/u/80540635?v=4"
-            alt="user"
+            src={BACKEND_BASE_URL + selectedContacter?.avatar}
+            alt={selectedContacter?.name ?? ""}
             className="w-[200px] h-[200px] object-cover object-center rounded-full shadow-lg bg-transparent"
           />
-          <div className="mt-4 flex flex-row items-center gap-4">
-            <h2 className="text-lg font-semibold">
-              <strong>Kursat</strong>.{" "}
-              <strong className="text-sm">@kursat</strong>
-            </h2>
+          <div className="mt-4">
             <div className="flex flex-row items-center gap-1">
+              <h2 className="text-sm font-semibold mr-2">
+                <strong>{selectedContacter?.name}</strong>
+              </h2>
               <Badge type="kyc" />
               <Badge type="premium" />
             </div>
           </div>
+          <div>
+            <h3 className="text-sm mr-2">
+              <strong>@{selectedContacter?.shortname}</strong>
+            </h3>
+          </div>
           <div className="flex flex-row items-center gap-4">
-            <span className="text-sm">
-              Torontto, <strong>Canada</strong>
+            <span className="text-xs">
+              {selectedContacter?.region?.includes(",")
+                ? selectedContacter.region
+                : `${selectedContacter?.region},`}{" "}
+              <strong>
+                {countryConverter.getLabel(selectedContacter?.country ?? "GB")}
+              </strong>
             </span>
-            <Icon icon="flag:ca-4x3" className="w-6 h-4 rounded-md" />
+            <Icon
+              icon={`flag:${selectedContacter?.country?.toLowerCase()}-4x3`}
+              className="w-6 h-4 rounded-md"
+            />
           </div>
           <div>
-            <Rater rate={4.3} />
+            <Rater rate={selectedContacter?.rate ?? 0} />
           </div>
           <div className="flex flex-row items-center gap-2 w-full justify-center">
             <Icon
@@ -178,10 +182,10 @@ const Chat = () => {
           </div>
           <div className="w-full flex-1 flex flex-col gap-2 mt-4">
             <h2 className="text-xs text-center border-b-[1px] border-gray-300 pb-1">
-              <strong>Party Lover & Owner</strong>
+              <strong>{selectedContacter?.title}</strong>
             </h2>
             <p className="text-xs flex-1 overflow-h_idden text-ellipsis whitespace-nowrap p-1 overflow-x-hidden overflow-y-auto">
-              I love to open my party
+              {selectedContacter?.about}
             </p>
           </div>
         </motion.div>

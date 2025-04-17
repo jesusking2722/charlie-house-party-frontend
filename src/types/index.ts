@@ -30,6 +30,7 @@ export interface User {
   notifications?: Notification[];
   stickers?: Sticker[];
   status?: "online" | "offline";
+  contacts: User[];
 }
 
 export interface Review {
@@ -60,7 +61,8 @@ export interface Notification {
     | "applicant-rejected"
     | "sticker-added"
     | "sticker-bought"
-    | "announcement";
+    | "announcement"
+    | "new-contact";
   content: string;
   createdAt: Date;
   read: boolean;
@@ -118,7 +120,7 @@ export interface Geo {
   lng: any;
 }
 
-export interface ChatItemType {
+export interface IChatItem {
   _id: string;
   avatar: string;
   alt: string;

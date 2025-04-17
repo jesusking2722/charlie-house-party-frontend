@@ -1,15 +1,16 @@
 import { ChatItem } from "react-chat-elements";
-import { ChatItemType } from "../../../types";
+import { IChatItem } from "../../../types";
 import "./style.css";
+import { BACKEND_BASE_URL } from "../../../constant";
 
 const ChatItemGroup = ({
   chatList,
   selectedChatItem,
   onSelect,
 }: {
-  chatList: ChatItemType[];
-  selectedChatItem: ChatItemType | null;
-  onSelect: (chatItem: ChatItemType) => void;
+  chatList: IChatItem[];
+  selectedChatItem: IChatItem | null;
+  onSelect: (chatItem: IChatItem) => void;
 }) => {
   return (
     <div className="w-full flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
@@ -22,14 +23,10 @@ const ChatItemGroup = ({
           }`}
         >
           <ChatItem
+            {...chatItem}
             key={index}
-            id={index}
-            avatar={chatItem.avatar}
-            alt={chatItem.alt}
-            title={chatItem.title}
-            subtitle={chatItem.subtitle}
-            date={chatItem.date}
-            unread={chatItem.unread}
+            id={chatItem._id}
+            avatar={BACKEND_BASE_URL + chatItem.avatar}
             onClick={() => onSelect(chatItem)}
             statusColor={chatItem.status === "online" ? "#18bf4b" : "gray"}
           />

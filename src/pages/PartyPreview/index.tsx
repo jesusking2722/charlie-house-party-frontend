@@ -8,6 +8,7 @@ import {
   Progress,
   Rater,
   SharingButtonGroup,
+  Spinner,
   Stepper,
   StepperItem,
   StickerCheckbox,
@@ -19,17 +20,14 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, store } from "../../redux/store";
-import { Applicant, Party } from "../../types";
+import { Applicant, Party, User } from "../../types";
 import { BACKEND_BASE_URL, DOMAIN } from "../../constant";
 import ApplicantGroup from "./ApplicantGroup";
 import { motion } from "motion/react";
 import socket from "../../lib/socketInstance";
 import toast from "react-hot-toast";
-import {
-  formatDate,
-  getRemainingDays,
-  getRemaningDaysPercent,
-} from "../../utils";
+import { getRemainingDays, getRemaningDaysPercent } from "../../utils";
+import { useNavigate } from "react-router-dom";
 
 const initialSteps: StepperItem[] = [
   { icon: "solar:documents-bold", label: "Publish", completed: true },
@@ -60,11 +58,14 @@ const PartyPreview = () => {
   const [steps, setSteps] = useState<StepperItem[]>(initialSteps);
   const [stickers, setStickers] = useState<StickerCheckbox[]>([]);
   const [loadingApply, setLoadingApply] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { partyId } = useParams();
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { parties } = useSelector((state: RootState) => state.party);
+
+  const navigate = useNavigate();
 
   const handleStickersCheck = (sticker: StickerCheckbox) => {
     setStickers(
@@ -131,9 +132,40 @@ const PartyPreview = () => {
       }
       toast.success("Applied successfully");
     } catch (error) {
-      console.log("handle apply error: ", error);
+      console.error("handle apply error: ", error);
     } finally {
       setLoadingApply(false);
+    }
+  };
+
+  const handleDirectMessage = async () => {
+    if (
+      user?.membership !== "premium" &&
+      selectedParty?.creator?._id === user?._id
+    )
+      return;
+    try {
+      debugger;
+      setLoading(true);
+      const waitForUpdatedMe = new Promise<User>((resolve) => {
+        const unsubscribe = store.subscribe(() => {
+          const state = store.getState();
+          const contacter = state.auth.user?.contacts.find(
+            (contact) => contact._id === selectedParty?.creator?._id
+          );
+          if (contacter && contacter._id) {
+            unsubscribe();
+            resolve(contacter);
+          }
+        });
+      });
+      socket.emit("direct-party-apply", selectedParty?.creator?._id, user?._id);
+      const contacter = await waitForUpdatedMe;
+      navigate(`/chat/${contacter._id}`);
+    } catch (error) {
+      console.error("handle direct message error: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,6 +193,7 @@ const PartyPreview = () => {
 
   return (
     <div className="w-[80%] mx-auto py-8">
+      {loading && <Spinner />}
       <div className="w-full flex flex-row items-center justify-between mb-8">
         <div className="w-full flex flex-row items-center gap-2">
           <h1 className="text-black font-semibold text-3xl">Party Overview</h1>
@@ -255,7 +288,10 @@ const PartyPreview = () => {
             {user?.membership === "premium" &&
               user._id !== selectedParty?.creator?._id && (
                 <Tooltip message="Send direct message to creator">
-                  <IconButton icon="solar:plain-bold-duotone" />
+                  <IconButton
+                    icon="solar:plain-bold-duotone"
+                    onClick={handleDirectMessage}
+                  />
                 </Tooltip>
               )}
           </div>

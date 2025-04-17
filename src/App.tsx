@@ -67,6 +67,7 @@ function App() {
           <Route path="create-party" element={<CreateParty />} />
           <Route path="notification" element={<Notification />} />
           <Route path="chat" element={<Chat />} />
+          <Route path="chat/:contacterId" element={<Chat />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

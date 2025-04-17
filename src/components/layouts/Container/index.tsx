@@ -9,12 +9,14 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   const isAuthPage = ["/register", "/login", "/onboarding"].includes(pathname);
 
   const isPartyDetailPage = pathname.startsWith("/parties/");
+  const isChatDetailPage = pathname.startsWith("/chat/");
   const isProfileDetailPage = pathname.startsWith("/profile/");
 
   const isNotFound = !(
     isAuthPage ||
     isPartyDetailPage ||
     isProfileDetailPage ||
+    isChatDetailPage ||
     [
       "/dashboard",
       "/profile",

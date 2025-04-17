@@ -17,7 +17,13 @@ const Rater = ({ rate }: { rate: number }) => {
         className="max-w-[120px] p-0 m-0"
         readOnly={true}
       />
-      <span className="text-xs font-semibold text-green-500">{rate}</span>
+      <span
+        className={`text-xs font-semibold ${
+          rate === 0 ? "text-gray-400" : "text-green-500"
+        }`}
+      >
+        {rate}
+      </span>
     </div>
   );
 };
