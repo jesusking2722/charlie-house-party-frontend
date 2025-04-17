@@ -19,7 +19,7 @@ const PricingCard: FC<PricingCardProps> = ({
 }) => {
   return (
     <motion.div
-      initial={{ x: -300 }}
+      initial={{ x: -100 }}
       animate={{ x: 0 }}
       transition={{ type: "spring" }}
       className="bg-white/30 backdrop-blur-sm overflow-hidden rounded-xl shadow-lg"

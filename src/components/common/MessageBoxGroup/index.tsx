@@ -4,7 +4,7 @@ import { IMessage } from "../../../types";
 
 const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
   return (
-    <div className="flex-1 overflow-y-auto flex flex-col h-full">
+    <div className="overflow-y-auto flex flex-col h-full">
       <div className="flex flex-col gap-4 p-2">
         {messages.map((message) => (
           <div
