@@ -1,13 +1,26 @@
 import { MessageBox } from "react-chat-elements";
 import "./style.css";
 import { IMessage } from "../../../types";
+import { useEffect, useRef } from "react";
 
 const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="overflow-y-auto flex flex-col h-full">
-      <div className="flex flex-col gap-4 p-2">
+      <div className="flex flex-col-reverse gap-4 p-2">
+        {" "}
+        {/* Reverse container */}
+        {/* Anchor for auto-scrolling */}
+        <div ref={messagesEndRef} />
         {messages.map((message) => (
           <div
+            key={message._id}
             className={`${
               message.position === "left" ? "message-left" : "message-right"
             }`}

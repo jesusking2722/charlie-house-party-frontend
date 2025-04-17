@@ -17,6 +17,7 @@ import { RootState } from "../../redux/store";
 import { BACKEND_BASE_URL } from "../../constant";
 import countryList from "react-select-country-list";
 import UploadGroup from "./UploadGroup";
+import ChatInput from "./ChatInput";
 
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
@@ -26,7 +27,7 @@ const Chat = () => {
     null
   );
   const [selectedContacter, setSelectedContacter] = useState<User | null>(null);
-  const [text, setText] = useState<string>();
+  const [text, setText] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -133,9 +134,8 @@ const Chat = () => {
           {/* Fixed Input Container */}
           <div className="sticky bottom-0 bg-transparent pt-4">
             <div className="flex flex-row items-center gap-2 p-1">
-              <Input
-                type="text"
-                placeholder="Type your message here...."
+              <ChatInput
+                placeholder="Type your message here..."
                 value={text}
                 onChange={setText}
               />
