@@ -89,10 +89,10 @@ const Navbar = () => {
             onClick={updateReadNotifications}
           />
           <LinkIconButton
-            label="Chat"
+            label="Message"
             icon="solar:chat-line-bold-duotone"
-            path="chat"
-            active={pathname.includes("chat")}
+            path="message"
+            active={pathname.includes("message")}
           />
           <LinkIconButton
             label="Shop"

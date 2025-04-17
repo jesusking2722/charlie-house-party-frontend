@@ -66,7 +66,7 @@ function App() {
           <Route path="parties/:partyId" element={<PartyPreview />} />
           <Route path="create-party" element={<CreateParty />} />
           <Route path="notification" element={<Notification />} />
-          <Route path="chat" element={<Chat />} />
+          <Route path="message" element={<Chat />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
