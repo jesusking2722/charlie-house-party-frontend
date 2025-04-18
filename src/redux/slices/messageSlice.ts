@@ -23,7 +23,7 @@ const messageSlice = createSlice({
       state: MessageState,
       action: PayloadAction<{ newMessage: Message }>
     ) {
-      state.messages.unshift(action.payload.newMessage);
+      state.messages.push(action.payload.newMessage);
     },
   },
 });

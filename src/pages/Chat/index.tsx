@@ -62,6 +62,7 @@ const Chat = () => {
     }));
     setSelectedMessages(contacterIMessages);
     setSelectedContacter(contacter);
+    setSelectedChatItem(chatItem);
   };
 
   const handleUploadClick = () => fileInputRef.current?.click();
@@ -81,12 +82,18 @@ const Chat = () => {
 
   const handleSend = async () => {
     try {
-      if (text === "" || !user || !selectedContacter) return;
+      if (text === "" || !user || !selectedContacter || !selectedChatItem)
+        return;
+      const totalMessages = messages.length;
       const waitForNewMessage = new Promise<Message>((resolve) => {
         const unsubscribe = store.subscribe(() => {
           const state = store.getState();
-          const latestMessage = state.message.messages[0];
-          if (latestMessage && latestMessage._id) {
+          const latestMessage =
+            state.message.messages[state.message.messages.length - 1];
+          if (
+            latestMessage._id &&
+            totalMessages < state.message.messages.length
+          ) {
             unsubscribe();
             resolve(latestMessage);
           }
@@ -103,6 +110,25 @@ const Chat = () => {
           text
         );
         const latestMessage = await waitForNewMessage;
+        const newMessage: IMessage = {
+          ...latestMessage,
+          _id: latestMessage._id as string,
+          position: latestMessage.sender._id === user._id ? "right" : "left",
+          unread: latestMessage.status !== "read" ? 1 : 0,
+        };
+        setSelectedMessages([...selectedMessages, newMessage]);
+        const updatedSelectedChatItem: IChatItem = {
+          ...selectedChatItem,
+          subtitle: latestMessage.text,
+        };
+        const updatedChatList = chatList.map((chat) =>
+          chat._id === selectedChatItem._id
+            ? { ...chat, subtitle: latestMessage.text }
+            : chat
+        );
+        setChatList(updatedChatList);
+        setSelectedChatItem(updatedSelectedChatItem);
+        setText("");
       }
     } catch (error) {
       console.error("handle send error: ", error);
@@ -123,9 +149,7 @@ const Chat = () => {
           date: new Date(),
           title: contacter.name ?? "",
           subtitle:
-            contacterMessages.length > 0
-              ? contacterMessages[contacterMessages.length - 1].text
-              : "",
+            messages.length > 0 ? messages[messages.length - 1].text : "",
           unread: contacterMessages.filter(
             (message) => message.status !== "read"
           ).length,
@@ -138,6 +162,9 @@ const Chat = () => {
         (contacter) => contacter._id === params.contacterId
       );
       if (!contacter || !user) return;
+      const contacterMessages = messages.filter(
+        (message) => message.sender._id === contacter._id
+      );
       const chatItem: IChatItem = {
         _id: contacter._id ?? "",
         avatar: contacter.avatar ?? "",
@@ -145,10 +172,15 @@ const Chat = () => {
         status: contacter.status ?? "offline",
         date: new Date(),
         title: contacter.name ?? "",
-        subtitle: "What are you doing? Something else you are doing",
-        unread: 1,
+        subtitle:
+          contacterMessages.length > 0
+            ? contacterMessages[contacterMessages.length - 1].text
+            : "",
+        unread: contacterMessages.filter((message) => message.status !== "read")
+          .length,
       };
       setSelectedContacter(contacter);
+      setSelectedChatItem(chatItem);
     }
   }, [params, user]);
 
@@ -185,7 +217,7 @@ const Chat = () => {
           } border border-white p-4 bg-white/20 backdrop-blur-md rounded-md pt-16 pb-4 px-4 shadow-lg transition-all duration-300 ease-in-out`}
         >
           {/* Messages Container */}
-          <div className="mb-4 h-[600px]">
+          <div className="mb-4 h-[550px]">
             <MessageBoxGroup messages={selectedMessages} />
           </div>
           {/* Fixed Input Container */}
