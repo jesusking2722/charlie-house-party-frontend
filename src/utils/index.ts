@@ -14,3 +14,8 @@ export {
 } from "./country";
 export { wait } from "./wait";
 export { getApplicantScore } from "./ranking";
+export {
+  convertMultipleMessagesToIMessages,
+  convertMultipleIChatItems,
+  convertSingleIChatItem,
+} from "./message";

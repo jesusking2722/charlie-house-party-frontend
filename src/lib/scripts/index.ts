@@ -13,4 +13,8 @@ export {
 export { fetchAllUsers } from "./user";
 export { fetchAiResponse } from "./ai";
 export { fetchAllParties } from "./party";
-export { fetchAllMessages, fetchSelectedMessages } from "./message";
+export {
+  fetchAllMessages,
+  fetchSelectedMessages,
+  updateMessagesRead,
+} from "./message";

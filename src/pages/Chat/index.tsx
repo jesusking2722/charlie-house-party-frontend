@@ -3,6 +3,7 @@ import {
   Badge,
   ChatItemGroup,
   Input,
+  Loader,
   MessageBoxGroup,
   Rater,
   SearchInput,
@@ -20,6 +21,10 @@ import countryList from "react-select-country-list";
 import UploadGroup from "./UploadGroup";
 import ChatInput from "./ChatInput";
 import socket from "../../lib/socketInstance";
+import {
+  convertMultipleIChatItems,
+  convertMultipleMessagesToIMessages,
+} from "../../utils";
 
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
@@ -33,16 +38,22 @@ const Chat = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedMessageLoading, setSelectedMessageLoading] =
+    useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const countryConverter = countryList();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { messages } = useSelector((state: RootState) => state.message);
+  const { messages, currentSenderId, currentMessageId } = useSelector(
+    (state: RootState) => state.message
+  );
 
   const params = useParams();
 
   const handleChatListSelect = async (chatItem: IChatItem) => {
+    debugger;
+    setSelectedMessageLoading(true);
     const contacter = user?.contacts.find(
       (contacter) => contacter._id === chatItem._id
     );
@@ -54,15 +65,60 @@ const Chat = () => {
         (message.sender._id === contacter._id &&
           message.receiver._id === user._id)
     );
-    const contacterIMessages: IMessage[] = contacterMessages.map((message) => ({
-      ...message,
-      _id: message._id as string,
-      position: message.sender._id === user._id ? "right" : "left",
-      unread: 0,
-    }));
-    setSelectedMessages(contacterIMessages);
+
+    // update messages to read if there are unread messages on selected chat.
+    const updatingMessages = contacterMessages.filter(
+      (message) => message.status !== "read"
+    );
+    if (updatingMessages.length > 0) {
+      // wait for message's read in redux store.
+      const waitForUpdateMessage = new Promise<Message>((resolve) => {
+        const unsubscribe = store.subscribe(() => {
+          const state = store.getState();
+          const updatedMessage = state.message.messages.find(
+            (message) =>
+              message._id === updatingMessages[0]._id &&
+              message.status === "read"
+          );
+          if (
+            updatedMessage &&
+            updatedMessage._id &&
+            updatedMessage.status === "read"
+          ) {
+            unsubscribe();
+            resolve(updatedMessage);
+          }
+        });
+      });
+
+      socket.emit("message:multiple-update-read", updatingMessages);
+      await waitForUpdateMessage;
+      const contacterMessages = messages.filter(
+        (message) =>
+          (message.sender._id === user._id &&
+            message.receiver._id === contacter._id) ||
+          (message.sender._id === contacter._id &&
+            message.receiver._id === user._id)
+      );
+      const converttedIMessages = convertMultipleMessagesToIMessages(
+        contacterMessages,
+        user._id as string
+      );
+      setSelectedMessages(converttedIMessages);
+    } else {
+      const converttedIMessages = convertMultipleMessagesToIMessages(
+        contacterMessages,
+        user._id as string
+      );
+      setSelectedMessages(converttedIMessages);
+    }
+
+    // update selected chat item to read if there are unread messages on selected chat.
+    const updatedChatItem: IChatItem = { ...chatItem, unread: 0 };
+    setSelectedChatItem(updatedChatItem);
+    // set selecetd contacter
     setSelectedContacter(contacter);
-    setSelectedChatItem(chatItem);
+    setSelectedMessageLoading(false);
   };
 
   const handleUploadClick = () => fileInputRef.current?.click();
@@ -136,27 +192,66 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      const chatList: IChatItem[] = user.contacts.map((contacter) => {
-        const contacterMessages = messages.filter(
-          (message) => message.sender._id === contacter._id
+    const updateRealTimeChatItem = async (formattedChatList: IChatItem[]) => {
+      if (
+        selectedContacter &&
+        currentSenderId &&
+        selectedContacter._id === currentSenderId &&
+        currentMessageId
+      ) {
+        // wait for message's read in redux store.
+        const waitForUpdateMessage = new Promise<Message>((resolve) => {
+          const unsubscribe = store.subscribe(() => {
+            const state = store.getState();
+            const updatedMessage = state.message.messages.find(
+              (message) => message._id === currentMessageId
+            );
+            if (
+              updatedMessage &&
+              updatedMessage._id &&
+              updatedMessage.status === "read"
+            ) {
+              unsubscribe();
+              resolve(updatedMessage);
+            }
+          });
+        });
+        socket.emit("message:read", currentMessageId);
+        await waitForUpdateMessage;
+        const updatedChatList = formattedChatList.map((chat) =>
+          chat._id === currentSenderId ? { ...chat, unread: 0 } : chat
         );
-        return {
-          _id: contacter._id ?? "",
-          avatar: contacter.avatar ?? "",
-          alt: contacter.name ?? "",
-          status: contacter.status ?? "offline",
-          date: new Date(),
-          title: contacter.name ?? "",
-          subtitle:
-            messages.length > 0 ? messages[messages.length - 1].text : "",
-          unread: contacterMessages.filter(
-            (message) => message.status !== "read"
-          ).length,
-        };
-      });
-      setChatList(chatList);
+        setChatList(updatedChatList);
+      } else {
+        setChatList(formattedChatList);
+      }
+    };
+
+    if (user) {
+      if (selectedContacter) {
+        const selectedContacterMessages = messages.filter(
+          (message) =>
+            (message.sender._id === user._id &&
+              message.receiver._id === selectedContacter._id) ||
+            (message.sender._id === selectedContacter._id &&
+              message.receiver._id === user._id)
+        );
+        const converttedIMessages = convertMultipleMessagesToIMessages(
+          selectedContacterMessages,
+          user._id as string
+        );
+        setSelectedMessages(converttedIMessages);
+      }
+
+      const converttedChatList = convertMultipleIChatItems(
+        user._id as string,
+        user.contacts,
+        messages
+      );
+      // when user is looking at the selected contacter's messaging, update his chat item to read.
+      updateRealTimeChatItem(converttedChatList);
     }
+
     if (params.contacterId && user) {
       const contacter = user.contacts.find(
         (contacter) => contacter._id === params.contacterId
@@ -182,7 +277,7 @@ const Chat = () => {
       setSelectedContacter(contacter);
       setSelectedChatItem(chatItem);
     }
-  }, [params, user]);
+  }, [params, user, messages]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
@@ -216,66 +311,72 @@ const Chat = () => {
             selectedContacter ? "w-1/2" : "w-3/4"
           } border border-white p-4 bg-white/20 backdrop-blur-md rounded-md pt-16 pb-4 px-4 shadow-lg transition-all duration-300 ease-in-out`}
         >
-          {/* Messages Container */}
-          <div className="mb-4 h-[550px]">
-            <MessageBoxGroup messages={selectedMessages} />
-          </div>
-          {/* Fixed Input Container */}
-          <div className="sticky bottom-0 bg-transparent pt-4">
-            <div className="flex flex-row items-center gap-2 p-1">
-              <ChatInput
-                placeholder="Type your message here..."
-                value={text}
-                onChange={setText}
-              />
-              <Tooltip message="Send">
-                <button
-                  className={`p-2 rounded-lg shrink-0 transition-all duration-300 ease-in-out ${
-                    selectedContacter
-                      ? "bg-white cursor-pointer hover:bg-black/10 hover:backdrop-blur-sm hover:shadow-lg"
-                      : "bg-gray-300 cursor-not-allowed"
-                  }`}
-                  disabled={!selectedContacter}
-                  onClick={handleSend}
-                >
-                  <Icon
-                    icon="solar:plain-bold-duotone"
-                    className="text-black w-5 h-5"
-                  />
-                </button>
-              </Tooltip>
-              <Tooltip message="Upload files">
-                <button
-                  className={`p-2 rounded-lg shrink-0 transition-all duration-300 ease-in-out ${
-                    selectedContacter
-                      ? "bg-white cursor-pointer hover:bg-black/10 hover:backdrop-blur-sm hover:shadow-lg"
-                      : "bg-gray-300 cursor-not-allowed"
-                  }`}
-                  disabled={!selectedContacter}
-                  onClick={handleUploadClick}
-                >
-                  <Icon
-                    icon="solar:cloud-upload-bold-duotone"
-                    className="text-black w-5 h-5"
-                  />
-                </button>
-              </Tooltip>
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                className="hidden"
-                onChange={handleFileChange}
-              />
+          {selectedMessageLoading ? (
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <Loader />
             </div>
-            {files.length > 0 && (
-              <UploadGroup
-                files={files}
-                loading={uploadLoading}
-                onDelete={handleUploadDelete}
-              />
-            )}
-          </div>
+          ) : (
+            <>
+              {/* Messages Container */}
+              <MessageBoxGroup messages={selectedMessages} />
+              {/* Fixed Input Container */}
+              <div className="sticky bottom-0 bg-transparent pt-4">
+                <div className="flex flex-row items-end gap-2 p-1">
+                  <ChatInput
+                    placeholder="Type your message here..."
+                    value={text}
+                    onChange={setText}
+                  />
+                  <Tooltip message="Send">
+                    <button
+                      className={`p-2 rounded-lg shrink-0 transition-all duration-300 ease-in-out ${
+                        selectedContacter
+                          ? "bg-white cursor-pointer hover:bg-black/10 hover:backdrop-blur-sm hover:shadow-lg"
+                          : "bg-gray-300 cursor-not-allowed"
+                      }`}
+                      disabled={!selectedContacter}
+                      onClick={handleSend}
+                    >
+                      <Icon
+                        icon="solar:plain-bold-duotone"
+                        className="text-black w-5 h-5"
+                      />
+                    </button>
+                  </Tooltip>
+                  <Tooltip message="Upload files">
+                    <button
+                      className={`p-2 rounded-lg shrink-0 transition-all duration-300 ease-in-out ${
+                        selectedContacter
+                          ? "bg-white cursor-pointer hover:bg-black/10 hover:backdrop-blur-sm hover:shadow-lg"
+                          : "bg-gray-300 cursor-not-allowed"
+                      }`}
+                      disabled={!selectedContacter}
+                      onClick={handleUploadClick}
+                    >
+                      <Icon
+                        icon="solar:cloud-upload-bold-duotone"
+                        className="text-black w-5 h-5"
+                      />
+                    </button>
+                  </Tooltip>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                {files.length > 0 && (
+                  <UploadGroup
+                    files={files}
+                    loading={uploadLoading}
+                    onDelete={handleUploadDelete}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </motion.div>
 
         {/* Chatter profile */}

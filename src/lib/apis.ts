@@ -25,3 +25,4 @@ export const FETCH_ALL_PARTIES = "/party/all";
 // message apis
 export const FETCH_SELECTED_MESSAGES = "/message/";
 export const FETCH_ALL_MESSAGES = "/message/all/";
+export const UPDATE_MESSAGES_READ = "/message/read";

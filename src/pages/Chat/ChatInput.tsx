@@ -23,7 +23,7 @@ const ChatInput: FC<ChatInputProps> = ({
     if (textareaRef.current) {
       const el = textareaRef.current;
       // Store original line height (should match your CSS)
-      const lineHeight = parseInt(getComputedStyle(el).lineHeight) || 20; // Fallback to 20px
+      const lineHeight = parseInt(getComputedStyle(el).lineHeight) || 20;
 
       // Start with single line height
       el.style.height = `${lineHeight}px`;
@@ -42,12 +42,12 @@ const ChatInput: FC<ChatInputProps> = ({
   return (
     <div className="w-full flex flex-col gap-1">
       <div
-        className={`group w-full flex items-center gap-2 rounded-lg px-3 py-2
-        bg-transparent border border-gray-400 transition-all duration-300
-        hover:border-[#c4f70f] hover:bg-white focus-within:bg-white hover:shadow-lg
-        focus-within:border-[#c4f70f] focus-within:shadow-lg ${
-          isInvalid ? "border-red-500" : ""
-        }`}
+        className={`group w-full flex items-start gap-2 rounded-lg px-3 py-2
+    bg-transparent border border-gray-400 transition-all duration-300
+    hover:border-[#c4f70f] hover:bg-white focus-within:bg-white hover:shadow-lg
+    focus-within:border-[#c4f70f] focus-within:shadow-lg ${
+      isInvalid ? "border-red-500" : ""
+    }`}
       >
         <textarea
           ref={textareaRef}
@@ -59,6 +59,7 @@ const ChatInput: FC<ChatInputProps> = ({
           onChange={(e) => onChange?.(e.target.value)}
         />
       </div>
+
       {isInvalid && invalidTxt && (
         <p className="w-full text-red-500 text-xs font-semibold p-1">
           {invalidTxt}

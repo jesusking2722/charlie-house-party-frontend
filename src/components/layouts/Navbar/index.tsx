@@ -9,16 +9,20 @@ import { updateMe } from "../../../lib/scripts";
 import { setAuthUser } from "../../../redux/slices/authSlice";
 
 const Navbar = () => {
-  const [unreadCount, setUnreadCount] = useState<number | null>(null);
+  const [notificationUnread, setNotificationUnread] = useState<number | null>(
+    null
+  );
+  const [chatUnread, setChatUnread] = useState<number | null>(null);
 
   const { pathname } = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
+  const { messages } = useSelector((state: RootState) => state.message);
   const dispatch = useDispatch();
 
   const updateReadNotifications = async () => {
     try {
       if (!user) return;
-      if (unreadCount && unreadCount > 0) {
+      if (notificationUnread && notificationUnread > 0) {
         const notifications = user.notifications ?? [];
         let updatedNotifications = notifications.map((notification) => {
           return {
@@ -34,7 +38,7 @@ const Navbar = () => {
 
         if (response.ok) {
           dispatch(setAuthUser({ user: response.data.user }));
-          setUnreadCount(null);
+          setNotificationUnread(null);
         }
       }
     } catch (error) {
@@ -43,12 +47,28 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    debugger;
+    if (!user) return;
+    const chatUnread = messages.filter(
+      (message) =>
+        message.receiver._id === user._id && message.status !== "read"
+    ).length;
+    if (chatUnread && chatUnread > 0) {
+      setChatUnread(chatUnread);
+    } else {
+      setChatUnread(null);
+    }
+  }, [messages, user]);
+
+  useEffect(() => {
     if (user) {
       const unreads = user.notifications?.filter(
         (notification) => !notification.read
       ).length;
       if (unreads && unreads > 0) {
-        setUnreadCount(unreads);
+        setNotificationUnread(unreads);
+      } else {
+        setNotificationUnread(null);
       }
     }
   }, [user]);
@@ -84,7 +104,7 @@ const Navbar = () => {
             label="Notification"
             icon="solar:bell-bing-bold-duotone"
             path="notification"
-            count={unreadCount}
+            count={notificationUnread}
             active={pathname.includes("notification")}
             onClick={updateReadNotifications}
           />
@@ -92,6 +112,7 @@ const Navbar = () => {
             label="Chat"
             icon="solar:chat-line-bold-duotone"
             path="chat"
+            count={chatUnread}
             active={pathname.includes("chat")}
           />
           <LinkIconButton

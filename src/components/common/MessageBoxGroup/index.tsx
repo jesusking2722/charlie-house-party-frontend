@@ -1,102 +1,176 @@
 import { MessageBox } from "react-chat-elements";
 import "./style.css";
 import { IMessage } from "../../../types";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
 const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prevMessageCount = useRef(messages.length);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Only auto-scroll if:
+    // 1. New message was added (array length increased)
+    // 2. User isn't currently scrolling (optional)
+    const shouldScroll = messages.length > prevMessageCount.current;
+    prevMessageCount.current = messages.length;
+
+    if (shouldScroll) {
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
 
   return (
-    <div className="overflow-y-auto flex flex-col h-full">
-      <div className="flex flex-col-reverse gap-4 p-2">
-        {" "}
-        {/* Reverse container */}
-        {/* Anchor for auto-scrolling */}
-        <div ref={messagesEndRef} />
-        {messages.map((message) => (
-          <div
-            key={message._id}
-            className={`${
-              message.position === "left" ? "message-left" : "message-right"
-            }`}
-          >
-            {message.type === "text" ? (
-              <MessageBox
-                {...message}
-                id={message._id}
-                notch={true}
-                type="text"
-                titleColor="#09cbf9"
-                replyButton
-                removeButton
-              />
-            ) : message.type === "photo" ? (
-              <MessageBox
-                {...message}
-                id={message._id}
-                notch={true}
-                type="photo"
-                data={{
-                  uri: message.photo ?? "",
-                  status: {
-                    autoDownload: true,
-                  },
-                }}
-                titleColor="#09cbf9"
-                replyButton
-                removeButton
-              />
-            ) : message.type === "file" ? (
-              <MessageBox
-                {...message}
-                id={message._id}
-                notch={true}
-                type="file"
-                data={{
-                  uri: message.file ?? "",
-                  status: {
-                    autoDownload: true,
-                  },
-                }}
-                titleColor="#09cbf9"
-                replyButton
-                removeButton
-              />
-            ) : message.type === "video" ? (
-              <MessageBox
-                {...message}
-                id={message._id}
-                notch={true}
-                type="video"
-                controlsList=""
-                data={{
-                  videoURL: message.video ?? "",
-                  thumbnailURL: "",
-                  status: {
-                    click: false,
-                    loading: 0,
-                  },
-                }}
-                titleColor="#09cbf9"
-                replyButton
-                removeButton
-              />
-            ) : message.type === "audio" ? (
-              <MessageBox
-                {...message}
-                id={message._id}
-                notch={true}
-                type="audio"
-                data={{
-                  audioURL: message.audio ?? "",
-                }}
-                titleColor="#09cbf9"
-                replyButton
-                removeButton
-              />
-            ) : null}
-          </div>
-        ))}
+    <div
+      ref={containerRef}
+      className="overflow-y-auto flex flex-col h-full"
+      style={{ scrollBehavior: "smooth" }}
+    >
+      <div className="flex flex-col gap-4 p-2">
+        {messages
+          .sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          )
+          .map((message) => (
+            <div
+              key={message._id}
+              className={`${
+                message.position === "left" ? "message-left" : "message-right"
+              }`}
+            >
+              {/* Message rendering logic remains unchanged */}
+              {message.type === "text" ? (
+                <motion.div
+                  initial={
+                    message.position === "left"
+                      ? { x: -50, opacity: 0 }
+                      : { x: 50, opacity: 0 }
+                  }
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ type: "spring" }}
+                >
+                  <MessageBox
+                    {...message}
+                    id={message._id}
+                    notch={true}
+                    type="text"
+                    titleColor="#09cbf9"
+                    replyButton={false}
+                    removeButton={false}
+                  />
+                </motion.div>
+              ) : message.type === "photo" ? (
+                <motion.div
+                  initial={
+                    message.position === "left"
+                      ? { x: -50, opacity: 0 }
+                      : { x: 50, opacity: 0 }
+                  }
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ type: "spring" }}
+                >
+                  <MessageBox
+                    {...message}
+                    id={message._id}
+                    notch={true}
+                    type="photo"
+                    data={{
+                      uri: message.photo ?? "",
+                      status: {
+                        autoDownload: true,
+                      },
+                    }}
+                    titleColor="#09cbf9"
+                    replyButton={false}
+                    removeButton={false}
+                  />
+                </motion.div>
+              ) : message.type === "file" ? (
+                <motion.div
+                  initial={
+                    message.position === "left"
+                      ? { x: -50, opacity: 0 }
+                      : { x: 50, opacity: 0 }
+                  }
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ type: "spring" }}
+                >
+                  <MessageBox
+                    {...message}
+                    id={message._id}
+                    notch={true}
+                    type="file"
+                    data={{
+                      uri: message.file ?? "",
+                      status: {
+                        autoDownload: true,
+                      },
+                    }}
+                    titleColor="#09cbf9"
+                    replyButton={false}
+                    removeButton={false}
+                  />
+                </motion.div>
+              ) : message.type === "video" ? (
+                <motion.div
+                  initial={
+                    message.position === "left"
+                      ? { x: -50, opacity: 0 }
+                      : { x: 50, opacity: 0 }
+                  }
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ type: "spring" }}
+                >
+                  <MessageBox
+                    {...message}
+                    id={message._id}
+                    notch={true}
+                    type="video"
+                    controlsList=""
+                    data={{
+                      videoURL: message.video ?? "",
+                      thumbnailURL: "",
+                      status: {
+                        click: false,
+                        loading: 0,
+                      },
+                    }}
+                    titleColor="#09cbf9"
+                    replyButton={false}
+                    removeButton={false}
+                  />
+                </motion.div>
+              ) : message.type === "audio" ? (
+                <motion.div
+                  initial={
+                    message.position === "left"
+                      ? { x: -50, opacity: 0 }
+                      : { x: 50, opacity: 0 }
+                  }
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ type: "spring" }}
+                >
+                  <MessageBox
+                    {...message}
+                    id={message._id}
+                    notch={true}
+                    type="audio"
+                    data={{
+                      audioURL: message.audio ?? "",
+                    }}
+                    titleColor="#09cbf9"
+                    replyButton={false}
+                    removeButton={false}
+                  />
+                </motion.div>
+              ) : null}
+            </div>
+          ))}
       </div>
     </div>
   );

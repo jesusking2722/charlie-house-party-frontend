@@ -10,7 +10,13 @@ import { Applicant, Message, Notification, Party, User } from "../types";
 import { addNewNotification, setAuthUser } from "../redux/slices/authSlice";
 import toast from "react-hot-toast";
 import { addNewApplicant } from "../redux/slices/applicantSlice";
-import { addNewMessage } from "../redux/slices/messageSlice";
+import {
+  addNewMessage,
+  setCurrentMessageId,
+  setCurrentSenderId,
+  updateMessage,
+  updateMessageToRead,
+} from "../redux/slices/messageSlice";
 
 const useSocket = () => {
   const dispatch = useDispatch();
@@ -44,8 +50,22 @@ const useSocket = () => {
       dispatch(setAuthUser({ user }));
     };
 
-    const handleNewMessage = (newMessage: Message) => {
+    const handleNewMessage = (
+      newMessage: Message,
+      senderId: string,
+      messageId: string
+    ) => {
       dispatch(addNewMessage({ newMessage }));
+      dispatch(setCurrentSenderId({ senderId }));
+      dispatch(setCurrentMessageId({ messageId }));
+    };
+
+    const handleUpdateMessage = (updatedMessage: Message) => {
+      dispatch(updateMessage({ updatedMessage }));
+    };
+
+    const handleUpdateMultipleMessagesRead = (updatedMessages: Message[]) => {
+      dispatch(updateMessageToRead({ updatedMessages }));
     };
 
     // party
@@ -62,6 +82,11 @@ const useSocket = () => {
 
     // message
     socket.on("message-received:text", handleNewMessage);
+    socket.on("message:update", handleUpdateMessage);
+    socket.on(
+      "message:updated-multiple-read",
+      handleUpdateMultipleMessagesRead
+    );
 
     return () => {
       socket.off("party:created", handleNewParty);
@@ -69,6 +94,11 @@ const useSocket = () => {
       socket.off("notification", handleNewNotification);
       socket.off("update-me", handleUpdateMeViaSocket);
       socket.off("message-received:text", handleNewMessage);
+      socket.off("message:update", handleUpdateMessage);
+      socket.off(
+        "message:updated-multiple-read",
+        handleUpdateMultipleMessagesRead
+      );
     };
   }, [dispatch, user]);
 };
