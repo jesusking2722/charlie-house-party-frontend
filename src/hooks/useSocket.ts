@@ -14,6 +14,7 @@ import {
   addNewMessage,
   setCurrentMessageId,
   setCurrentSenderId,
+  setTypingUser,
   updateMessage,
   updateMessageToRead,
 } from "../redux/slices/messageSlice";
@@ -68,6 +69,10 @@ const useSocket = () => {
       dispatch(updateMessageToRead({ updatedMessages }));
     };
 
+    const handleTypingUser = (typingUser: User | null) => {
+      dispatch(setTypingUser({ typingUser }));
+    };
+
     // party
     socket.on("party:created", handleNewParty);
 
@@ -87,6 +92,7 @@ const useSocket = () => {
       "message:updated-multiple-read",
       handleUpdateMultipleMessagesRead
     );
+    socket.on("message:user-typing", handleTypingUser);
 
     return () => {
       socket.off("party:created", handleNewParty);
@@ -99,6 +105,7 @@ const useSocket = () => {
         "message:updated-multiple-read",
         handleUpdateMultipleMessagesRead
       );
+      socket.off("message:user-typing", handleTypingUser);
     };
   }, [dispatch, user]);
 };

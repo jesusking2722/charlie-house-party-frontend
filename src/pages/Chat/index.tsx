@@ -9,12 +9,13 @@ import {
   SearchInput,
   Spinner,
   Tooltip,
+  TypingLoader,
 } from "../../components";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState, store } from "../../redux/store";
 import { BACKEND_BASE_URL } from "../../constant";
 import countryList from "react-select-country-list";
@@ -25,6 +26,7 @@ import {
   convertMultipleIChatItems,
   convertMultipleMessagesToIMessages,
 } from "../../utils";
+import { debounce } from "lodash";
 
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
@@ -40,14 +42,15 @@ const Chat = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedMessageLoading, setSelectedMessageLoading] =
     useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [showTypingLoader, setShowTypingLoader] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const countryConverter = countryList();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { messages, currentSenderId, currentMessageId } = useSelector(
-    (state: RootState) => state.message
-  );
+  const { messages, currentSenderId, currentMessageId, typingUser } =
+    useSelector((state: RootState) => state.message);
 
   const params = useParams();
 
@@ -191,6 +194,44 @@ const Chat = () => {
     }
   };
 
+  // Create separate debounce instances
+  const debouncedStopTyping = debounce(() => {
+    if (!selectedContacter || !user) return;
+    socket.emit("message:stop-typing", selectedContacter._id, user);
+    setIsTyping(false);
+  }, 1000);
+
+  const delayedLoader = debounce(() => {
+    setShowTypingLoader(true);
+  }, 300);
+
+  const handleChatInputChange = (val: string) => {
+    if (!selectedContacter || !user) return;
+
+    setText(val);
+
+    // Clear previous debounce
+    debouncedStopTyping.cancel();
+    delayedLoader.cancel();
+
+    // Immediate actions
+    if (!isTyping) {
+      socket.emit("message:start-typing", selectedContacter._id, user);
+      setIsTyping(true);
+      delayedLoader(); // Start loader delay
+    }
+
+    // Restart debounce timer
+    debouncedStopTyping();
+  };
+
+  useEffect(() => {
+    return () => {
+      debouncedStopTyping.cancel();
+      delayedLoader.cancel();
+    };
+  }, []);
+
   useEffect(() => {
     const updateRealTimeChatItem = async (formattedChatList: IChatItem[]) => {
       if (
@@ -321,11 +362,19 @@ const Chat = () => {
               <MessageBoxGroup messages={selectedMessages} />
               {/* Fixed Input Container */}
               <div className="sticky bottom-0 bg-transparent pt-4">
+                {showTypingLoader &&
+                  typingUser &&
+                  selectedContacter &&
+                  selectedContacter._id === typingUser._id && (
+                    <div className="p-2">
+                      <TypingLoader name={typingUser.name ?? ""} />
+                    </div>
+                  )}
                 <div className="flex flex-row items-end gap-2 p-1">
                   <ChatInput
                     placeholder="Type your message here..."
                     value={text}
-                    onChange={setText}
+                    onChange={handleChatInputChange}
                   />
                   <Tooltip message="Send">
                     <button

@@ -34,3 +34,4 @@ export { default as SearchInput } from "./SearchInput";
 export { default as ChatItemGroup } from "./ChatItemGroup";
 export { default as MessageBoxGroup } from "./MessageboxGroup";
 export { default as Loader } from "./Loader";
+export { default as TypingLoader } from "./TypingLoader";

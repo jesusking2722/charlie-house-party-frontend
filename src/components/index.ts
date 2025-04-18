@@ -32,6 +32,7 @@ export {
   ChatItemGroup,
   MessageBoxGroup,
   Loader,
+  TypingLoader,
 } from "./common";
 export type {
   CardEffectSliderItemType,

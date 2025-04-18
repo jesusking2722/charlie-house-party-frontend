@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Message } from "../../types";
+import { Message, User } from "../../types";
 
 interface MessageState {
   messages: Message[];
   currentSenderId: string | null;
   currentMessageId: string | null;
+  typingUser: User | null;
 }
 
 const initialMessageState: MessageState = {
   messages: [],
   currentSenderId: null,
   currentMessageId: null,
+  typingUser: null,
 };
 
 const messageSlice = createSlice({
@@ -34,6 +36,12 @@ const messageSlice = createSlice({
       action: PayloadAction<{ messageId: string }>
     ) {
       state.currentMessageId = action.payload.messageId;
+    },
+    setTypingUser(
+      state: MessageState,
+      action: PayloadAction<{ typingUser: User | null }>
+    ) {
+      state.typingUser = action.payload.typingUser;
     },
     addNewMessage(
       state: MessageState,
@@ -73,6 +81,7 @@ export const {
   setMessage,
   setCurrentSenderId,
   setCurrentMessageId,
+  setTypingUser,
   addNewMessage,
   updateMessageToRead,
   updateMessage,
