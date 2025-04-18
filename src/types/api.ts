@@ -1,4 +1,4 @@
-import {Party, User} from ".";
+import { Message, Party, User } from ".";
 
 export interface AuthResponse {
   token: string | null;
@@ -25,4 +25,8 @@ export interface AiResponse {
 
 export interface PartyAllResponse {
   parties: Party[];
+}
+
+export interface MessageResponse {
+  messages: Message[];
 }

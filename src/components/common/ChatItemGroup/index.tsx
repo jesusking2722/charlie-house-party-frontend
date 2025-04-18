@@ -10,7 +10,7 @@ const ChatItemGroup = ({
 }: {
   chatList: IChatItem[];
   selectedChatItem: IChatItem | null;
-  onSelect: (chatItem: IChatItem) => void;
+  onSelect: (chatItem: IChatItem) => Promise<void>;
 }) => {
   return (
     <div className="w-full flex flex-col gap-2 overflow-x-hidden overflow-y-auto">

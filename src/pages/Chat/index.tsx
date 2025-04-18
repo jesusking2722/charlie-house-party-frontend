@@ -6,13 +6,14 @@ import {
   MessageBoxGroup,
   Rater,
   SearchInput,
+  Spinner,
   Tooltip,
 } from "../../components";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, store } from "../../redux/store";
 import { BACKEND_BASE_URL } from "../../constant";
 import countryList from "react-select-country-list";
@@ -23,7 +24,7 @@ import socket from "../../lib/socketInstance";
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
   const [chatList, setChatList] = useState<IChatItem[]>([]);
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [selectedMessages, setSelectedMessages] = useState<IMessage[]>([]);
   const [selectedChatItem, setSelectedChatItem] = useState<IChatItem | null>(
     null
   );
@@ -31,21 +32,36 @@ const Chat = () => {
   const [text, setText] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const countryConverter = countryList();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const { messages } = useSelector((state: RootState) => state.message);
 
   const params = useParams();
 
-  const handleChatListSelect = (chatItem: IChatItem) => {
+  const handleChatListSelect = async (chatItem: IChatItem) => {
     const contacter = user?.contacts.find(
       (contacter) => contacter._id === chatItem._id
     );
-    if (!contacter) return;
+    if (!contacter || !user) return;
+    const contacterMessages = messages.filter(
+      (message) =>
+        (message.sender._id === user._id &&
+          message.receiver._id === contacter._id) ||
+        (message.sender._id === contacter._id &&
+          message.receiver._id === user._id)
+    );
+    const contacterIMessages: IMessage[] = contacterMessages.map((message) => ({
+      ...message,
+      _id: message._id as string,
+      position: message.sender._id === user._id ? "right" : "left",
+      unread: 0,
+    }));
+    setSelectedMessages(contacterIMessages);
     setSelectedContacter(contacter);
-    setSelectedChatItem(chatItem);
   };
 
   const handleUploadClick = () => fileInputRef.current?.click();
@@ -79,7 +95,13 @@ const Chat = () => {
       if (files.length > 0) {
         let formData = new FormData();
       } else {
-        socket.emit("message-send:text", user._id, selectedContacter._id, text);
+        socket.emit(
+          "message-send:text",
+          user._id,
+          selectedContacter._id,
+          user.name,
+          text
+        );
         const latestMessage = await waitForNewMessage;
       }
     } catch (error) {
@@ -89,23 +111,33 @@ const Chat = () => {
 
   useEffect(() => {
     if (user) {
-      const chatList: IChatItem[] = user.contacts.map((contacter) => ({
-        _id: contacter._id ?? "",
-        avatar: contacter.avatar ?? "",
-        alt: contacter.name ?? "",
-        status: contacter.status ?? "offline",
-        date: new Date(),
-        title: contacter.name ?? "",
-        subtitle: "What are you doing?",
-        unread: 1,
-      }));
+      const chatList: IChatItem[] = user.contacts.map((contacter) => {
+        const contacterMessages = messages.filter(
+          (message) => message.sender._id === contacter._id
+        );
+        return {
+          _id: contacter._id ?? "",
+          avatar: contacter.avatar ?? "",
+          alt: contacter.name ?? "",
+          status: contacter.status ?? "offline",
+          date: new Date(),
+          title: contacter.name ?? "",
+          subtitle:
+            contacterMessages.length > 0
+              ? contacterMessages[contacterMessages.length - 1].text
+              : "",
+          unread: contacterMessages.filter(
+            (message) => message.status !== "read"
+          ).length,
+        };
+      });
       setChatList(chatList);
     }
     if (params.contacterId && user) {
       const contacter = user.contacts.find(
         (contacter) => contacter._id === params.contacterId
       );
-      if (!contacter) return;
+      if (!contacter || !user) return;
       const chatItem: IChatItem = {
         _id: contacter._id ?? "",
         avatar: contacter.avatar ?? "",
@@ -116,13 +148,13 @@ const Chat = () => {
         subtitle: "What are you doing? Something else you are doing",
         unread: 1,
       };
-      setSelectedChatItem(chatItem);
       setSelectedContacter(contacter);
     }
   }, [params, user]);
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col gap-14">
+      {loading && <Spinner />}
       <div className="w-full flex gap-8 h-[700px]">
         {/* Chat list */}
         <motion.div
@@ -154,7 +186,7 @@ const Chat = () => {
         >
           {/* Messages Container */}
           <div className="mb-4 h-[600px]">
-            <MessageBoxGroup messages={messages} />
+            <MessageBoxGroup messages={selectedMessages} />
           </div>
           {/* Fixed Input Container */}
           <div className="sticky bottom-0 bg-transparent pt-4">
@@ -172,6 +204,7 @@ const Chat = () => {
                       : "bg-gray-300 cursor-not-allowed"
                   }`}
                   disabled={!selectedContacter}
+                  onClick={handleSend}
                 >
                   <Icon
                     icon="solar:plain-bold-duotone"

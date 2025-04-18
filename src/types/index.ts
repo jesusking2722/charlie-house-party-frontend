@@ -156,6 +156,7 @@ export interface Message {
   date: Date;
   status: "read" | "waiting" | "sent" | "received";
   focus: boolean;
+  text: string;
   forwarded: boolean;
   retracted: boolean;
   photo?: string;

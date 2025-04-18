@@ -21,3 +21,7 @@ export const FETCH_AI_RESPONSE_CREATE_PARTY = "/ai/create-party";
 
 // party apis
 export const FETCH_ALL_PARTIES = "/party/all";
+
+// message apis
+export const FETCH_SELECTED_MESSAGES = "/message/";
+export const FETCH_ALL_MESSAGES = "/message/all/";
