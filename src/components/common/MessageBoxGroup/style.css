@@ -9,3 +9,7 @@
 .message-right .rce-mbox-right-notch {
   fill: #d6eeff !important;
 }
+
+.rce-mbox-photo--img__block {
+  display: none !important;
+}

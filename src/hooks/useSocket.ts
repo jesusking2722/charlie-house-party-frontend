@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { addNewApplicant } from "../redux/slices/applicantSlice";
 import {
   addNewMessage,
+  addNewMessages,
   setCurrentMessageId,
   setCurrentSenderId,
   setTypingUser,
@@ -61,6 +62,16 @@ const useSocket = () => {
       dispatch(setCurrentMessageId({ messageId }));
     };
 
+    const handleNewFilesMessages = (
+      newMessages: Message[],
+      senderId: string,
+      messageId: string
+    ) => {
+      dispatch(addNewMessages({ newMessages }));
+      dispatch(setCurrentSenderId({ senderId }));
+      dispatch(setCurrentMessageId({ messageId }));
+    };
+
     const handleUpdateMessage = (updatedMessage: Message) => {
       dispatch(updateMessage({ updatedMessage }));
     };
@@ -87,6 +98,7 @@ const useSocket = () => {
 
     // message
     socket.on("message-received:text", handleNewMessage);
+    socket.on("message-received:files", handleNewFilesMessages);
     socket.on("message:update", handleUpdateMessage);
     socket.on(
       "message:updated-multiple-read",
@@ -100,6 +112,7 @@ const useSocket = () => {
       socket.off("notification", handleNewNotification);
       socket.off("update-me", handleUpdateMeViaSocket);
       socket.off("message-received:text", handleNewMessage);
+      socket.off("message-received:files", handleNewFilesMessages);
       socket.off("message:update", handleUpdateMessage);
       socket.off(
         "message:updated-multiple-read",

@@ -47,20 +47,6 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    debugger;
-    if (!user) return;
-    const chatUnread = messages.filter(
-      (message) =>
-        message.receiver._id === user._id && message.status !== "read"
-    ).length;
-    if (chatUnread && chatUnread > 0) {
-      setChatUnread(chatUnread);
-    } else {
-      setChatUnread(null);
-    }
-  }, [messages, user]);
-
-  useEffect(() => {
     if (user) {
       const unreads = user.notifications?.filter(
         (notification) => !notification.read
@@ -70,8 +56,17 @@ const Navbar = () => {
       } else {
         setNotificationUnread(null);
       }
+      const chatUnread = messages.filter(
+        (message) =>
+          message.receiver._id === user._id && message.status !== "read"
+      ).length;
+      if (chatUnread && chatUnread > 0) {
+        setChatUnread(chatUnread);
+      } else {
+        setChatUnread(null);
+      }
     }
-  }, [user]);
+  }, [user, messages]);
 
   return (
     <motion.div

@@ -3,6 +3,7 @@ import "./style.css";
 import { IMessage } from "../../../types";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { BACKEND_BASE_URL } from "../../../constant";
 
 const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,9 +81,12 @@ const MessageBoxGroup = ({ messages }: { messages: IMessage[] }) => {
                     notch={true}
                     type="photo"
                     data={{
-                      uri: message.photo ?? "",
+                      uri: BACKEND_BASE_URL + `${message.photo ?? ""}`,
+                      width: 400,
+                      height: 400,
                       status: {
-                        autoDownload: true,
+                        autoDownload: false,
+                        download: false,
                       },
                     }}
                     titleColor="#09cbf9"

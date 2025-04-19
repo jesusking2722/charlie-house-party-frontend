@@ -17,7 +17,7 @@ import { motion } from "motion/react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState, store } from "../../redux/store";
-import { BACKEND_BASE_URL } from "../../constant";
+import { BACKEND_BASE_URL, MAX_FILE_SIZE_MB } from "../../constant";
 import countryList from "react-select-country-list";
 import UploadGroup from "./UploadGroup";
 import ChatInput from "./ChatInput";
@@ -27,6 +27,7 @@ import {
   convertMultipleMessagesToIMessages,
 } from "../../utils";
 import { debounce } from "lodash";
+import toast from "react-hot-toast";
 
 const Chat = () => {
   const [search, setSearch] = useState<string>("");
@@ -128,10 +129,22 @@ const Chat = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUploadLoading(true);
+
     const file = event.target.files?.[0];
-    if (file) {
-      setFiles((prev) => [...prev, file]);
+
+    if (!file) {
+      setUploadLoading(false);
+      return;
     }
+
+    const fileSizeInMB = file.size / (1024 * 1024);
+
+    if (fileSizeInMB > MAX_FILE_SIZE_MB) {
+      toast.error("Max file size is 10 MB");
+      setUploadLoading(false);
+      return;
+    }
+    setFiles((prev) => [...prev, file]);
     setUploadLoading(false);
   };
 
@@ -141,9 +154,9 @@ const Chat = () => {
 
   const handleSend = async () => {
     try {
-      if (text === "" || !user || !selectedContacter || !selectedChatItem)
-        return;
+      if (!user || !selectedContacter || !selectedChatItem) return;
       const totalMessages = messages.length;
+      debugger;
       const waitForNewMessage = new Promise<Message>((resolve) => {
         const unsubscribe = store.subscribe(() => {
           const state = store.getState();
@@ -159,8 +172,30 @@ const Chat = () => {
         });
       });
       if (files.length > 0) {
-        let formData = new FormData();
+        // const fileDataArray = await Promise.all(
+        //   files.map(async (file) => {
+        //     const arrayBuffer = await file.arrayBuffer();
+        //     return {
+        //       name: file.name,
+        //       type: file.type,
+        //       size: file.size,
+        //       data: Array.from(new Uint8Array(arrayBuffer)),
+        //     };
+        //   })
+        // );
+        // socket.emit(
+        //   "message-send:files",
+        //   user._id,
+        //   selectedContacter._id,
+        //   user.name,
+        //   text,
+        //   fileDataArray
+        // );
+        // await waitForNewMessage;
+        // setText("");
+        // setFiles([]);
       } else {
+        if (text === "") return;
         socket.emit(
           "message-send:text",
           user._id,
@@ -199,11 +234,11 @@ const Chat = () => {
     if (!selectedContacter || !user) return;
     socket.emit("message:stop-typing", selectedContacter._id, user);
     setIsTyping(false);
-  }, 1000);
+  }, 2000);
 
   const delayedLoader = debounce(() => {
     setShowTypingLoader(true);
-  }, 300);
+  }, 1000);
 
   const handleChatInputChange = (val: string) => {
     if (!selectedContacter || !user) return;
@@ -410,7 +445,7 @@ const Chat = () => {
                   </Tooltip>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar"
                     ref={fileInputRef}
                     className="hidden"
                     onChange={handleFileChange}

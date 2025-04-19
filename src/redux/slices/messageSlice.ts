@@ -49,6 +49,12 @@ const messageSlice = createSlice({
     ) {
       state.messages.push(action.payload.newMessage);
     },
+    addNewMessages(
+      state: MessageState,
+      action: PayloadAction<{ newMessages: Message[] }>
+    ) {
+      state.messages.push(...action.payload.newMessages);
+    },
     updateMessageToRead(
       state: MessageState,
       action: PayloadAction<{ updatedMessages: Message[] }>
@@ -83,6 +89,7 @@ export const {
   setCurrentMessageId,
   setTypingUser,
   addNewMessage,
+  addNewMessages,
   updateMessageToRead,
   updateMessage,
 } = messageSlice.actions;
